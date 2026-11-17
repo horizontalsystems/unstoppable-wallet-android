@@ -270,7 +270,7 @@
     <string name="Market_Filter_TradingSignals">Trading Signals</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Sectors">Sectors</string>
-    <string name="Market_PriceChange_24H">24 Hours</string>
+    <string name="Market_PriceChange_24H">24H</string>
     <string name="Market_PriceChange_Utc">Midnight UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
@@ -1307,7 +1307,7 @@
     <string name="Appearance_MarketsTab">Markets Tab</string>
     <string name="Appearance_BalanceTab">Balance Tab</string>
     <string name="Appearance_AppIcon">App Icon</string>
-    <string name="Appearance_BalanceValue">Coin Balances</string>
+    <string name="Appearance_BalanceValue">Balance Value</string>
     <string name="Appearance_BalanceValue_Tip">Show balance in coins or fiat.</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_HideMarketsTab">Hide Markets</string>
@@ -1325,8 +1325,8 @@
     <string name="Appearance_RecentlySent">Recently Sent</string>
     <string name="Appearance_RecentlySent_Tip">Display recently sent address for token.</string>
 
-    <string name="BalanceViewType_CoinValue">Coin Value</string>
-    <string name="BalanceViewType_FiatValue">Fiat Value</string>
+    <string name="BalanceViewType_CoinFiat">Coin / Fiat</string>
+    <string name="BalanceViewType_FiatCoin">Fiat / Coin</string>
 
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>

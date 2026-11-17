@@ -203,7 +203,7 @@
     <string name="Market_Filter_TradingSignals">전반적인 점수가 좋거나 우수합니다</string>
     <string name="Market_Filter_PriceChange">가격 변경</string>
     <string name="Market_Filter_Sectors">분야</string>
-    <string name="Market_PriceChange_24H">24 시간</string>
+    <string name="Market_PriceChange_24H">24시간</string>
     <string name="Market_PriceChange_Utc">UTC 자정</string>
     <string name="Market_Filter_Blockchains">블록체인</string>
     <string name="Market_Filter_OutperformedBtc">BTC를 능가했습니다</string>
@@ -750,8 +750,8 @@
     <string name="Appearance_HideMarketsTab">마켓 숨기기</string>
     <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
     <string name="Appearance_PriceChangeInterval">가격 변경 %</string>
-    <string name="BalanceViewType_CoinValue">코인 가치</string>
-    <string name="BalanceViewType_FiatValue">법정 가치</string>
+    <string name="BalanceViewType_CoinFiat">코인 / 법정화폐</string>
+    <string name="BalanceViewType_FiatCoin">법정화폐 / 코인</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_AppVersion">앱버전</string>
@@ -1485,7 +1485,7 @@
     <string name="Appearance_AmountRounding_Tip">잔액 숫자를 읽기 쉽게 반올림합니다.</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
-    <string name="Appearance_BalanceValue">코인 잔액</string>
+    <string name="Appearance_BalanceValue">잔액 값</string>
     <string name="Appearance_BalanceValue_Tip">잔액을 코인 또는 법정화폐로 표시합니다.</string>
     <string name="Appearance_HideBalanceTabButtons_Tip">잔액 탭에서 전송, 수신, 스왑 버튼을 숨깁니다.</string>
     <string name="Appearance_HideMarketsTab_Tip">마켓 탭을 화면에서 숨깁니다.</string>

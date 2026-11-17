@@ -220,7 +220,7 @@
     <string name="Market_Filter_TradingSignals">Торговые сигналы</string>
     <string name="Market_Filter_PriceChange">Изменение цены</string>
     <string name="Market_Filter_Sectors">Секторы</string>
-    <string name="Market_PriceChange_24H">24 Часа</string>
+    <string name="Market_PriceChange_24H">24ч</string>
     <string name="Market_PriceChange_Utc">Полночь по UTC</string>
     <string name="Market_Filter_Blockchains">Блокчейны</string>
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
@@ -896,7 +896,7 @@
     <string name="Appearance_MarketsTab">Вкладка «Рынки»</string>
     <string name="Appearance_BalanceTab">Вкладка «Баланс»</string>
     <string name="Appearance_AppIcon">Иконка приложения</string>
-    <string name="Appearance_BalanceValue">Балансы токенов</string>
+    <string name="Appearance_BalanceValue">Значение баланса</string>
     <string name="Appearance_BalanceValue_Tip">Показывать баланс в монетах или в фиате.</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_HideMarketsTab">Скрыть рынки</string>
@@ -911,8 +911,8 @@
     <string name="Appearance_PriceChangeInterval_Tip">Выберите период для отображения изменения цены.</string>
     <string name="Appearance_RecentlySent">Недавно отправленные</string>
     <string name="Appearance_RecentlySent_Tip">Показывать недавний адрес отправки для токена.</string>
-    <string name="BalanceViewType_CoinValue">Токен значение</string>
-    <string name="BalanceViewType_FiatValue">Фиатное значение</string>
+    <string name="BalanceViewType_CoinFiat">Монета / Фиат</string>
+    <string name="BalanceViewType_FiatCoin">Фиат / Монета</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_AppVersion">Версия приложения</string>

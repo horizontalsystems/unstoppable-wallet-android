@@ -219,7 +219,7 @@
     <string name="Market_Filter_TradingSignals">Signaux de trading</string>
     <string name="Market_Filter_PriceChange">Changement de prix</string>
     <string name="Market_Filter_Sectors">Secteurs</string>
-    <string name="Market_PriceChange_24H">24 Heures</string>
+    <string name="Market_PriceChange_24H">24h</string>
     <string name="Market_PriceChange_Utc">minuit UTC</string>
     <string name="Market_Filter_Blockchains">Chaînes de blocs</string>
     <string name="Market_Filter_OutperformedBtc">BTC non exécutés</string>
@@ -894,7 +894,7 @@
     <string name="Appearance_MarketsTab">Onglet Marchés</string>
     <string name="Appearance_BalanceTab">Onglet Solde</string>
     <string name="Appearance_AppIcon">Icône de l\'application</string>
-    <string name="Appearance_BalanceValue">Soldes de Pièces</string>
+    <string name="Appearance_BalanceValue">Valeur du solde</string>
     <string name="Appearance_BalanceValue_Tip">Afficher le solde en cryptomonnaies ou en fiat.</string>
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_HideMarketsTab">Masquer les marchés</string>
@@ -909,8 +909,8 @@
     <string name="Appearance_PriceChangeInterval_Tip">Choisissez la période d\'affichage de la variation de prix.</string>
     <string name="Appearance_RecentlySent">Envoyé récemment</string>
     <string name="Appearance_RecentlySent_Tip">Afficher l\'adresse d\'envoi récente pour le jeton.</string>
-    <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
-    <string name="BalanceViewType_FiatValue">Valeur Fiat</string>
+    <string name="BalanceViewType_CoinFiat">Crypto / Fiat</string>
+    <string name="BalanceViewType_FiatCoin">Fiat / Crypto</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Site Web</string>
     <string name="SettingsAboutApp_AppVersion">Version de l\'application</string>

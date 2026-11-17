@@ -219,7 +219,7 @@
     <string name="Market_Filter_TradingSignals">Handelssignale</string>
     <string name="Market_Filter_PriceChange">Preisänderung</string>
     <string name="Market_Filter_Sectors">Sektoren</string>
-    <string name="Market_PriceChange_24H">24 Stunden</string>
+    <string name="Market_PriceChange_24H">24h</string>
     <string name="Market_PriceChange_Utc">Mitternacht UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Ausgelassenes BTC</string>
@@ -894,7 +894,7 @@
     <string name="Appearance_MarketsTab">Märkte-Tab</string>
     <string name="Appearance_BalanceTab">Saldo-Tab</string>
     <string name="Appearance_AppIcon">App-Symbol</string>
-    <string name="Appearance_BalanceValue">Münzsalden</string>
+    <string name="Appearance_BalanceValue">Saldowert</string>
     <string name="Appearance_BalanceValue_Tip">Saldo in Coins oder Fiat anzeigen.</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
     <string name="Appearance_HideMarketsTab">Märkte ausblenden</string>
@@ -909,8 +909,8 @@
     <string name="Appearance_PriceChangeInterval_Tip">Zeitraum für die Anzeige der Preisänderung wählen.</string>
     <string name="Appearance_RecentlySent">Zuletzt gesendet</string>
     <string name="Appearance_RecentlySent_Tip">Die zuletzt verwendete Sendeadresse für den Token anzeigen.</string>
-    <string name="BalanceViewType_CoinValue">Münzwert</string>
-    <string name="BalanceViewType_FiatValue">Fiat-Wert</string>
+    <string name="BalanceViewType_CoinFiat">Coin / Fiat</string>
+    <string name="BalanceViewType_FiatCoin">Fiat / Coin</string>
     <string name="SettingsAboutApp_Title">Über App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsAboutApp_AppVersion">App-Version</string>

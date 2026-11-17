@@ -315,8 +315,8 @@
     <!--Setting Subscription -->
     <!--Premium Screens-->
     <string name="Appearance_AppIcon">نماد برنامه</string>
-    <string name="BalanceViewType_CoinValue">ارزش سکه</string>
-    <string name="BalanceViewType_FiatValue">ارزش فیات</string>
+    <string name="BalanceViewType_CoinFiat">کوین / فیات</string>
+    <string name="BalanceViewType_FiatCoin">فیات / کوین</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
     <string name="SettingsAboutApp_Site">وب سایت پروژه</string>
     <!-- Blockchain Settings  -->
@@ -995,7 +995,7 @@
     <string name="Market_Filter_TradingSignals">سیگنال‌های معاملاتی</string>
     <string name="Market_Filter_PriceChange">تغییر قیمت</string>
     <string name="Market_Filter_Sectors">بخش‌ها</string>
-    <string name="Market_PriceChange_24H">24 ساعت</string>
+    <string name="Market_PriceChange_24H">24س</string>
     <string name="Market_PriceChange_Utc">نیمه‌شب UTC</string>
     <string name="Market_Filter_Blockchains">بلاکچین‌ها</string>
     <string name="Market_Filter_OutperformedBtc">بهتر از BTC</string>
@@ -1431,7 +1431,7 @@
     <string name="Appearance_SendScreen">صفحه ارسال</string>
     <string name="Appearance_MarketsTab">تب بازارها</string>
     <string name="Appearance_BalanceTab">تب موجودی</string>
-    <string name="Appearance_BalanceValue">موجودی کوین‌ها</string>
+    <string name="Appearance_BalanceValue">مقدار موجودی</string>
     <string name="Appearance_BalanceValue_Tip">نمایش موجودی به کوین یا فیات.</string>
     <string name="Appearance_Warning_CloseApplication">تغییر آیکون باعث بسته شدن برنامه می‌شود</string>
     <string name="Appearance_HideMarketsTab">پنهان کردن بازارها</string>
