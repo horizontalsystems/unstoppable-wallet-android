@@ -3,11 +3,12 @@
     android:height="288dp"
     android:viewportWidth="288"
     android:viewportHeight="288">
+  <!-- The mark is 64 dp wide, as the design's launch screen draws it, in the
+       middle of the 288 dp canvas a splash screen icon is given. The welcome
+       screen draws this file at the same size, so the two stay in step. -->
   <group
-      android:scaleX="1.5"
-      android:scaleY="1.5"
-      android:translateX="45"
-      android:translateY="45">
+      android:translateX="78"
+      android:translateY="78">
     <path
         android:pathData="M55.333 87.333H44.668V34H34.001V87.333H34L44.667 98H87.333L98 87.333V34H55.333V87.333Z"
         android:fillColor="#FE4A11"/>
