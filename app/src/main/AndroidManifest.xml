@@ -158,6 +158,15 @@
             </intent-filter>
         </activity-alias>
 
+        <!-- Not a launcher entry and never enabled. AppIconService moves it
+             between its two disabled states to make the launcher draw the
+             app icon again after the system's light or dark mode changed. -->
+        <activity-alias
+            android:name="${applicationId}.LauncherIconRedraw"
+            android:enabled="false"
+            android:exported="false"
+            android:targetActivity=".modules.main.MainActivity" />
+
         <!-- Retired icons. An alias stays for two releases after its icon is
              retired, so that the app keeps a launcher entry while users who
              had that icon are moved to the main one. -->

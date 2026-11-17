@@ -550,6 +550,11 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         localeAwareContext(this)
+
+        // The system may have switched between light and dark
+        coroutineScope.launch {
+            appIconService.redrawLauncherIconIfOutdated()
+        }
     }
 
     override val isSwapEnabled = true
@@ -620,6 +625,12 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             contactsRepository.initialize()
             trialExpired = !UserSubscriptionManager.hasFreeTrial()
             appIconService.validateAndFixCurrentIcon()
+        }
+
+        // Not behind the startup work above: the home screen is what the user
+        // sees next if they leave the app.
+        coroutineScope.launch {
+            appIconService.redrawLauncherIconIfOutdated()
         }
 
         // A node can also die mid-session, foreground or background; watch for a sync that

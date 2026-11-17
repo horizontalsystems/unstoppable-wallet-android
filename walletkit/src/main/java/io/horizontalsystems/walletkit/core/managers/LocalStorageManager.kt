@@ -77,6 +77,7 @@ class LocalStorageManager(
     private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
     private val LAUNCH_PAGE = "launch_page"
     private val APP_ICON = "app_icon"
+    private val LAUNCHER_ICON_DRAWN_FOR = "launcher_icon_drawn_for"
     private val MAIN_TAB = "main_tab"
     private val MARKET_FAVORITES_SORTING = "market_favorites_sorting"
     private val MARKET_FAVORITES_SHOW_SIGNALS = "market_favorites_show_signals"
@@ -512,6 +513,12 @@ class LocalStorageManager(
         }
         set(value) {
             preferences.edit().putString(APP_ICON, value?.name).apply()
+        }
+
+    override var launcherIconDrawnFor: String?
+        get() = preferences.getString(LAUNCHER_ICON_DRAWN_FOR, null)
+        set(value) {
+            preferences.edit().putString(LAUNCHER_ICON_DRAWN_FOR, value).apply()
         }
 
     override var mainTab: MainModule.MainNavigation?

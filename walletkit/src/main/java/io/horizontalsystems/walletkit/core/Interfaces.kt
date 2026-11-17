@@ -105,6 +105,7 @@ interface ILocalStorage {
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
+    var launcherIconDrawnFor: String?
     var mainTab: MainModule.MainNavigation?
     fun moneroActiveAccount(accountId: String): Int
     fun setMoneroActiveAccount(accountId: String, accountIndex: Int)
