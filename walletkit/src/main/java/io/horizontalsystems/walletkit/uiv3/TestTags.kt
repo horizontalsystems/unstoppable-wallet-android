@@ -187,6 +187,7 @@ object TestTags {
     const val PREMIUM_SUBSCRIBED_CLOSE = "premium_subscribed_close"
     const val PREMIUM_SUBSCRIBED_GO_TO_APP = "premium_subscribed_go_to_app"
 
+    const val APPEARANCE_RESET = "appearance_reset"
     const val APPEARANCE_LANGUAGE = "appearance_language"
     const val APPEARANCE_BASE_CURRENCY = "appearance_base_currency"
     // The dropdown buttons that show a setting's value and open its options

@@ -30,6 +30,7 @@ import io.horizontalsystems.walletkit.modules.coin.CoinPage
 import io.horizontalsystems.walletkit.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.walletkit.modules.market.platform.MarketPlatformPage
 import io.horizontalsystems.walletkit.modules.pin.core.LockGate
+import io.horizontalsystems.walletkit.modules.settings.appearance.AppearanceDefaults
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WCListPage
@@ -62,7 +63,7 @@ class MainViewModel(
     private var swapTabEnabled = isSwapTabEnabled()
     private var settingsBadge: MainModule.BadgeType? = null
     private val launchPage: LaunchPage
-        get() = localStorage.launchPage ?: LaunchPage.Auto
+        get() = localStorage.launchPage ?: AppearanceDefaults.launchPage
 
     private var currentMainTab: MainNavigation
         get() = localStorage.mainTab ?: MainNavigation.Balance

@@ -57,7 +57,9 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.settings.language.LanguageSettingsPage
 import io.horizontalsystems.walletkit.ui.compose.Select
+import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
+import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_orange
@@ -106,6 +108,14 @@ fun AppearanceScreen(navigation: HSNavigation) {
     HSScaffold(
         title = stringResource(R.string.Settings_AppSettings),
         onBack = navigation::removeLastOrNull,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                enabled = uiState.resetEnabled,
+                testTag = TestTags.APPEARANCE_RESET,
+                onClick = viewModel::reset
+            )
+        ),
     ) {
         Column(
             modifier = Modifier

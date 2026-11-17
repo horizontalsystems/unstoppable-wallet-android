@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.entities.LaunchPage
+import io.horizontalsystems.walletkit.modules.balance.BalanceViewType
 import io.horizontalsystems.walletkit.modules.theme.ThemeService
+import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 
@@ -29,6 +32,24 @@ object AppearanceModule {
         }
     }
 
+}
+
+/**
+ * What each setting of the Appearance page holds until the user changes it.
+ * The storage fallbacks and the page's Reset both read these, so they cannot
+ * disagree.
+ */
+object AppearanceDefaults {
+    val theme = ThemeType.System
+    val baseCurrencyCode = "USD"
+    val launchPage = LaunchPage.Auto
+    val marketsTabEnabled = true
+    val priceChangeInterval = PriceChangeInterval.LAST_24H
+    val balanceTabButtonsEnabled = true
+    val chartButtonEnabled = true
+    val amountRoundingEnabled = true
+    val balanceViewType = BalanceViewType.CoinThenFiat
+    val recentlySentEnabled = false
 }
 
 /**

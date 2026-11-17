@@ -92,7 +92,21 @@ class AppearanceViewModel(
         priceChangeIntervalOptions = priceChangeIntervalOptions,
         amountRoundingEnabled = amountRoundingEnabled,
         recentlySentEnabled = recentlySentEnabled,
+        resetEnabled = resetEnabled,
     )
+
+    // The app icon is left out: changing it closes the app
+    private val resetEnabled: Boolean
+        get() = themeService.selectedTheme != AppearanceDefaults.theme
+                || baseCurrencyCode != AppearanceDefaults.baseCurrencyCode
+                || launchScreenService.selectedLaunchScreen != AppearanceDefaults.launchPage
+                || marketsTabHidden == AppearanceDefaults.marketsTabEnabled
+                || priceChangeInterval != AppearanceDefaults.priceChangeInterval
+                || balanceTabButtonsHidden == AppearanceDefaults.balanceTabButtonsEnabled
+                || chartButtonEnabled != AppearanceDefaults.chartButtonEnabled
+                || amountRoundingEnabled != AppearanceDefaults.amountRoundingEnabled
+                || balanceViewTypeManager.balanceViewType != AppearanceDefaults.balanceViewType
+                || recentlySentEnabled != AppearanceDefaults.recentlySentEnabled
 
     private fun buildBalanceViewTypeSelect(value: BalanceViewType): Select<BalanceViewType> {
         return Select(value, balanceViewTypeManager.viewTypes)
@@ -201,6 +215,46 @@ class AppearanceViewModel(
         emitState()
     }
 
+    /**
+     * Puts every setting of the page that differs from its default back to
+     * it, through the same paths a user's own change takes. Language and the
+     * app icon are not touched.
+     */
+    fun reset() {
+        if (themeService.selectedTheme != AppearanceDefaults.theme) {
+            onEnterTheme(AppearanceDefaults.theme)
+        }
+        if (baseCurrencyCode != AppearanceDefaults.baseCurrencyCode) {
+            currencyManager.setBaseCurrencyCode(AppearanceDefaults.baseCurrencyCode)
+        }
+        if (marketsTabHidden == AppearanceDefaults.marketsTabEnabled) {
+            onSetMarketTabsHidden(!AppearanceDefaults.marketsTabEnabled)
+        }
+        if (launchScreenService.selectedLaunchScreen != AppearanceDefaults.launchPage) {
+            onEnterLaunchPage(AppearanceDefaults.launchPage)
+        }
+        if (priceChangeInterval != AppearanceDefaults.priceChangeInterval) {
+            onSetPriceChangeInterval(AppearanceDefaults.priceChangeInterval)
+        }
+        if (balanceTabButtonsHidden == AppearanceDefaults.balanceTabButtonsEnabled) {
+            onSetBalanceTabButtonsHidden(!AppearanceDefaults.balanceTabButtonsEnabled)
+        }
+        if (chartButtonEnabled != AppearanceDefaults.chartButtonEnabled) {
+            onChartButtonToggle(AppearanceDefaults.chartButtonEnabled)
+        }
+        if (amountRoundingEnabled != AppearanceDefaults.amountRoundingEnabled) {
+            onAmountRoundingToggle(AppearanceDefaults.amountRoundingEnabled)
+        }
+        if (balanceViewTypeManager.balanceViewType != AppearanceDefaults.balanceViewType) {
+            onEnterBalanceViewType(AppearanceDefaults.balanceViewType)
+        }
+        if (recentlySentEnabled != AppearanceDefaults.recentlySentEnabled) {
+            enableRecentlySent(AppearanceDefaults.recentlySentEnabled)
+        }
+
+        emitState()
+    }
+
 }
 
 data class AppearanceUIState(
@@ -220,4 +274,5 @@ data class AppearanceUIState(
     val priceChangeIntervalOptions: Select<PriceChangeInterval>,
     val amountRoundingEnabled: Boolean,
     val recentlySentEnabled: Boolean,
+    val resetEnabled: Boolean,
 )

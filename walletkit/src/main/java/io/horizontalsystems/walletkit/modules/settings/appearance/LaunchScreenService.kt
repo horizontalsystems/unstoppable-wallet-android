@@ -11,7 +11,7 @@ class LaunchScreenService(private val localStorage: ILocalStorage) {
     private val screens by lazy { LaunchPage.entries }
 
     val selectedLaunchScreen: LaunchPage
-        get() = localStorage.launchPage ?: LaunchPage.Auto
+        get() = localStorage.launchPage ?: AppearanceDefaults.launchPage
 
     private val _optionsFlow = MutableStateFlow(
         Select(selectedLaunchScreen, screens)

@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.core.managers
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.Currency
+import io.horizontalsystems.walletkit.modules.settings.appearance.AppearanceDefaults
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -22,7 +23,7 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
         }
 
     private val defaultCurrency: Currency
-        get() = appConfigProvider.currencies.first { it.code == "USD" }
+        get() = appConfigProvider.currencies.first { it.code == AppearanceDefaults.baseCurrencyCode }
 
     private fun getInitialCurrency(): Currency {
         return localStorage.baseCurrencyCode?.let { code ->

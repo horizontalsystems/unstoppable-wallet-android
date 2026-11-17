@@ -25,6 +25,7 @@ import io.horizontalsystems.walletkit.modules.market.TimeDuration
 import io.horizontalsystems.walletkit.modules.market.favorites.WatchlistSorting
 import io.horizontalsystems.walletkit.modules.roi.PerformanceCoin
 import io.horizontalsystems.walletkit.modules.settings.appearance.AppIcon
+import io.horizontalsystems.walletkit.modules.settings.appearance.AppearanceDefaults
 import io.horizontalsystems.walletkit.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.walletkit.modules.theme.ThemeType
@@ -306,7 +307,7 @@ class LocalStorageManager(
 
     override var currentTheme: ThemeType
         get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) }
-            ?: ThemeType.System
+            ?: AppearanceDefaults.theme
         set(themeType) {
             preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
@@ -574,7 +575,7 @@ class LocalStorageManager(
         }
 
     override var marketsTabEnabled: Boolean
-        get() = preferences.getBoolean(MARKETS_TAB_ENABLED, true)
+        get() = preferences.getBoolean(MARKETS_TAB_ENABLED, AppearanceDefaults.marketsTabEnabled)
         set(value) {
             preferences.edit().putBoolean(MARKETS_TAB_ENABLED, value).commit()
             _marketsTabEnabledFlow.update {
@@ -583,27 +584,27 @@ class LocalStorageManager(
         }
 
     override var recentlySentEnabled: Boolean
-        get() = preferences.getBoolean("recentlySentEnabled", false)
+        get() = preferences.getBoolean("recentlySentEnabled", AppearanceDefaults.recentlySentEnabled)
         set(value) {
             preferences.edit(commit = true) { putBoolean("recentlySentEnabled", value) }
         }
 
     override var balanceTabButtonsEnabled: Boolean
-        get() = preferences.getBoolean("balanceTabButtonsEnabled", true)
+        get() = preferences.getBoolean("balanceTabButtonsEnabled", AppearanceDefaults.balanceTabButtonsEnabled)
         set(value) {
             preferences.edit().putBoolean("balanceTabButtonsEnabled", value).apply()
             balanceTabButtonsEnabledFlow.update { value }
         }
 
     override var chartButtonEnabled: Boolean
-        get() = preferences.getBoolean("chartButtonEnabled", true)
+        get() = preferences.getBoolean("chartButtonEnabled", AppearanceDefaults.chartButtonEnabled)
         set(value) {
             preferences.edit { putBoolean("chartButtonEnabled", value) }
             chartButtonEnabledFlow.update { value }
         }
 
     override var amountRoundingEnabled: Boolean
-        get() = preferences.getBoolean("amountRoundingEnabled", true)
+        get() = preferences.getBoolean("amountRoundingEnabled", AppearanceDefaults.amountRoundingEnabled)
         set(value) {
             preferences.edit().putBoolean("amountRoundingEnabled", value).apply()
             amountRoundingEnabledFlow.update { value }
@@ -672,7 +673,7 @@ class LocalStorageManager(
     override var priceChangeInterval: PriceChangeInterval
         get() = preferences.getString(PRICE_CHANGE_INTERVAL, null)?.let {
             PriceChangeInterval.fromRaw(it)
-        } ?: PriceChangeInterval.LAST_24H
+        } ?: AppearanceDefaults.priceChangeInterval
         set(value) {
             preferences.edit().putString(PRICE_CHANGE_INTERVAL, value.raw).apply()
 
