@@ -63,12 +63,26 @@ class EvmSyncSourceAutoSelectTest {
     }
 
     @Test
-    fun webSocketAndAuthSourcesAreNotCombined() {
+    fun webSocketSourcesAreNotCombined() {
         val ws = source("Ws", "wss://ws.example", ws = true)
-        val keyed = source("Keyed", "https://k.example", auth = "key")
-        val withOdd = listOf(unstoppable, ws, keyed, llama)
+        val withWs = listOf(unstoppable, ws, llama)
 
-        assertEquals(listOf(unstoppable, llama), EvmSyncSourceManager.failoverOrder(unstoppable, withOdd, autoSelect = true))
-        assertEquals(listOf(ws), EvmSyncSourceManager.failoverOrder(ws, withOdd, autoSelect = true))
+        assertEquals(listOf(unstoppable, llama), EvmSyncSourceManager.failoverOrder(unstoppable, withWs, autoSelect = true))
+        assertEquals(listOf(ws), EvmSyncSourceManager.failoverOrder(ws, withWs, autoSelect = true))
+    }
+
+    @Test
+    fun builtInSourceWithAuthTakesPartLikeAnyOther() {
+        val keyed = source("Keyed", "https://k.example", auth = "key")
+        val withKeyed = listOf(unstoppable, keyed, llama)
+
+        assertEquals(
+            listOf(unstoppable, keyed, llama),
+            EvmSyncSourceManager.failoverOrder(unstoppable, withKeyed, autoSelect = true)
+        )
+        assertEquals(
+            listOf(keyed, unstoppable, llama),
+            EvmSyncSourceManager.failoverOrder(keyed, withKeyed, autoSelect = true)
+        )
     }
 }

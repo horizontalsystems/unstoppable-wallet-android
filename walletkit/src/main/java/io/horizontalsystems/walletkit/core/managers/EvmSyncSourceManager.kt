@@ -468,7 +468,9 @@ class EvmSyncSourceManager(
         ): List<EvmSyncSource> {
             if (!autoSelect || selected.isWebSocket || selected !in defaults) return listOf(selected)
 
-            return listOf(selected) + defaults.filter { it != selected && it.isHttp && it.auth == null }
+            // A built-in source with auth takes part too: the kit sends each source's secret
+            // only to that source's own URLs.
+            return listOf(selected) + defaults.filter { it != selected && it.isHttp }
         }
     }
 }

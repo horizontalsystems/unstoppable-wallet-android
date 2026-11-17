@@ -8,6 +8,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -37,10 +38,7 @@ object EvmSourcePinger {
 
     private suspend fun probe(source: EvmSyncSource): SourceProbe<EvmSyncSource> = withContext(Dispatchers.IO) {
         try {
-            val request = Request.Builder()
-                .url(source.uri.toString())
-                .post(BLOCK_NUMBER_REQUEST.toRequestBody(jsonMediaType))
-                .build()
+            val request = request(source)
 
             val start = System.nanoTime()
             client.newCall(request).execute().use { response ->
@@ -56,6 +54,15 @@ object EvmSourcePinger {
             failed(source)
         }
     }
+
+    // Sends the source's auth the way ethereum-kit does, or a source that needs it would
+    // always look dead.
+    internal fun request(source: EvmSyncSource): Request =
+        Request.Builder()
+            .url(source.uri.toString())
+            .apply { source.auth?.let { header("Authorization", Credentials.basic("", it)) } }
+            .post(BLOCK_NUMBER_REQUEST.toRequestBody(jsonMediaType))
+            .build()
 
     private fun failed(source: EvmSyncSource) = SourceProbe(source, null, null)
 
