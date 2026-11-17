@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import coil.ImageLoader
 import coil.ImageLoaderFactory
@@ -99,7 +98,6 @@ import io.horizontalsystems.walletkit.modules.roi.RoiManager
 import io.horizontalsystems.walletkit.modules.settings.appearance.AppIconService
 import io.horizontalsystems.walletkit.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.walletkit.modules.theme.ThemeService
-import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
@@ -517,15 +515,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     }
 
     private fun setAppTheme() {
-        val nightMode = when (localStorage.currentTheme) {
-            ThemeType.Light -> AppCompatDelegate.MODE_NIGHT_NO
-            ThemeType.Dark -> AppCompatDelegate.MODE_NIGHT_YES
-            ThemeType.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
-
-        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
-            AppCompatDelegate.setDefaultNightMode(nightMode)
-        }
+        localStorage.currentTheme.applyNightMode(this)
     }
 
     override val workManagerConfiguration: androidx.work.Configuration
