@@ -7,8 +7,10 @@
     <color name="launcher_main_background">#EDEDED</color>
     <color name="launcher_dark_background">#FE4A11</color>
     <color name="launcher_dark_mark">#EDEDED</color>
-    <color name="launcher_mono_background">#EDEDED</color>
-    <color name="launcher_mono_mark">#151515</color>
+    <!-- The mono icon contrasts with the mode: dark in light mode, light in
+         dark mode -->
+    <color name="launcher_mono_background">#151515</color>
+    <color name="launcher_mono_mark">#EDEDED</color>
 
     <!-- The 8ball icon is the same in both modes -->
     <color name="launcher_8ball_background">#FE4A11</color>
