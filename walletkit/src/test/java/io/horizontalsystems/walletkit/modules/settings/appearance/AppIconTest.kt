@@ -2,11 +2,21 @@ package io.horizontalsystems.walletkit.modules.settings.appearance
 
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class AppIconTest {
 
     private fun shownTitle(icon: AppIcon) = (icon.title as TranslatableString.PlainString).text
+
+    // An icon removed altogether is unknown; the app then applies the main one
+    @Test
+    fun removedIcons_areNotFound() {
+        listOf("Leo", "Mustang", "Yak").forEach {
+            assertNull(AppIcon.fromString(it))
+            assertNull(AppIcon.fromTitle(it))
+        }
+    }
 
     @Test
     fun darkIcon_isShownAsOrange() {

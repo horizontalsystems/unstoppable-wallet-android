@@ -55,12 +55,7 @@ enum class AppIcon(
     Plflag(R.drawable.launcher_plflag_preview, "Plflag"),
     Sinwar(R.drawable.launcher_sinwar_preview, "Sinwar"),
     Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad"),
-    Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad"),
-    //deprecated icons with manifest aliases should stay in app for 2 releases before removal
-    //remove deprecated below in 0.47
-    Leo(R.drawable.launcher_leo_preview, "Leo", true),
-    Mustang(R.drawable.launcher_mustang_preview, "Mustang", true),
-    Yak(R.drawable.launcher_yak_preview, "Yak", true);
+    Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad");
 
     override val title: TranslatableString
         get() = TranslatableString.PlainString(displayName)
