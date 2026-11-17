@@ -16,12 +16,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -58,23 +57,22 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.settings.language.LanguageSettingsPage
 import io.horizontalsystems.walletkit.ui.compose.Select
-import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
-import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
-import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_orange
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
-import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -116,193 +114,131 @@ fun AppearanceScreen(navigation: HSNavigation) {
                 .navigationBarsPadding(),
         ) {
             VSpacer(height = 12.dp)
-            CellUniversalLawrenceSection(
-                listOf {
-                    MenuItemWithDialog(
-                        R.string.Settings_Theme,
-                        value = uiState.selectedTheme.title.getString(),
-                        testTag = TestTags.APPEARANCE_THEME,
-                        onClick = { openThemeSelector = true }
-                    )
-                }
-            )
+            Section {
+                DropdownCell(
+                    title = R.string.Settings_Theme,
+                    value = uiState.selectedTheme.title.getString(),
+                    testTag = TestTags.APPEARANCE_THEME,
+                    onClick = { openThemeSelector = true }
+                )
+            }
 
-            VSpacer(32.dp)
+            VSpacer(16.dp)
+            Section {
+                NavigationCell(
+                    title = R.string.Settings_Language,
+                    value = uiState.currentLanguage,
+                    testTag = TestTags.APPEARANCE_LANGUAGE,
+                    onClick = {
+                        navigation.slideFromRight(LanguageSettingsPage)
 
-            CellUniversalLawrenceSection(
-                buildList {
-                    add {
-                        MenuItem(
-                            R.string.Settings_Language,
-                            value = uiState.currentLanguage,
-                            onClick = {
-                                navigation.slideFromRight(LanguageSettingsPage)
-
-                                stat(
-                                    page = StatPage.Settings,
-                                    event = StatEvent.Open(StatPage.Language)
-                                )
-                            }
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.Open(StatPage.Language)
                         )
-                    }
-                    add {
-                        MenuItem(
-                            R.string.Settings_BaseCurrency,
-                            value = uiState.baseCurrencyCode,
-                            testTag = TestTags.APPEARANCE_BASE_CURRENCY,
-                            onClick = {
-                                navigation.slideFromRight(BaseCurrencySettingsPage)
-
-                                stat(
-                                    page = StatPage.Settings,
-                                    event = StatEvent.Open(StatPage.BaseCurrency)
-                                )
-                            }
-                        )
-                    }
-                }
-            )
-
-            VSpacer(24.dp)
-
-            HeaderText(text = stringResource(id = R.string.Appearance_MarketsTab))
-            CellUniversalLawrenceSection(
-                listOf(
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_HideMarketsTab,
-                            subtitle = R.string.Appearance_HideMarketsTab_Tip,
-                        ) {
-                            HsSwitch(
-                                checked = uiState.marketsTabHidden,
-                                onCheckedChange = {
-                                    viewModel.onSetMarketTabsHidden(it)
-                                }
-                            )
-                        }
-                    },
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_PriceChangeInterval,
-                            subtitle = R.string.Appearance_PriceChangeInterval_Tip,
-                            onClick = { openPriceChangeIntervalSelector = true }
-                        ) {
-                            HSDropdownButton(
-                                modifier = Modifier.testTag(TestTags.APPEARANCE_PRICE_CHANGE),
-                                variant = ButtonVariant.Secondary,
-                                style = ButtonStyle.Transparent,
-                                title = uiState.priceChangeInterval.title.getString(),
-                                onClick = { openPriceChangeIntervalSelector = true },
-                            )
-                        }
                     }
                 )
-            )
+                BoxBordered(top = true) {
+                    NavigationCell(
+                        title = R.string.Settings_BaseCurrency,
+                        value = uiState.baseCurrencyCode,
+                        testTag = TestTags.APPEARANCE_BASE_CURRENCY,
+                        onClick = {
+                            navigation.slideFromRight(BaseCurrencySettingsPage)
 
-            AnimatedVisibility(visible = !uiState.marketsTabHidden) {
-                Column {
-                    VSpacer(32.dp)
-                    CellUniversalLawrenceSection(
-                        listOf {
-                            SettingUniversalCell(
-                                title = R.string.Settings_LaunchScreen,
-                                subtitle = R.string.Settings_LaunchScreen_Tip,
-                                onClick = { openLaunchPageSelector = true }
-                            ) {
-                                HSDropdownButton(
-                                    modifier = Modifier.testTag(TestTags.APPEARANCE_LAUNCH_SCREEN),
-                                    variant = ButtonVariant.Secondary,
-                                    style = ButtonStyle.Transparent,
-                                    title = uiState.selectedLaunchScreen.title.getString(),
-                                    onClick = { openLaunchPageSelector = true },
-                                )
-                            }
+                            stat(
+                                page = StatPage.Settings,
+                                event = StatEvent.Open(StatPage.BaseCurrency)
+                            )
                         }
                     )
                 }
             }
 
-            VSpacer(24.dp)
-            HeaderText(text = stringResource(id = R.string.Appearance_BalanceTab))
-            CellUniversalLawrenceSection(
-                listOf(
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_HideBalanceTabButtons,
-                            subtitle = R.string.Appearance_HideBalanceTabButtons_Tip,
-                        ) {
-                            HsSwitch(
-                                checked = uiState.balanceTabButtonsHidden,
-                                onCheckedChange = {
-                                    viewModel.onSetBalanceTabButtonsHidden(it)
-                                }
-                            )
-                        }
-                    },
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_ChartButton,
-                            subtitle = R.string.Appearance_ChartButton_Tip,
-                        ) {
-                            HsSwitch(
-                                checked = uiState.chartButtonEnabled,
-                                onCheckedChange = {
-                                    viewModel.onChartButtonToggle(it)
-                                }
-                            )
-                        }
-                    },
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_AmountRounding,
-                            subtitle = R.string.Appearance_AmountRounding_Tip,
-                        ) {
-                            HsSwitch(
-                                checked = uiState.amountRoundingEnabled,
-                                onCheckedChange = {
-                                    viewModel.onAmountRoundingToggle(it)
-                                }
-                            )
-                        }
-                    },
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_BalanceValue,
-                            subtitle = R.string.Appearance_BalanceValue_Tip,
-                            onClick = { openBalanceValueSelector = true }
-                        ) {
-                            HSDropdownButton(
-                                modifier = Modifier.testTag(TestTags.APPEARANCE_BALANCE_VALUE),
-                                variant = ButtonVariant.Secondary,
-                                style = ButtonStyle.Transparent,
-                                title = uiState.selectedBalanceViewType.title.getString(),
-                                onClick = { openBalanceValueSelector = true },
-                            )
-                        }
+            AnimatedVisibility(visible = !uiState.marketsTabHidden) {
+                Column {
+                    VSpacer(16.dp)
+                    Section {
+                        DropdownCell(
+                            title = R.string.Settings_LaunchScreen,
+                            subtitle = R.string.Settings_LaunchScreen_Tip,
+                            value = uiState.selectedLaunchScreen.title.getString(),
+                            testTag = TestTags.APPEARANCE_LAUNCH_SCREEN,
+                            onClick = { openLaunchPageSelector = true }
+                        )
                     }
+                }
+            }
+
+            HeaderText(text = stringResource(id = R.string.Appearance_MarketsTab))
+            Section {
+                SwitchCell(
+                    title = R.string.Appearance_HideMarketsTab,
+                    subtitle = R.string.Appearance_HideMarketsTab_Tip,
+                    checked = uiState.marketsTabHidden,
+                    testTag = TestTags.APPEARANCE_HIDE_MARKETS,
+                    onCheckedChange = viewModel::onSetMarketTabsHidden
                 )
-            )
+                BoxBordered(top = true) {
+                    DropdownCell(
+                        title = R.string.Appearance_PriceChangeInterval,
+                        subtitle = R.string.Appearance_PriceChangeInterval_Tip,
+                        value = uiState.priceChangeInterval.title.getString(),
+                        testTag = TestTags.APPEARANCE_PRICE_CHANGE,
+                        onClick = { openPriceChangeIntervalSelector = true }
+                    )
+                }
+            }
+
+            HeaderText(text = stringResource(id = R.string.Appearance_BalanceTab))
+            Section {
+                SwitchCell(
+                    title = R.string.Appearance_HideBalanceTabButtons,
+                    subtitle = R.string.Appearance_HideBalanceTabButtons_Tip,
+                    checked = uiState.balanceTabButtonsHidden,
+                    testTag = TestTags.APPEARANCE_HIDE_BUTTONS,
+                    onCheckedChange = viewModel::onSetBalanceTabButtonsHidden
+                )
+                BoxBordered(top = true) {
+                    SwitchCell(
+                        title = R.string.Appearance_ChartButton,
+                        subtitle = R.string.Appearance_ChartButton_Tip,
+                        checked = uiState.chartButtonEnabled,
+                        testTag = TestTags.APPEARANCE_CHART_BUTTON,
+                        onCheckedChange = viewModel::onChartButtonToggle
+                    )
+                }
+                BoxBordered(top = true) {
+                    SwitchCell(
+                        title = R.string.Appearance_AmountRounding,
+                        subtitle = R.string.Appearance_AmountRounding_Tip,
+                        checked = uiState.amountRoundingEnabled,
+                        testTag = TestTags.APPEARANCE_AMOUNT_ROUNDING,
+                        onCheckedChange = viewModel::onAmountRoundingToggle
+                    )
+                }
+                BoxBordered(top = true) {
+                    DropdownCell(
+                        title = R.string.Appearance_BalanceValue,
+                        subtitle = R.string.Appearance_BalanceValue_Tip,
+                        value = uiState.selectedBalanceViewType.title.getString(),
+                        testTag = TestTags.APPEARANCE_BALANCE_VALUE,
+                        onClick = { openBalanceValueSelector = true }
+                    )
+                }
+            }
 
             HeaderText(text = stringResource(id = R.string.Appearance_SendScreen))
-            CellUniversalLawrenceSection(
-                listOf(
-                    {
-                        SettingUniversalCell(
-                            title = R.string.Appearance_RecentlySent,
-                            subtitle = R.string.Appearance_RecentlySent_Tip,
-                        ) {
-                            HsSwitch(
-                                checked = uiState.recentlySentEnabled,
-                                onCheckedChange = {
-                                    viewModel.enableRecentlySent(it)
-                                }
-                            )
-                        }
-                    }
+            Section {
+                SwitchCell(
+                    title = R.string.Appearance_RecentlySent,
+                    subtitle = R.string.Appearance_RecentlySent_Tip,
+                    checked = uiState.recentlySentEnabled,
+                    testTag = TestTags.APPEARANCE_RECENTLY_SENT,
+                    onCheckedChange = viewModel::enableRecentlySent
                 )
-            )
+            }
 
-            VSpacer(24.dp)
             HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
             AppIconSection(uiState.appIconOptions) {
                 scope.launch {
@@ -317,41 +253,33 @@ fun AppearanceScreen(navigation: HSNavigation) {
         if (openThemeSelector) {
             MenuGroup(
                 title = stringResource(R.string.Settings_Theme),
-                items = uiState.themeOptions.options.map {
-                    MenuItemX(it.title.getString(), it == uiState.themeOptions.selected, it)
-                },
-                onDismissRequest = { openThemeSelector = false },
-                onSelectItem = { viewModel.onEnterTheme(it) }
+                select = uiState.themeOptions,
+                onSelect = viewModel::onEnterTheme,
+                onDismiss = { openThemeSelector = false },
             )
         }
         if (openLaunchPageSelector) {
             MenuGroup(
                 title = stringResource(R.string.Settings_LaunchScreen),
-                items = uiState.launchScreenOptions.options.map {
-                    MenuItemX(it.title.getString(), it == uiState.launchScreenOptions.selected, it)
-                },
-                onDismissRequest = { openLaunchPageSelector = false },
-                onSelectItem = { viewModel.onEnterLaunchPage(it) }
+                select = uiState.launchScreenOptions,
+                onSelect = viewModel::onEnterLaunchPage,
+                onDismiss = { openLaunchPageSelector = false },
             )
         }
         if (openBalanceValueSelector) {
             MenuGroup(
                 title = stringResource(R.string.Appearance_BalanceValue),
-                items = uiState.balanceViewTypeOptions.options.map {
-                    MenuItemX(it.title.getString(), it == uiState.balanceViewTypeOptions.selected, it)
-                },
-                onDismissRequest = { openBalanceValueSelector = false },
-                onSelectItem = { viewModel.onEnterBalanceViewType(it) }
+                select = uiState.balanceViewTypeOptions,
+                onSelect = viewModel::onEnterBalanceViewType,
+                onDismiss = { openBalanceValueSelector = false },
             )
         }
         if (openPriceChangeIntervalSelector) {
             MenuGroup(
                 title = stringResource(R.string.Appearance_PriceChangeInterval),
-                items = uiState.priceChangeIntervalOptions.options.map {
-                    MenuItemX(it.title.getString(), it == uiState.priceChangeIntervalOptions.selected, it)
-                },
-                onDismissRequest = { openPriceChangeIntervalSelector = false },
-                onSelectItem = { viewModel.onSetPriceChangeInterval(it) }
+                select = uiState.priceChangeIntervalOptions,
+                onSelect = viewModel::onSetPriceChangeInterval,
+                onDismiss = { openPriceChangeIntervalSelector = false },
             )
         }
 
@@ -382,32 +310,82 @@ fun AppearanceScreen(navigation: HSNavigation) {
     }
 }
 
+// A row whose value sits in a dropdown button. The whole row opens the
+// options as well, since flows and users tap it by its title.
 @Composable
-fun SettingUniversalCell(
-    title: Int,
-    subtitle: Int? = null,
-    onClick: (() -> Unit)? = null,
-    value: @Composable() (RowScope.() -> Unit),
+private fun DropdownCell(
+    @StringRes title: Int,
+    @StringRes subtitle: Int? = null,
+    value: String,
+    testTag: String,
+    onClick: () -> Unit,
 ) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 16.dp)
-        ) {
-            body_leah(text = stringResource(title))
-            subtitle?.let {
-                VSpacer(height = 1.dp)
-                subhead2_grey(text = stringResource(it))
-            }
-        }
-        Row(
-            content = value
-        )
-    }
+    CellPrimary(
+        modifier = Modifier.heightIn(min = 64.dp),
+        middle = {
+            CellMiddleInfo(
+                title = stringResource(title).hs,
+                subtitle = subtitle?.let { stringResource(it).hs },
+            )
+        },
+        right = {
+            HSDropdownButton(
+                modifier = Modifier.testTag(testTag),
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Transparent,
+                title = value,
+                onClick = onClick,
+            )
+        },
+        onClick = onClick,
+    )
+}
+
+@Composable
+private fun SwitchCell(
+    @StringRes title: Int,
+    @StringRes subtitle: Int,
+    checked: Boolean,
+    testTag: String,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    CellPrimary(
+        modifier = Modifier.heightIn(min = 64.dp),
+        middle = {
+            CellMiddleInfo(
+                title = stringResource(title).hs,
+                subtitle = stringResource(subtitle).hs,
+            )
+        },
+        right = {
+            CellRightControlsSwitcher(
+                modifier = Modifier.testTag(testTag),
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+            )
+        },
+    )
+}
+
+@Composable
+private fun NavigationCell(
+    @StringRes title: Int,
+    value: String,
+    testTag: String,
+    onClick: () -> Unit,
+) {
+    CellPrimary(
+        modifier = Modifier
+            .heightIn(min = 64.dp)
+            .testTag(testTag),
+        middle = {
+            CellMiddleInfo(title = stringResource(title).hs)
+        },
+        right = {
+            CellRightNavigation(subtitle = value.hs)
+        },
+        onClick = onClick,
+    )
 }
 
 @Composable
@@ -525,67 +503,5 @@ private fun IconBox(
         } else {
             subhead1_leah(name, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-    }
-}
-
-@Composable
-fun MenuItemWithDialog(
-    @StringRes title: Int,
-    value: String,
-    testTag: String,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
-    ) {
-        body_leah(
-            text = stringResource(title),
-            maxLines = 1,
-            modifier = Modifier.weight(1f)
-        )
-
-        HSpacer(16.dp)
-        HSDropdownButton(
-            modifier = Modifier.testTag(testTag),
-            variant = ButtonVariant.Secondary,
-            style = ButtonStyle.Transparent,
-            title = value,
-            onClick = onClick,
-        )
-    }
-}
-
-@Composable
-private fun MenuItem(
-    @StringRes title: Int,
-    value: String? = null,
-    testTag: String? = null,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
-        onClick = onClick
-    ) {
-        body_leah(
-            text = stringResource(title),
-            maxLines = 1,
-            modifier = Modifier.weight(1f)
-        )
-        value?.let {
-            subhead1_grey(
-                text = value,
-                maxLines = 1,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-        }
-
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-        )
     }
 }

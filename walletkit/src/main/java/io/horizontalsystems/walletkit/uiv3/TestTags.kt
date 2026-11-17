@@ -187,12 +187,19 @@ object TestTags {
     const val PREMIUM_SUBSCRIBED_CLOSE = "premium_subscribed_close"
     const val PREMIUM_SUBSCRIBED_GO_TO_APP = "premium_subscribed_go_to_app"
 
+    const val APPEARANCE_LANGUAGE = "appearance_language"
     const val APPEARANCE_BASE_CURRENCY = "appearance_base_currency"
     // The dropdown buttons that show a setting's value and open its options
     const val APPEARANCE_THEME = "appearance_theme"
     const val APPEARANCE_PRICE_CHANGE = "appearance_price_change"
     const val APPEARANCE_LAUNCH_SCREEN = "appearance_launch_screen"
     const val APPEARANCE_BALANCE_VALUE = "appearance_balance_value"
+    // The switches; each reports whether it is on
+    const val APPEARANCE_HIDE_MARKETS = "appearance_hide_markets"
+    const val APPEARANCE_HIDE_BUTTONS = "appearance_hide_buttons"
+    const val APPEARANCE_CHART_BUTTON = "appearance_chart_button"
+    const val APPEARANCE_AMOUNT_ROUNDING = "appearance_amount_rounding"
+    const val APPEARANCE_RECENTLY_SENT = "appearance_recently_sent"
     fun currency(code: String) = "currency_$code"
     // A tile of the app icon picker; the chosen one reports itself as checked
     fun appIcon(id: String) = "app_icon_$id"

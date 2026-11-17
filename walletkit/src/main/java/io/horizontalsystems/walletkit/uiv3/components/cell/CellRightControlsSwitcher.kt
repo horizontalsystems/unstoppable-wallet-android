@@ -31,6 +31,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 @Composable
 fun CellRightControlsSwitcher(
     checked: Boolean,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onInfoClick: (() -> Unit)? = null,
     confirmChange: (() -> Boolean) = { true },
@@ -58,6 +59,7 @@ fun CellRightControlsSwitcher(
         }
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
             Switch(
+                modifier = modifier,
                 checked = internalChecked,
                 onCheckedChange = { newChecked ->
                     if (confirmChange()) {

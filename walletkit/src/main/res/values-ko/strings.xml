@@ -1482,14 +1482,14 @@
     <string name="AddMoneroNode_NodeUrl">노드 URL</string>
     <string name="AddMoneroNode_Warning_UrlExists">이 URL의 노드는 이미 존재합니다</string>
     <string name="Appearance_AmountRounding">금액 반올림</string>
-    <string name="Appearance_AmountRounding_Tip">잔액 및 트랜잭션 금액을 반올림하여 표시합니다.</string>
+    <string name="Appearance_AmountRounding_Tip">잔액 숫자를 읽기 쉽게 반올림합니다.</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
     <string name="Appearance_BalanceValue">코인 잔액</string>
-    <string name="Appearance_BalanceValue_Tip">잔액을 crypto 또는 fiat 기준으로 강조 표시합니다.</string>
-    <string name="Appearance_HideBalanceTabButtons_Tip">잔액 탭에서 전송, 수신 및 스왑 버튼을 숨깁니다.</string>
-    <string name="Appearance_HideMarketsTab_Tip">마켓 탭을 완전히 숨기기.</string>
-    <string name="Appearance_PriceChangeInterval_Tip">토큰 가격 변동을 표시할 기간을 선택하세요.</string>
+    <string name="Appearance_BalanceValue_Tip">잔액을 코인 또는 법정화폐로 표시합니다.</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">잔액 탭에서 전송, 수신, 스왑 버튼을 숨깁니다.</string>
+    <string name="Appearance_HideMarketsTab_Tip">마켓 탭을 화면에서 숨깁니다.</string>
+    <string name="Appearance_PriceChangeInterval_Tip">가격 변동을 표시할 기간을 선택하세요.</string>
     <string name="Appearance_RecentlySent">최근 전송</string>
     <string name="Appearance_SendScreen">보내기 화면</string>
     <string name="BalanceSyncError_Text">동기화 오류</string>
@@ -1570,7 +1570,7 @@
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <string name="SettingsSubscription_GetPremium">프리미엄 가입</string>
     <string name="Settings_AutoLock_Description">선택한 시간이 지나면 앱을 자동으로 잠급니다.</string>
-    <string name="Settings_LaunchScreen_Tip">앱이 기본적으로 열릴 화면을 선택하세요.</string>
+    <string name="Settings_LaunchScreen_Tip">앱을 시작할 때 열릴 화면을 선택하세요.</string>
     <string name="Settings_VipSupport">우선 지원</string>
     <string name="ShareUiDataDescription">이 설정을 통해 UI/UX 분석을 비활성화하고 완전한 기밀성을 보장할 수 있습니다.</string>
     <string name="StatusInfo_Confirmed">완료됨</string>
@@ -1626,7 +1626,7 @@
     <string name="AddressEnter_NeedSubscription_Content">보안 전송이 꺼져 있습니다. 위험한 주소로 송금되어 자금을 잃을 수 있습니다.</string>
     <string name="AddressEnter_Safe_Content">주소를 확인했습니다. 피싱, 블랙리스트 또는 제재 사항이 발견되지 않았습니다. 안전하게 사용할 수 있습니다.</string>
     <string name="AddressFormatSettings_Subtitle">코인의 주소 형식을 선택하세요.</string>
-    <string name="Appearance_RecentlySent_Tip">토큰의 최근 전송 주소를 표시합니다</string>
+    <string name="Appearance_RecentlySent_Tip">토큰의 최근 전송 주소를 표시합니다.</string>
     <string name="Approve_Allowance">허용 금액</string>
     <string name="BirthdayHeight_BlockDate">블록 날짜:</string>
     <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">거래소 유형</string>
