@@ -3,16 +3,16 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-  <!-- The mark is drawn on the design's 132 unit square: 64 wide with 34
+  <!-- The mark is drawn on the design's 120 unit square: 68 wide with 26
        around it. A launcher shows the middle 72 dp of this 108 dp canvas, so
        the square is scaled onto those 72 dp to keep that padding. -->
   <group
-      android:scaleX="0.5454545"
-      android:scaleY="0.5454545"
+      android:scaleX="0.6"
+      android:scaleY="0.6"
       android:translateX="18"
       android:translateY="18">
     <path
-        android:pathData="M55.333 87.333H44.668V34H34.001V87.333H34L44.667 98H87.333L98 87.333V34H55.333V87.333Z"
+        android:pathData="M48.666 82.666H37.335V26H26.001V82.666H26L37.334 94H82.666L94 82.666V26H48.666V82.666Z"
         android:fillColor="@color/launcher_debug_mark"/>
   </group>
 </vector>

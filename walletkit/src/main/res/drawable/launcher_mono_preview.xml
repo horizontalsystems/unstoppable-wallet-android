@@ -6,12 +6,12 @@
   <path
       android:pathData="M0,8C0,3.582 3.582,0 8,0H52C56.418,0 60,3.582 60,8V52C60,56.418 56.418,60 52,60H8C3.582,60 0,56.418 0,52V8Z"
       android:fillColor="@color/launcher_mono_background"/>
-  <!-- The design's 132 unit square scaled onto this 60 dp one -->
+  <!-- The design's 120 unit square scaled onto this 60 dp one -->
   <group
-      android:scaleX="0.4545455"
-      android:scaleY="0.4545455">
+      android:scaleX="0.5"
+      android:scaleY="0.5">
     <path
-        android:pathData="M55.333 87.333H44.668V34H34.001V87.333H34L44.667 98H87.333L98 87.333V34H55.333V87.333Z"
+        android:pathData="M48.666 82.666H37.335V26H26.001V82.666H26L37.334 94H82.666L94 82.666V26H48.666V82.666Z"
         android:fillColor="@color/launcher_mono_mark"/>
   </group>
 </vector>
