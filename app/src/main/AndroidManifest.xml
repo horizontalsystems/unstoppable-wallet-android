@@ -146,6 +146,24 @@
         </activity-alias>
 
         <activity-alias
+            android:name="${applicationId}.Ball8LauncherAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/launcher_8ball"
+            android:label="@string/App_Name"
+            android:targetActivity=".modules.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Retired icons. An alias stays for two releases after its icon is
+             retired, so that the app keeps a launcher entry while users who
+             had that icon are moved to the main one. -->
+
+        <!-- Retired in 0.54, remove in 0.56 -->
+        <activity-alias
             android:name="${applicationId}.PunkLauncherAlias"
             android:enabled="false"
             android:exported="true"
@@ -163,19 +181,6 @@
             android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/launcher_ape"
-            android:label="@string/App_Name"
-            android:targetActivity=".modules.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name="${applicationId}.Ball8LauncherAlias"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/launcher_8ball"
             android:label="@string/App_Name"
             android:targetActivity=".modules.main.MainActivity">
             <intent-filter>

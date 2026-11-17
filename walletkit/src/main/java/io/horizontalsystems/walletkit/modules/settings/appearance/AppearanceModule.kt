@@ -45,17 +45,24 @@ enum class AppIcon(
     Main(R.drawable.launcher_main_preview, "Main"),
     Dark(R.drawable.launcher_dark_preview, "Dark", displayName = "Orange"),
     Mono(R.drawable.launcher_mono_preview, "Mono"),
-    Ball8(R.drawable.launcher_8ball_preview, "8ball"),
-    Monero(R.drawable.launcher_monero_preview, "monero"),
-    ZCash(R.drawable.launcher_zcash_preview, "ZCash"),
-    Pepe(R.drawable.launcher_pepe_preview, "Pepe"),
-    Doge(R.drawable.launcher_doge_preview, "Doge"),
-    Punk(R.drawable.launcher_punk_preview, "Punk"),
-    Ape(R.drawable.launcher_ape_preview, "#1874"),
-    Plflag(R.drawable.launcher_plflag_preview, "Plflag"),
-    Sinwar(R.drawable.launcher_sinwar_preview, "Sinwar"),
-    Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad"),
-    Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad");
+    Ball8(R.drawable.launcher_8ball_preview, "8ball", displayName = "8Ball"),
+
+    // A retired icon leaves the picker, and a user who had it gets Main at
+    // the next launch. Its manifest alias has to outlive that by two
+    // releases: an update that drops the alias of the icon still selected
+    // leaves the app without a launcher entry.
+
+    // Retired in 0.54, remove with their aliases in 0.56
+    Monero(R.drawable.launcher_monero_preview, "monero", true),
+    ZCash(R.drawable.launcher_zcash_preview, "ZCash", true),
+    Pepe(R.drawable.launcher_pepe_preview, "Pepe", true),
+    Doge(R.drawable.launcher_doge_preview, "Doge", true),
+    Punk(R.drawable.launcher_punk_preview, "Punk", true),
+    Ape(R.drawable.launcher_ape_preview, "#1874", true),
+    Plflag(R.drawable.launcher_plflag_preview, "Plflag", true),
+    Sinwar(R.drawable.launcher_sinwar_preview, "Sinwar", true),
+    Yeschad(R.drawable.launcher_yeschad_preview, "Yeschad", true),
+    Gigachad(R.drawable.launcher_gigachad_preview, "Gigachad", true);
 
     override val title: TranslatableString
         get() = TranslatableString.PlainString(displayName)

@@ -11,21 +11,21 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +43,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
@@ -443,84 +447,85 @@ private fun AppCloseWarningBottomSheet(
     }
 }
 
-@Composable
-private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (AppIcon) -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        val rows = appIconOptions.options.chunked(3)
-        rows.forEach { row ->
-            AppIconsRow(row, appIconOptions.selected, onAppIconSelect)
-        }
+// Spreads the tiles from edge to edge like SpaceBetween, and keeps a gap
+// between them when the row is too narrow for the tiles at full size
+private val AppIconsArrangement = object : Arrangement.Horizontal {
+    override val spacing = 8.dp
 
+    override fun Density.arrange(
+        totalSize: Int,
+        sizes: IntArray,
+        layoutDirection: LayoutDirection,
+        outPositions: IntArray
+    ) = with(Arrangement.SpaceBetween) {
+        arrange(totalSize, sizes, layoutDirection, outPositions)
     }
 }
 
 @Composable
-private fun AppIconsRow(
-    chunk: List<AppIcon?>,
-    selected: AppIcon,
-    onAppIconSelect: (AppIcon) -> Unit
-) {
+private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (AppIcon) -> Unit) {
     Row(
         modifier = Modifier
+            .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .padding(horizontal = 14.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(16.dp)
+            .selectableGroup(),
+        horizontalArrangement = AppIconsArrangement
     ) {
-        for (i in 0 until 3) {
-            val appIcon = chunk.getOrNull(i)
-            if (appIcon != null) {
-                IconBox(
-                    appIcon.icon,
-                    appIcon.title.getString(),
-                    appIcon == selected
-                ) { onAppIconSelect(appIcon) }
-            } else {
-                // Invisible element to preserve space
-                Spacer(modifier = Modifier.size(60.dp))
-            }
+        appIconOptions.options.forEach { appIcon ->
+            IconBox(
+                // Tiles keep their size while the row has room for them and
+                // shrink evenly, instead of squeezing the last one, when a
+                // narrow window does not
+                modifier = Modifier.weight(1f, fill = false),
+                icon = appIcon.icon,
+                name = appIcon.title.getString(),
+                selected = appIcon == appIconOptions.selected,
+                testTag = TestTags.appIcon(appIcon.titleText.lowercase()),
+                onAppIconSelect = { onAppIconSelect(appIcon) }
+            )
         }
     }
 }
 
 @Composable
 private fun IconBox(
+    modifier: Modifier,
     icon: Int,
     name: String,
     selected: Boolean,
+    testTag: String,
     onAppIconSelect: () -> Unit
 ) {
     Column(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = { onAppIconSelect() }
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier
+            .testTag(testTag)
+            .selectable(
+                selected = selected,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                role = Role.RadioButton,
+                onClick = onAppIconSelect
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Image(
-            modifier = Modifier.size(60.dp),
+            modifier = Modifier
+                .widthIn(max = 60.dp)
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(12.dp)),
             painter = painterResource(icon),
             contentDescription = null,
         )
-        Box(
-            Modifier
-                .height(6.dp)
-                .background(ComposeAppTheme.colors.red50)
-        )
         if (selected) {
-            subhead1_orange(name)
+            subhead1_orange(name, maxLines = 1, overflow = TextOverflow.Ellipsis)
         } else {
-            subhead1_leah(name)
+            subhead1_leah(name, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
-
 }
 
 @Composable

@@ -194,6 +194,8 @@ object TestTags {
     const val APPEARANCE_LAUNCH_SCREEN = "appearance_launch_screen"
     const val APPEARANCE_BALANCE_VALUE = "appearance_balance_value"
     fun currency(code: String) = "currency_$code"
+    // A tile of the app icon picker; the chosen one reports itself as checked
+    fun appIcon(id: String) = "app_icon_$id"
 
     const val INDICATOR_MA_TYPE = "indicator_ma_type"
 
