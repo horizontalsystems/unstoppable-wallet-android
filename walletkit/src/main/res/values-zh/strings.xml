@@ -967,10 +967,8 @@
     <!--Info screen-->
     <string name="Info_Title">信息</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">生物认证</string>
-    <string name="SettingsSecurity_EnablePin">启用密码</string>
-    <string name="SettingsSecurity_DisablePin">禁用密码</string>
-    <string name="SettingsSecurity_EditPin">编辑密码</string>
+    <string name="SettingsSecurity_Biometric_Authentication">生物识别</string>
+    <string name="SettingsSecurity_Passcode">密码</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动本钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
@@ -1578,8 +1576,6 @@
     <string name="PinSet_ForDuress">设置密码以启用压力模式</string>
     <string name="PinSet_ErrorPinInUse">此密码已被使用.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">编辑密码</string>
-    <string name="EditPin_NewPinInfo">新密码</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">生物扫描仪</string>
     <!--Contacts-->

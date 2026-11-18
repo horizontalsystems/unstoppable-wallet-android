@@ -222,7 +222,6 @@ object TestTags {
     const val ABOUT_TERMS = "about_terms"
 
     const val SECURITY_PASSCODE = "security_passcode"
-    const val SECURITY_DISABLE_PASSCODE = "security_disable_passcode"
     const val SECURITY_BIOMETRICS = "security_biometrics"
     const val SECURITY_AUTOLOCK = "security_autolock"
     // The dropdown button inside the row above; it opens the same list

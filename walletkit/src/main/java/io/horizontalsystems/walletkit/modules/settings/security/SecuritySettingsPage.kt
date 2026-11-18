@@ -115,12 +115,13 @@ private fun SecurityCenterScreen(
         Column(
             Modifier.verticalScroll(rememberScrollState())
         ) {
+            VSpacer(12.dp)
             PasscodeBlock(
                 securitySettingsViewModel,
                 navigation
             )
 
-            VSpacer(24.dp)
+            VSpacer(16.dp)
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -184,8 +185,6 @@ private fun SecurityCenterScreen(
                 )
             }
 
-            VSpacer(height = 6.dp)
-
             SectionHeader(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.Premium_DefenseSystem),
@@ -229,16 +228,6 @@ private fun SecurityCenterScreen(
                     }
                 }
 
-            }
-
-            VSpacer(height = 24.dp)
-
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-            ) {
                 val authorizedActionDuressPin = navigation.authorizedAction {
                     if (uiState.duressPinEnabled) {
                         navigation.slideFromRight(EditDuressPinPage)
@@ -265,53 +254,55 @@ private fun SecurityCenterScreen(
                         }
                     }
 
-                CellPrimary(
-                    middle = {
-                        CellMiddleInfo(
-                            title = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection).hs,
-                            subtitle = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection_Description).hs
-                        )
-                    },
-                    right = {
-                        val onClick = {
-                            if (uiState.pinEnabled) {
-                                authorizedActionDuressPin()
-                            } else {
-                                setDuressPinFlow()
+                BoxBordered(top = uiState.defenseSystemActions.isNotEmpty()) {
+                    CellPrimary(
+                        middle = {
+                            CellMiddleInfo(
+                                title = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection).hs,
+                                subtitle = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection_Description).hs
+                            )
+                        },
+                        right = {
+                            val onClick = {
+                                if (uiState.pinEnabled) {
+                                    authorizedActionDuressPin()
+                                } else {
+                                    setDuressPinFlow()
+                                }
                             }
-                        }
 
-                        if (uiState.duressPinEnabled) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                HSIconButton(
+                            if (uiState.duressPinEnabled) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    HSIconButton(
+                                        variant = ButtonVariant.Secondary,
+                                        style = ButtonStyle.Solid,
+                                        size = ButtonSize.Small,
+                                        icon = painterResource(R.drawable.ic_edit_24),
+                                        contentDescription = stringResource(R.string.EditDuressPin_Title),
+                                        onClick = onClick
+                                    )
+
+                                    HSIconButton(
+                                        variant = ButtonVariant.Secondary,
+                                        style = ButtonStyle.Solid,
+                                        size = ButtonSize.Small,
+                                        icon = painterResource(R.drawable.trash_24),
+                                        contentDescription = stringResource(R.string.Button_Delete),
+                                        onClick = confirmDisableDuressPin
+                                    )
+                                }
+                            } else {
+                                HSButton(
                                     variant = ButtonVariant.Secondary,
                                     style = ButtonStyle.Solid,
                                     size = ButtonSize.Small,
-                                    icon = painterResource(R.drawable.ic_edit_24),
-                                    contentDescription = stringResource(R.string.EditDuressPin_Title),
+                                    title = stringResource(R.string.Button_Add),
                                     onClick = onClick
                                 )
-
-                                HSIconButton(
-                                    variant = ButtonVariant.Secondary,
-                                    style = ButtonStyle.Solid,
-                                    size = ButtonSize.Small,
-                                    icon = painterResource(R.drawable.trash_24),
-                                    contentDescription = stringResource(R.string.Button_Delete),
-                                    onClick = confirmDisableDuressPin
-                                )
                             }
-                        } else {
-                            HSButton(
-                                variant = ButtonVariant.Secondary,
-                                style = ButtonStyle.Solid,
-                                size = ButtonSize.Small,
-                                title = stringResource(R.string.Button_Add),
-                                onClick = onClick
-                            )
                         }
-                    }
-                )
+                    )
+                }
             }
 
             VSpacer(height = 32.dp)

@@ -971,9 +971,7 @@
     <string name="Info_Title">Информация</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Biometric_Authentication">Биометрия</string>
-    <string name="SettingsSecurity_EnablePin">Включить код доступа</string>
-    <string name="SettingsSecurity_DisablePin">Отключить код доступа</string>
-    <string name="SettingsSecurity_EditPin">Изменить код</string>
+    <string name="SettingsSecurity_Passcode">Код доступа</string>
     <string name="SettingsSecurity_ManageKeys">Кошельки</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
@@ -1586,8 +1584,6 @@
     <string name="PinSet_ForDuress">Установите код доступа для включения режима Duress</string>
     <string name="PinSet_ErrorPinInUse">Этот код доступа уже используется.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Изменить код</string>
-    <string name="EditPin_NewPinInfo">Новый код доступа</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Биометрический сканер</string>
     <!--Contacts-->

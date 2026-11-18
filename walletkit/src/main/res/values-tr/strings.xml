@@ -677,10 +677,8 @@
     <!--Info screen-->
     <string name="Info_Title">Bilgi</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">Biyometrik doğrulama</string>
-    <string name="SettingsSecurity_EnablePin">Kod</string>
-    <string name="SettingsSecurity_DisablePin">Şifre Kodunu Devre Dışı Bırak</string>
-    <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biyometrik</string>
+    <string name="SettingsSecurity_Passcode">Şifre</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
@@ -1226,8 +1224,6 @@
     <string name="PinSet_ForDuress">Duress Modunu etkinleştirmek için bir şifre kodu ayarlayın</string>
     <string name="PinSet_ErrorPinInUse">Bu şifre zaten kullanılıyor.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Kod Değiştir</string>
-    <string name="EditPin_NewPinInfo">Yeni Kod</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Biyometri Tarayıcı</string>
     <!--Contacts-->

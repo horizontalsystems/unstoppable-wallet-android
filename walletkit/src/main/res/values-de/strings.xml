@@ -968,10 +968,8 @@
     <!--Info screen-->
     <string name="Info_Title">Info</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">Biometrien</string>
-    <string name="SettingsSecurity_EnablePin">Passcode aktivieren</string>
-    <string name="SettingsSecurity_DisablePin">Passwort deaktivieren</string>
-    <string name="SettingsSecurity_EditPin">Passwort bearbeiten</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrie</string>
+    <string name="SettingsSecurity_Passcode">Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion startet die unaufhaltsame Wallet neu.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Vollständig anonymisieren Sie Ihr Internet während Sie diese App verwenden. Beachten Sie, dass in einigen Fällen die WalletConnect-Funktion für DeFi-Apps sehr langsam oder gar nicht funktionieren kann.</string>
@@ -1584,8 +1582,6 @@
     <string name="PinSet_ForDuress">Code zum Aktivieren des Duress Modus festlegen</string>
     <string name="PinSet_ErrorPinInUse">Dieser Code wird bereits verwendet.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Passwort bearbeiten</string>
-    <string name="EditPin_NewPinInfo">Neue Code</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Biometriescanner</string>
     <!--Contacts-->

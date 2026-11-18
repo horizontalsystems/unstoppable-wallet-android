@@ -968,10 +968,8 @@
     <!--Info screen-->
     <string name="Info_Title">Informação</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">Autenticação Biométrica</string>
-    <string name="SettingsSecurity_EnablePin">Senha</string>
-    <string name="SettingsSecurity_DisablePin">Desativar Senha</string>
-    <string name="SettingsSecurity_EditPin">Editar senha</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometria</string>
+    <string name="SettingsSecurity_Passcode">Senha</string>
     <string name="SettingsSecurity_ManageKeys">Gerenciar carteiras</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimize sua internet completamente enquanto estiver usando este aplicativo. Nota: em alguns casos, o recurso WalletConnect para apps DeFi pode ser muito lento ou nem funcionar.</string>
@@ -1584,8 +1582,6 @@
     <string name="PinSet_ForDuress">Defina uma senha para ativar o modo de Coação</string>
     <string name="PinSet_ErrorPinInUse">Esta senha já está sendo usada.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Editar senha</string>
-    <string name="EditPin_NewPinInfo">Nova Senha</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Leitura Biométrica</string>
     <!--Contacts-->

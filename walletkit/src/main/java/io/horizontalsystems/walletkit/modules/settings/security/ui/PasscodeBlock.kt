@@ -2,11 +2,13 @@ package io.horizontalsystems.walletkit.modules.settings.security.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
@@ -16,16 +18,14 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.modules.pin.EditPinPage
 import io.horizontalsystems.walletkit.modules.pin.SetPinPage
 import io.horizontalsystems.walletkit.modules.settings.security.passcode.SecuritySettingsViewModel
+import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
-import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
-import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 
 @Composable
@@ -35,83 +35,71 @@ fun PasscodeBlock(
 ) {
     val uiState = viewModel.uiState
 
-    VSpacer(height = 8.dp)
+    val disablePin = navigation.authorizedAction { viewModel.disablePin() }
+    // Both switches only start a flow; they turn on once the view model reports the new state.
+    val togglePin = {
+        if (uiState.pinEnabled) disablePin() else navigation.slideFromRight(SetPinPage())
+    }
+    val enableBiometricsFlow = navigation.ensurePinSet(R.string.PinSet_ForBiometrics) {
+        viewModel.enableBiometrics()
+    }
+
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
     ) {
-        val authorizedActionEditPin = navigation.authorizedAction {
-            navigation.slideFromRight(EditPinPage)
-        }
         CellPrimary(
             modifier = Modifier.testTag(TestTags.SECURITY_PASSCODE),
             middle = {
-                val text =
-                    if (uiState.pinEnabled) R.string.SettingsSecurity_EditPin else R.string.SettingsSecurity_EnablePin
-                CellMiddleInfo(title = stringResource(text).hs)
+                CellMiddleInfo(title = stringResource(R.string.SettingsSecurity_Passcode).hs)
             },
             right = {
-                CellRightNavigation(
-                    icon = if (!uiState.pinEnabled) {
-                        painterResource(id = R.drawable.ic_attention_red_20)
-                    } else null,
-                    iconTint = ComposeAppTheme.colors.lucian
-                )
-            },
-            onClick = {
-                if (!uiState.pinEnabled) navigation.slideFromRight(SetPinPage())
-                else authorizedActionEditPin()
-            }
-        )
-        if (uiState.pinEnabled) {
-            HsDivider()
-            CellPrimary(
-                modifier = Modifier.testTag(TestTags.SECURITY_DISABLE_PASSCODE),
-                middle = {
-                    CellMiddleInfo(
-                        title = stringResource(R.string.SettingsSecurity_DisablePin).hs(
-                            ComposeAppTheme.colors.lucian
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (!uiState.pinEnabled) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(R.drawable.warning_filled_24),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.lucian
                         )
+                        HSpacer(12.dp)
+                    }
+                    CellRightControlsSwitcher(
+                        checked = uiState.pinEnabled,
+                        confirmChange = {
+                            togglePin()
+                            false
+                        },
+                        onCheckedChange = {}
                     )
-                },
-                onClick = navigation.authorizedAction { viewModel.disablePin() }
-            )
-        }
-    }
-
-    if (viewModel.biometricSettingsVisible) {
-        Spacer(Modifier.height(24.dp))
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
-        ) {
+                }
+            },
+            onClick = togglePin
+        )
+        if (viewModel.biometricSettingsVisible) {
+            HsDivider()
             CellPrimary(
                 middle = {
                     CellMiddleInfo(title = stringResource(R.string.SettingsSecurity_Biometric_Authentication).hs)
                 },
                 right = {
-                    val enableBiometricsFlow = navigation.ensurePinSet(R.string.PinSet_ForBiometrics) {
-                        viewModel.enableBiometrics()
-                    }
-
-                    HsSwitch(
+                    CellRightControlsSwitcher(
                         modifier = Modifier.testTag(TestTags.SECURITY_BIOMETRICS),
                         checked = uiState.biometricsEnabled,
-                        onCheckedChange = { enabled ->
-                            if (enabled) {
-                                enableBiometricsFlow()
-                            } else {
+                        confirmChange = {
+                            if (uiState.biometricsEnabled) {
                                 viewModel.disableBiometrics()
+                            } else {
+                                enableBiometricsFlow()
                             }
+                            false
                         },
+                        onCheckedChange = {}
                     )
                 }
             )
         }
     }
-
 }

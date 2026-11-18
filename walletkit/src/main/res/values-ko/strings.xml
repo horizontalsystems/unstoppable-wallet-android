@@ -795,10 +795,8 @@
     <!--Info screen-->
     <string name="Info_Title">인포</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">생체정보 인증</string>
-    <string name="SettingsSecurity_EnablePin">비밀번호</string>
-    <string name="SettingsSecurity_DisablePin">비밀번호 비활성화</string>
-    <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
+    <string name="SettingsSecurity_Biometric_Authentication">생체 인증</string>
+    <string name="SettingsSecurity_Passcode">비밀번호</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>
@@ -1373,8 +1371,6 @@
     <string name="PinSet_ForDuress">긴급 상황 모드를 활성화하려면 비밀번호를 설정하세요.</string>
     <string name="PinSet_ErrorPinInUse">이 비밀번호는 이미 사용 중입니다.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">비밀번호 변경</string>
-    <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">생체정보 스캐너</string>
     <!--Contacts-->

@@ -968,10 +968,8 @@
     <!--Info screen-->
     <string name="Info_Title">Información</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">Autenticación biométrica</string>
-    <string name="SettingsSecurity_EnablePin">Código</string>
-    <string name="SettingsSecurity_DisablePin">Desactivar bloqueo con código</string>
-    <string name="SettingsSecurity_EditPin">Editar el código </string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometría</string>
+    <string name="SettingsSecurity_Passcode">Código de acceso</string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimiza completamente tu internet mientras usas esta aplicación. Tenga en cuenta que en algunos casos la función WalletConnect para aplicaciones DeFi puede ser muy lenta o no funcionar.</string>
@@ -1579,8 +1577,6 @@
     <string name="PinSet_ForDuress">Establecer un código de acceso para activar el modo Duración</string>
     <string name="PinSet_ErrorPinInUse">Este código de acceso ya está siendo usado.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Editar el código </string>
-    <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Escáner biométrico</string>
     <!--Contacts-->
