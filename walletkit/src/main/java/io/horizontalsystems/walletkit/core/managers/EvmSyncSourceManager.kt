@@ -358,12 +358,9 @@ class EvmSyncSourceManager(
         return enabled
     }
 
-    /**
-     * A chain needs at least two built-in sources, and a kit that can fall over between them;
-     * tron-kit uses only its first URL so far.
-     */
+    /** A chain needs at least two built-in sources for its kit to fall over between. */
     fun autoSelectSupported(blockchainType: BlockchainType): Boolean =
-        blockchainType != BlockchainType.Tron && defaultSyncSources(blockchainType).size >= 2
+        defaultSyncSources(blockchainType).size >= 2
 
     private fun autoSelectDefault(blockchainType: BlockchainType): Boolean =
         isUntouched(
