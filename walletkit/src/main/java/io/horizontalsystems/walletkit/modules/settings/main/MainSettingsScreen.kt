@@ -219,12 +219,10 @@ private fun SettingSections(
                     title = R.string.DAppConnection_Title,
                     icon = R.drawable.link_24,
                     testTag = TestTags.SETTINGS_DAPP_CONNECTION,
-                    value = when (val counter = uiState.wcCounterType) {
-                        is MainSettingsModule.CounterType.PendingRequestCounter -> {
-                            counter.number.toString().hs(color = ComposeAppTheme.colors.lucian)
-                        }
-                        is MainSettingsModule.CounterType.SessionCounter -> counter.number.toString().hs
-                        null -> null
+                    value = if (uiState.pendingRequestCount > 0) {
+                        uiState.pendingRequestCount.toString().hs(color = ComposeAppTheme.colors.lucian)
+                    } else {
+                        null
                     },
                     onClick = {
                         when (val state = viewModel.walletConnectSupportState) {

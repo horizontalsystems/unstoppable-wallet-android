@@ -22,10 +22,4 @@ object MainSettingsModule {
             return viewModel as T
         }
     }
-
-    sealed class CounterType {
-        class SessionCounter(val number: Int) : CounterType()
-        class PendingRequestCounter(val number: Int) : CounterType()
-    }
-
 }

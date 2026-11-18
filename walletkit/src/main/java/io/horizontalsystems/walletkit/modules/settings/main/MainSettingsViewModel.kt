@@ -8,7 +8,6 @@ import io.horizontalsystems.walletkit.core.IBackupManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
-import io.horizontalsystems.walletkit.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -56,15 +55,10 @@ class MainSettingsViewModel(
     private val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
-    private val walletConnectSessionCount: Int
-        get() = wcSessionManager.sessions.count()
-
     private val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
 
-    private var wcCounterType: CounterType? = null
-    private var wcSessionsCount = walletConnectSessionCount
     private var wcPendingRequestCount = 0
     private var hasSubscription = false
 
@@ -72,12 +66,6 @@ class MainSettingsViewModel(
         viewModelScope.launch {
             backupManager.allBackedUpFlow.collectSafely {
                 emitState()
-            }
-        }
-        viewModelScope.launch {
-            wcSessionManager.sessionsFlow.collect {
-                wcSessionsCount = walletConnectSessionCount
-                syncCounter()
             }
         }
         viewModelScope.launch {
@@ -95,7 +83,7 @@ class MainSettingsViewModel(
         viewModelScope.launch {
             wcSessionManager.pendingRequestCountFlow.collect {
                 wcPendingRequestCount = it
-                syncCounter()
+                emitState()
             }
         }
 
@@ -105,7 +93,6 @@ class MainSettingsViewModel(
                 emitState()
             }
         }
-        syncCounter()
     }
 
     override fun createState(): MainSettingUiState {
@@ -114,24 +101,11 @@ class MainSettingsViewModel(
             hasNonStandardAccount = hasNonStandardAccount,
             allBackedUp = allBackedUp,
             pendingRequestCount = wcPendingRequestCount,
-            walletConnectSessionCount = wcSessionsCount,
             manageWalletShowAlert = !allBackedUp || hasNonStandardAccount,
             securityCenterShowAlert = !isPinSet,
-            wcCounterType = wcCounterType,
             hasSubscription = hasSubscription,
             donateEnabled = donateEnabled,
         )
-    }
-
-    private fun syncCounter() {
-        if (wcPendingRequestCount > 0) {
-            wcCounterType = CounterType.PendingRequestCounter(wcPendingRequestCount)
-        } else if (wcSessionsCount > 0) {
-            wcCounterType = CounterType.SessionCounter(wcSessionsCount)
-        } else {
-            wcCounterType = null
-        }
-        emitState()
     }
 }
 
@@ -140,10 +114,8 @@ data class MainSettingUiState(
     val hasNonStandardAccount: Boolean,
     val allBackedUp: Boolean,
     val pendingRequestCount: Int,
-    val walletConnectSessionCount: Int,
     val manageWalletShowAlert: Boolean,
     val securityCenterShowAlert: Boolean,
-    val wcCounterType: CounterType?,
     val hasSubscription: Boolean,
     val donateEnabled: Boolean,
 )
