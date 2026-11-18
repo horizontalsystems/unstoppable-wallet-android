@@ -195,6 +195,11 @@ object TestTags {
     const val APPEARANCE_PRICE_CHANGE = "appearance_price_change"
     const val APPEARANCE_LAUNCH_SCREEN = "appearance_launch_screen"
     const val APPEARANCE_BALANCE_VALUE = "appearance_balance_value"
+    // The rows that hold those buttons; tapping a row opens the same options
+    const val APPEARANCE_THEME_ROW = "appearance_theme_row"
+    const val APPEARANCE_PRICE_CHANGE_ROW = "appearance_price_change_row"
+    const val APPEARANCE_LAUNCH_SCREEN_ROW = "appearance_launch_screen_row"
+    const val APPEARANCE_BALANCE_VALUE_ROW = "appearance_balance_value_row"
     // The switches; each reports whether it is on
     const val APPEARANCE_HIDE_MARKETS = "appearance_hide_markets"
     const val APPEARANCE_HIDE_BUTTONS = "appearance_hide_buttons"

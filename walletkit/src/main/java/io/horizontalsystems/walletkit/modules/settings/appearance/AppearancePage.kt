@@ -129,6 +129,7 @@ fun AppearanceScreen(navigation: HSNavigation) {
                     title = R.string.Settings_Theme,
                     value = uiState.selectedTheme.title.getString(),
                     testTag = TestTags.APPEARANCE_THEME,
+                    rowTestTag = TestTags.APPEARANCE_THEME_ROW,
                     onClick = { openThemeSelector = true }
                 )
             }
@@ -174,6 +175,7 @@ fun AppearanceScreen(navigation: HSNavigation) {
                             subtitle = R.string.Settings_LaunchScreen_Tip,
                             value = uiState.selectedLaunchScreen.title.getString(),
                             testTag = TestTags.APPEARANCE_LAUNCH_SCREEN,
+                            rowTestTag = TestTags.APPEARANCE_LAUNCH_SCREEN_ROW,
                             onClick = { openLaunchPageSelector = true }
                         )
                     }
@@ -195,6 +197,7 @@ fun AppearanceScreen(navigation: HSNavigation) {
                         subtitle = R.string.Appearance_PriceChangeInterval_Tip,
                         value = uiState.priceChangeInterval.title.getString(),
                         testTag = TestTags.APPEARANCE_PRICE_CHANGE,
+                        rowTestTag = TestTags.APPEARANCE_PRICE_CHANGE_ROW,
                         onClick = { openPriceChangeIntervalSelector = true }
                     )
                 }
@@ -233,6 +236,7 @@ fun AppearanceScreen(navigation: HSNavigation) {
                         subtitle = R.string.Appearance_BalanceValue_Tip,
                         value = uiState.selectedBalanceViewType.title.getString(),
                         testTag = TestTags.APPEARANCE_BALANCE_VALUE,
+                        rowTestTag = TestTags.APPEARANCE_BALANCE_VALUE_ROW,
                         onClick = { openBalanceValueSelector = true }
                     )
                 }
@@ -328,10 +332,13 @@ private fun DropdownCell(
     @StringRes subtitle: Int? = null,
     value: String,
     testTag: String,
+    rowTestTag: String,
     onClick: () -> Unit,
 ) {
     CellPrimary(
-        modifier = Modifier.heightIn(min = 64.dp),
+        modifier = Modifier
+            .heightIn(min = 64.dp)
+            .testTag(rowTestTag),
         middle = {
             CellMiddleInfo(
                 title = stringResource(title).hs,
