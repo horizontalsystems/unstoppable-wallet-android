@@ -677,7 +677,7 @@
     <!--Info screen-->
     <string name="Info_Title">Bilgi</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Biometric_Authentication">Biyometrik</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biyometri</string>
     <string name="SettingsSecurity_Passcode">Şifre</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>

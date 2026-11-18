@@ -1433,7 +1433,7 @@
 
     <!--Setting_Security-->
 
-    <string name="SettingsSecurity_Biometric_Authentication">Biometric</string>
+    <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Passcode">Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
