@@ -6,11 +6,12 @@ import io.horizontalsystems.walletkit.entities.EnabledWalletCache
 import io.horizontalsystems.walletkit.entities.Wallet
 
 class BalanceCache(private val dao: EnabledWalletsCacheDao) {
-    private var cacheMap: Map<String, BalanceData>
+    // Read on first use, not on construction: the balance screens build this cache on
+    // the main thread, and a wallet whose adapter is ready never asks for it.
+    private val stored by lazy { convertToCacheMap(dao.getAll()) }
 
-    init {
-        cacheMap = convertToCacheMap(dao.getAll())
-    }
+    @Volatile
+    private var updated = mapOf<String, BalanceData>()
 
     private fun convertToCacheMap(list: List<EnabledWalletCache>): Map<String, BalanceData> {
         return list.mapNotNull {
@@ -28,9 +29,10 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
 
     fun getCache(wallet: Wallet): BalanceData? {
         val key = listOf(wallet.token.tokenQuery.id, wallet.account.id).joinToString()
-        return cacheMap[key]
+        return updated[key] ?: stored[key]
     }
 
+    @Synchronized
     fun setCache(balancesData: Map<Wallet, BalanceData>) {
         val list = balancesData.map { (wallet, balanceData) ->
             EnabledWalletCache(
@@ -39,7 +41,7 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
                 balanceData
             )
         }
-        cacheMap = cacheMap + convertToCacheMap(list)
+        updated = updated + convertToCacheMap(list)
 
         dao.insertAll(list)
     }
