@@ -5,25 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 class CurveAnimatorBars(
-    private var targetValues: LinkedHashMap<Long, Float>,
-    private var targetMinKey: Long,
-    private var targetMaxKey: Long,
-    private var targetMinValue: Float,
-    private var targetMaxValue: Float,
+    targetValues: LinkedHashMap<Long, Float>,
+    targetMinKey: Long,
+    targetMaxKey: Long,
+    targetMinValue: Float,
+    targetMaxValue: Float,
+    private val transition: ChartTransition,
 ) {
-    private var fromValues: LinkedHashMap<Long, Float> = targetValues
-    private var fromMinKey: Long = targetMinKey
-    private var fromMaxKey: Long = targetMaxKey
-    private var fromMinValue: Float = targetMinValue
-    private var fromMaxValue: Float = targetMaxValue
-
-    private var frameValues: LinkedHashMap<Long, Float> = fromValues
-    private var frameMinKey: Long = fromMinKey
-    private var frameMaxKey: Long = fromMaxKey
-    private var frameMinValue: Float = fromMinValue
-    private var frameMaxValue: Float = fromMaxValue
-
-    private var combinedKeys = (fromValues.keys + targetValues.keys).distinct().sorted()
+    private var target = CurveFrame(targetValues, targetMinKey, targetMaxKey, targetMinValue, targetMaxValue)
+    private var frame = target
+    private var frameAt: (Float) -> CurveFrame = { target }
 
     data class UiState(
         val values: LinkedHashMap<Long, Float>,
@@ -33,15 +24,7 @@ class CurveAnimatorBars(
         val maxValue: Float,
     )
 
-    var state by mutableStateOf(
-        UiState(
-            values = frameValues,
-            startTimestamp = frameMinKey,
-            endTimestamp = frameMaxKey,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-        )
-    )
+    var state by mutableStateOf(uiState())
         private set
 
     fun setValues(
@@ -51,80 +34,37 @@ class CurveAnimatorBars(
         minValue: Float = values.minOfOrNull { it.value } ?: 0f,
         maxValue: Float = values.maxOfOrNull { it.value } ?: 0f,
     ) {
-        targetValues = values
-        targetMinKey = minKey
-        targetMaxKey = maxKey
-        targetMinValue = minValue
-        targetMaxValue = maxValue
+        // A single timestamp has no width to animate across, so it is shown at once.
+        val animated = minKey != maxKey && frame.values.isNotEmpty()
 
-        fromValues = frameValues
-        fromMinKey = frameMinKey
-        fromMaxKey = frameMaxKey
-        fromMinValue = frameMinValue
-        fromMaxValue = frameMaxValue
+        val to = CurveFrame(
+            values = values,
+            startTimestamp = if (minKey == maxKey) (minKey * 0.9).toLong() else minKey,
+            endTimestamp = if (minKey == maxKey) (maxKey * 1.1).toLong() else maxKey,
+            minValue = if (minValue == maxValue) minValue * 0.9f else minValue,
+            maxValue = maxValue,
+        )
 
-        if (targetMinValue == targetMaxValue) {
-            targetMinValue *= 0.9f
+        target = to
+        frameAt = if (animated) {
+            transition.bars(frame, to)
+        } else {
+            { to }
         }
-
-        if (minKey == maxKey) {
-            targetMinKey = (minKey * 0.9).toLong()
-            targetMaxKey = (maxKey * 1.1).toLong()
-
-            // turn off animation
-            fromValues = targetValues
-            fromMinKey = targetMinKey
-            fromMaxKey = targetMaxKey
-            fromMinValue = targetMinValue
-            fromMaxValue = targetMaxValue
-        }
-
-        combinedKeys = (fromValues.keys + targetValues.keys).distinct().sorted()
     }
 
     fun onNextFrame(animatedFraction: Float) {
-        if (fromValues.isEmpty() || animatedFraction == 1f) {
-            frameValues = targetValues
-            frameMinKey = targetMinKey
-            frameMaxKey = targetMaxKey
-            frameMinValue = targetMinValue
-            frameMaxValue = targetMaxValue
-        } else {
-            frameValues = LinkedHashMap(
-                combinedKeys.map { key ->
-                    val fromValue = fromValues.getOrDefault(key, fromMinValue / 10)
-                    val targetValue = targetValues.getOrDefault(key, targetMinValue / 10)
-                    val frameValue = changeByPercentage(fromValue, targetValue, animatedFraction)
+        // The last frame is the target itself, not a computed copy that may differ by rounding.
+        frame = if (animatedFraction == 1f) target else frameAt(animatedFraction)
 
-                    key to frameValue
-                }.toMap()
-            )
-            frameMinKey = changeByPercentage(fromMinKey, targetMinKey, animatedFraction)
-            frameMaxKey = changeByPercentage(fromMaxKey, targetMaxKey, animatedFraction)
-            frameMinValue = changeByPercentage(fromMinValue, targetMinValue, animatedFraction)
-            frameMaxValue = changeByPercentage(fromMaxValue, targetMaxValue, animatedFraction)
-        }
-
-        emitState()
+        state = uiState()
     }
 
-    private fun emitState() {
-        state = UiState(
-            values = frameValues,
-            startTimestamp = frameMinKey,
-            endTimestamp = frameMaxKey,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-        )
-    }
-
-    private fun changeByPercentage(fromValue: Float, targetValue: Float, percentage: Float): Float {
-        val change = targetValue - fromValue
-        return fromValue + change * percentage
-    }
-
-    private fun changeByPercentage(fromValue: Long, targetValue: Long, percentage: Float): Long {
-        val change = targetValue - fromValue
-        return (fromValue + change * percentage).toLong()
-    }
+    private fun uiState() = UiState(
+        values = frame.values,
+        startTimestamp = frame.startTimestamp,
+        endTimestamp = frame.endTimestamp,
+        minValue = frame.minValue,
+        maxValue = frame.maxValue,
+    )
 }

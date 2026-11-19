@@ -46,4 +46,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.runtime)
+
+    testImplementation(libs.junit)
 }

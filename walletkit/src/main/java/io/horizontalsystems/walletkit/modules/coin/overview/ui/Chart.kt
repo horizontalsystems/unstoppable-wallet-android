@@ -1,9 +1,7 @@
 package io.horizontalsystems.walletkit.modules.coin.overview.ui
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -27,12 +25,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,7 +75,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import kotlinx.coroutines.launch
 
 private const val MAX_WIDTH = 600
 
@@ -393,23 +388,19 @@ fun PriceVolChart(
 
     val colors = ComposeAppTheme.colors
 
-    val chartHelper = remember { ChartHelper(chartData, hasVolumes, colors) }
-    chartHelper.setTarget(chartData, hasVolumes)
+    val chartHelper = remember { ChartHelper(chartData, hasVolumes, colors, ChartAnimation.transition) }
 
-    val scope = rememberCoroutineScope()
-    DisposableEffect(chartData) {
-        val animationJob = scope.launch {
-            animate(
-                initialValue = 0f,
-                targetValue = 1f,
-                animationSpec = tween(1000, easing = LinearEasing),
-            ) { value, _ ->
-                chartHelper.onNextFrame(value)
-            }
-        }
-
-        onDispose {
-            animationJob.cancel()
+    // The target is set once per data change, not in the composable body: every frame
+    // recomposes this function, and setting the target again would restart the transition
+    // from the frame just drawn.
+    LaunchedEffect(chartData, hasVolumes) {
+        chartHelper.setTarget(chartData, hasVolumes)
+        animate(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = ChartAnimation.spec,
+        ) { value, _ ->
+            chartHelper.onNextFrame(value)
         }
     }
 

@@ -5,28 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 class CurveAnimator2(
-    private var toValues: LinkedHashMap<Long, Float>,
-    private var toStartTimestamp: Long,
-    private var toEndTimestamp: Long,
-    private var toMinValue: Float,
-    private var toMaxValue: Float,
+    toValues: LinkedHashMap<Long, Float>,
+    toStartTimestamp: Long,
+    toEndTimestamp: Long,
+    toMinValue: Float,
+    toMaxValue: Float,
+    private val transition: ChartTransition,
 ) {
     var color: Long? = null
 
-    private var fromValues: LinkedHashMap<Long, Float> = toValues
-    private var fromStartTimestamp: Long = toStartTimestamp
-    private var fromEndTimestamp: Long = toEndTimestamp
-    private var fromMinValue: Float = toMinValue
-    private var fromMaxValue: Float = toMaxValue
-
-    private var frameValues: LinkedHashMap<Long, Float> = fromValues
-    private var frameStartTimestamp: Long = fromStartTimestamp
-    private var frameEndTimestamp: Long = fromEndTimestamp
-    private var frameMinValue: Float = fromMinValue
-    private var frameMaxValue: Float = fromMaxValue
-
-    private var fromValuesFilled = fillWith(fromValues, toValues)
-    private var toValuesFilled = fillWith(toValues, fromValues)
+    private var target = CurveFrame(toValues, toStartTimestamp, toEndTimestamp, toMinValue, toMaxValue)
+    private var frame = target
+    private var frameAt: (Float) -> CurveFrame = { target }
 
     data class UiState(
         val values: LinkedHashMap<Long, Float>,
@@ -37,18 +27,8 @@ class CurveAnimator2(
         val color: Long?
     )
 
-    var state by mutableStateOf(
-        UiState(
-            values = frameValues,
-            startTimestamp = frameStartTimestamp,
-            endTimestamp = frameEndTimestamp,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-            color = color,
-        )
-    )
+    var state by mutableStateOf(uiState())
         private set
-
 
     fun setTo(
         toValues: LinkedHashMap<Long, Float>,
@@ -57,114 +37,29 @@ class CurveAnimator2(
         toMinValue: Float,
         toMaxValue: Float,
     ) {
-        fromValues = frameValues
-        fromStartTimestamp = frameStartTimestamp
-        fromEndTimestamp = frameEndTimestamp
-        fromMinValue = frameMinValue
-        fromMaxValue = frameMaxValue
+        val to = CurveFrame(toValues, toStartTimestamp, toEndTimestamp, toMinValue, toMaxValue)
 
-        this.toValues = toValues
-        this.toStartTimestamp = toStartTimestamp
-        this.toEndTimestamp = toEndTimestamp
-        this.toMinValue = toMinValue
-        this.toMaxValue = toMaxValue
-
-        fromValuesFilled = fillWith(fromValues, this.toValues)
-        toValuesFilled = fillWith(this.toValues, fromValues)
+        target = to
+        frameAt = if (frame.values.isEmpty()) {
+            { to }
+        } else {
+            transition.line(frame, to)
+        }
     }
 
     fun onNextFrame(animatedFraction: Float) {
-        if (fromValues.isEmpty() || animatedFraction == 1f) {
-            frameStartTimestamp = toStartTimestamp
-            frameEndTimestamp = toEndTimestamp
+        // The last frame is the target itself, not a computed copy that may differ by rounding.
+        frame = if (animatedFraction == 1f) target else frameAt(animatedFraction)
 
-            frameMinValue = toMinValue
-            frameMaxValue = toMaxValue
-
-            frameValues = toValues
-        } else {
-            frameStartTimestamp = getForFrame(fromStartTimestamp.toFloat(), toStartTimestamp.toFloat(), animatedFraction).toLong()
-            frameEndTimestamp = getForFrame(fromEndTimestamp.toFloat(), toEndTimestamp.toFloat(), animatedFraction).toLong()
-
-            frameMinValue = getForFrame(fromMinValue, toMinValue, animatedFraction)
-            frameMaxValue = getForFrame(fromMaxValue, toMaxValue, animatedFraction)
-
-            val values = mutableMapOf<Long, Float>()
-            for ((timestamp, valueFrom) in fromValuesFilled) {
-                val valueTo = toValuesFilled[timestamp]!!
-                values[timestamp] = getForFrame(valueFrom, valueTo, animatedFraction)
-            }
-
-            frameValues = LinkedHashMap(values.toSortedMap())
-        }
-
-        emitState()
+        state = uiState()
     }
 
-    private fun emitState() {
-        state = UiState(
-            values = frameValues,
-            startTimestamp = frameStartTimestamp,
-            endTimestamp = frameEndTimestamp,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-            color = color,
-        )
-    }
-
-    private fun getForFrame(start: Float, end: Float, animatedFraction: Float): Float {
-        val change = end - start
-
-        return start + (change * animatedFraction)
-    }
-
-    companion object {
-
-        fun fillWith(
-            prevPointsMap: LinkedHashMap<Long, Float>,
-            nextPointsMap: LinkedHashMap<Long, Float>,
-        ): LinkedHashMap<Long, Float> {
-            val prevPointsMutableMap = prevPointsMap.toMutableMap()
-
-            val prevTimestamps = prevPointsMutableMap.keys.toList()
-
-            for ((timestamp, _) in nextPointsMap) {
-                if (!prevPointsMutableMap.containsKey(timestamp)) {
-                    valueForTimestamp(timestamp, prevTimestamps, prevPointsMutableMap)?.let {
-                        prevPointsMutableMap[timestamp] = it
-                    }
-                }
-            }
-
-            for ((timestamp, value) in nextPointsMap) {
-                if (!prevPointsMutableMap.containsKey(timestamp)) {
-                    prevPointsMutableMap[timestamp] = value
-                }
-            }
-
-            return LinkedHashMap(prevPointsMutableMap.toSortedMap())
-        }
-
-        private fun valueForTimestamp(
-            timestamp: Long,
-            timestamps: Collection<Long>,
-            values: Map<Long, Float>
-        ): Float? {
-            val timeStampBefore = timestamps.lastOrNull { it < timestamp } ?: return null
-            val timeStampAfter = timestamps.firstOrNull { it > timestamp } ?: return null
-
-            val valueBefore = values[timeStampBefore] ?: return null
-            val valueAfter = values[timeStampAfter] ?: return null
-
-            // v = (t - t1) * (v2 - v1) / (t2 - t1) + v1
-
-            val t1 = timeStampBefore
-            val t2 = timeStampAfter
-            val v1 = valueBefore
-            val v2 = valueAfter
-            val t = timestamp
-
-            return (t - t1) * (v2 - v1) / (t2 - t1) + v1
-        }
-    }
+    private fun uiState() = UiState(
+        values = frame.values,
+        startTimestamp = frame.startTimestamp,
+        endTimestamp = frame.endTimestamp,
+        minValue = frame.minValue,
+        maxValue = frame.maxValue,
+        color = color,
+    )
 }
