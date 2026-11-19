@@ -74,13 +74,13 @@ import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.components.BoxTyler44
 import io.horizontalsystems.walletkit.ui.compose.components.CustomKeyboardWarningDialog
-import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.controls.WalletNameInput
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -173,21 +173,14 @@ fun RestorePhrase(
                     color = ComposeAppTheme.colors.grey,
                     title = stringResource(id = R.string.ManageAccount_WalletName)
                 )
-                FormsInput(
+                WalletNameInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = uiState.accountName,
-                    pasteEnabled = false,
+                    initial = viewModel.defaultName,
                     hint = viewModel.defaultName,
                     onValueChange = viewModel::onEnterName,
-                    trailingContent = {
-                        HSIconButton(
-                            modifier = Modifier.testTag(TestTags.RESTORE_NAME_RANDOM),
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.magic_24),
-                            onClick = viewModel::generateRandomAccountName
-                        )
-                    }
+                    randomName = viewModel::randomAccountName,
+                    randomModifier = Modifier.testTag(TestTags.RESTORE_NAME_RANDOM),
+                    clearModifier = Modifier.testTag(TestTags.RESTORE_NAME_CLEAR),
                 )
                 VSpacer(24.dp)
 

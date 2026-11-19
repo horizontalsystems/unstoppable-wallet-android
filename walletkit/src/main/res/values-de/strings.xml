@@ -1998,4 +1998,6 @@
     <string name="Premium_Agreement_Terms">Bedingungen</string>
     <string name="Premium_Agreement_Privacy">Datenschutz</string>
     <string name="NetworkSettings_NotSynced">Nicht synchronisiert</string>
+    <string name="WalletName_Default">Wallet %d</string>
+    <string name="WalletName_WatchDefault">Watch-Wallet %d</string>
 </resources>

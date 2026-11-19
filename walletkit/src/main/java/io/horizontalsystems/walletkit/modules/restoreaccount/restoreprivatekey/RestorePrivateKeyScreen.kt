@@ -12,14 +12,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
-import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEntity
@@ -28,10 +25,10 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreViewModel
-import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.controls.WalletNameInput
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeaderColored
 
@@ -63,21 +60,14 @@ fun RestorePrivateKey(
                     color = ComposeAppTheme.colors.grey,
                     title = stringResource(id = R.string.ManageAccount_WalletName)
                 )
-                FormsInput(
+                WalletNameInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.accountName,
-                    pasteEnabled = false,
+                    initial = viewModel.defaultName,
                     hint = viewModel.defaultName,
                     onValueChange = viewModel::onEnterName,
-                    trailingContent = {
-                        HSIconButton(
-                            modifier = Modifier.testTag(TestTags.RESTORE_KEY_NAME_RANDOM),
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.magic_24),
-                            onClick = viewModel::generateRandomAccountName
-                        )
-                    }
+                    randomName = viewModel::randomAccountName,
+                    randomModifier = Modifier.testTag(TestTags.RESTORE_KEY_NAME_RANDOM),
+                    clearModifier = Modifier.testTag(TestTags.RESTORE_KEY_NAME_CLEAR),
                 )
                 VSpacer(24.dp)
 

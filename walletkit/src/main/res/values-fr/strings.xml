@@ -1995,4 +1995,6 @@
     <string name="Premium_Agreement_Terms">Conditions</string>
     <string name="Premium_Agreement_Privacy">Confidentialité</string>
     <string name="NetworkSettings_NotSynced">Non synchronisé</string>
+    <string name="WalletName_Default">Portefeuille %d</string>
+    <string name="WalletName_WatchDefault">Portefeuille d\'observation %d</string>
 </resources>

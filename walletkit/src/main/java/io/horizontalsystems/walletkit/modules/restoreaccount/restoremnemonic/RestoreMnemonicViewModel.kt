@@ -42,7 +42,7 @@ class RestoreMnemonicViewModel(
     private val regex = Regex("\\S+")
 
     val defaultName = accountFactory.getNextAccountName()
-    private var _accountName: String = accountManager.getRandomWalletName()
+    private var _accountName: String = defaultName
     val accountName: String get() = _accountName.ifBlank { defaultName }
 
     val isThirdPartyKeyboardAllowed: Boolean
@@ -110,10 +110,7 @@ class RestoreMnemonicViewModel(
         _accountName = name
     }
 
-    fun generateRandomAccountName() {
-        _accountName = accountManager.getRandomWalletName()
-        emitState()
-    }
+    fun randomAccountName(): String = accountManager.getRandomWalletName()
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
         error = null

@@ -1,10 +1,9 @@
 package io.horizontalsystems.walletkit.modules.watchaddress
 
-import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
-import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.controls.WalletNameInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -121,21 +119,15 @@ fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out 
             VSpacer(12.dp)
 
             HeaderText(stringResource(id = R.string.ManageAccount_Name))
-            FormsInput(
+            WalletNameInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                initial = viewModel.accountName,
-                pasteEnabled = false,
+                initial = viewModel.defaultAccountName,
                 hint = viewModel.defaultAccountName,
+                assignedName = uiState.assignedAccountName,
                 onValueChange = viewModel::onEnterAccountName,
-                trailingContent = {
-                    HSIconButton(
-                        modifier = Modifier.testTag(TestTags.WATCH_NAME_RANDOM),
-                        variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Small,
-                        icon = painterResource(R.drawable.magic_24),
-                        onClick = viewModel::generateRandomAccountName
-                    )
-                }
+                randomName = viewModel::randomAccountName,
+                randomModifier = Modifier.testTag(TestTags.WATCH_NAME_RANDOM),
+                clearModifier = Modifier.testTag(TestTags.WATCH_NAME_CLEAR),
             )
             VSpacer(32.dp)
             FormsInputMultiline(

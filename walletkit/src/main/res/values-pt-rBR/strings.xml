@@ -1998,4 +1998,6 @@
     <string name="Premium_Agreement_Terms">Termos</string>
     <string name="Premium_Agreement_Privacy">Privacidade</string>
     <string name="NetworkSettings_NotSynced">Não sincronizado</string>
+    <string name="WalletName_Default">Carteira %d</string>
+    <string name="WalletName_WatchDefault">Carteira de observação %d</string>
 </resources>

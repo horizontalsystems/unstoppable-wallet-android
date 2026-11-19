@@ -1988,4 +1988,6 @@
     <string name="Premium_Agreement_Terms">약관</string>
     <string name="Premium_Agreement_Privacy">개인정보 처리방침</string>
     <string name="NetworkSettings_NotSynced">동기화되지 않음</string>
+    <string name="WalletName_Default">지갑 %d</string>
+    <string name="WalletName_WatchDefault">조회 전용 지갑 %d</string>
 </resources>

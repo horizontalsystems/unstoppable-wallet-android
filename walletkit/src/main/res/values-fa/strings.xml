@@ -1981,4 +1981,6 @@
     <string name="Premium_Agreement_Terms">شرایط</string>
     <string name="Premium_Agreement_Privacy">حریم خصوصی</string>
     <string name="NetworkSettings_NotSynced">همگام‌سازی نشده</string>
+    <string name="WalletName_Default">کیف پول %d</string>
+    <string name="WalletName_WatchDefault">کیف پول نظارتی %d</string>
 </resources>

@@ -1,8 +1,11 @@
 package io.horizontalsystems.walletkit.core.factories
 
+import androidx.annotation.StringRes
+import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.IAccountFactory
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.managers.UserManager
+import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -46,20 +49,25 @@ class AccountFactory(
     }
 
     override fun getNextWatchAccountName(): String {
-        return nextUnusedName("Watch Address") { it.isWatchAccount }
+        return nextUnusedName(R.string.WalletName_WatchDefault)
     }
 
     override fun getNextAccountName(): String {
-        return nextUnusedName("Wallet") { !it.isWatchAccount }
+        return nextUnusedName(R.string.WalletName_Default)
     }
 
-    private fun nextUnusedName(prefix: String, counted: (Account) -> Boolean): String {
-        val accounts = accountManager.accounts
-        val existingNames = accounts.map { it.name }.toSet()
-        var number = accounts.count(counted) + 1
-        while ("$prefix $number" in existingNames) number++
+    private fun nextUnusedName(@StringRes template: Int): String {
+        val existingNames = accountManager.accounts.map { it.name }.toSet()
 
-        return "$prefix $number"
+        return firstUnusedName(existingNames) { Translator.getString(template, it) }
     }
 
+}
+
+/** The lowest-numbered name, counting from 1, that is not in [existingNames]. */
+internal fun firstUnusedName(existingNames: Set<String>, name: (Int) -> String): String {
+    // existingNames.size + 1 numbers always hold an unused one, as long as each number gives its own name
+    return (1..existingNames.size + 1).firstNotNullOfOrNull { number ->
+        name(number).takeIf { it !in existingNames }
+    } ?: name(1)
 }

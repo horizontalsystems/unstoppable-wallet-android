@@ -121,6 +121,7 @@ fun ManageAccountScreen(navigation: HSNavigation, accountId: String) {
                         .testTag(TestTags.ACCOUNT_NAME_INPUT),
                     initial = viewState.title,
                     hint = "",
+                    clearModifier = Modifier.testTag(TestTags.ACCOUNT_NAME_CLEAR),
                     onValueChange = {
                         viewModel.onChange(it)
 

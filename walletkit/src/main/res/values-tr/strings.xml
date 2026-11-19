@@ -1994,4 +1994,6 @@
     <string name="Premium_Agreement_Terms">Koşullar</string>
     <string name="Premium_Agreement_Privacy">Gizlilik</string>
     <string name="NetworkSettings_NotSynced">Senkronize değil</string>
+    <string name="WalletName_Default">Cüzdan %d</string>
+    <string name="WalletName_WatchDefault">İzleme Cüzdanı %d</string>
 </resources>

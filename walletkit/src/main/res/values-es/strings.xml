@@ -1993,4 +1993,6 @@
     <string name="Premium_Agreement_Terms">Términos</string>
     <string name="Premium_Agreement_Privacy">Privacidad</string>
     <string name="NetworkSettings_NotSynced">No sincronizado</string>
+    <string name="WalletName_Default">Cartera %d</string>
+    <string name="WalletName_WatchDefault">Cartera de observación %d</string>
 </resources>

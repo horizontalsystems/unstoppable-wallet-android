@@ -2002,4 +2002,6 @@
     <string name="Premium_Agreement_Terms">Условия</string>
     <string name="Premium_Agreement_Privacy">Политику конфиденциальности</string>
     <string name="NetworkSettings_NotSynced">Не синхронизирован</string>
+    <string name="WalletName_Default">Кошелёк %d</string>
+    <string name="WalletName_WatchDefault">Кошелёк наблюдения %d</string>
 </resources>

@@ -25,7 +25,7 @@ class RestorePrivateKeyViewModel(
 ) : ViewModel() {
 
     val defaultName = accountFactory.getNextAccountName()
-    private var _accountName: String by mutableStateOf(accountManager.getRandomWalletName())
+    private var _accountName: String by mutableStateOf(defaultName)
     val accountName: String get() = _accountName
 
     private var text = ""
@@ -37,9 +37,7 @@ class RestorePrivateKeyViewModel(
         _accountName = name
     }
 
-    fun generateRandomAccountName() {
-        _accountName = accountManager.getRandomWalletName()
-    }
+    fun randomAccountName(): String = accountManager.getRandomWalletName()
 
     fun onEnterPrivateKey(input: String) {
         inputState = null

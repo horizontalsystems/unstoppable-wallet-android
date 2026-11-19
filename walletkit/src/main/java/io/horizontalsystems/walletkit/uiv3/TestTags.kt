@@ -40,6 +40,7 @@ object TestTags {
     const val CREATE_TYPE_PASSKEY = "create_type_passkey"
     const val CREATE_NAME_INPUT = "create_name_input"
     const val CREATE_NAME_RANDOM = "create_name_random"
+    const val CREATE_NAME_CLEAR = "create_name_clear"
     const val CREATE_MNEMONIC_KIND = "create_mnemonic_kind"
     const val CREATE_PASSPHRASE_INPUT = "create_passphrase_input"
     const val CREATE_PASSPHRASE_EYE = "create_passphrase_eye"
@@ -53,7 +54,9 @@ object TestTags {
     const val IMPORT_BACKUP_FILE = "import_backup_file"
 
     const val RESTORE_NAME_RANDOM = "restore_name_random"
+    const val RESTORE_NAME_CLEAR = "restore_name_clear"
     const val RESTORE_KEY_NAME_RANDOM = "restore_key_name_random"
+    const val RESTORE_KEY_NAME_CLEAR = "restore_key_name_clear"
     const val RESTORE_PHRASE_INPUT = "restore_phrase_input"
     const val RESTORE_WORDLIST = "restore_wordlist"
     const val RESTORE_NEXT = "restore_next"
@@ -62,6 +65,7 @@ object TestTags {
     const val RESTORE_SUBMIT = "restore_submit"
 
     const val WATCH_NAME_RANDOM = "watch_name_random"
+    const val WATCH_NAME_CLEAR = "watch_name_clear"
     const val WATCH_INPUT = "watch_input"
     // Done for addresses that need no chain choice, Next for the rest
     const val WATCH_SUBMIT = "watch_submit"
@@ -241,6 +245,7 @@ object TestTags {
     const val ACCOUNT_LOCAL_BACKUP = "account_local_backup"
     const val ACCOUNT_UNLINK = "account_unlink"
     const val ACCOUNT_NAME_INPUT = "account_name_input"
+    const val ACCOUNT_NAME_CLEAR = "account_name_clear"
     const val ACCOUNT_SAVE = "account_save"
     fun unlinkConfirm(index: Int) = "unlink_confirm_$index"
     const val UNLINK_DELETE = "unlink_delete"

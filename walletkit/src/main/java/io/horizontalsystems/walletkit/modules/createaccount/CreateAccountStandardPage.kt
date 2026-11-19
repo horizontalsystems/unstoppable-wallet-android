@@ -19,17 +19,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.components.HSDropdownButton
-import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -42,10 +39,10 @@ import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModul
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.components.D1
-import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.controls.WalletNameInput
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -123,23 +120,16 @@ private fun CreateAccountIntroScreen(
                     color = ComposeAppTheme.colors.grey,
                     title = stringResource(id = R.string.ManageAccount_WalletName)
                 )
-                FormsInput(
+                WalletNameInput(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .testTag(TestTags.CREATE_NAME_INPUT),
-                    initial = viewModel.accountName,
-                    pasteEnabled = false,
+                    initial = viewModel.defaultAccountName,
                     hint = viewModel.defaultAccountName,
                     onValueChange = viewModel::onChangeAccountName,
-                    trailingContent = {
-                        HSIconButton(
-                            modifier = Modifier.testTag(TestTags.CREATE_NAME_RANDOM),
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.magic_24),
-                            onClick = viewModel::generateRandomAccountName
-                        )
-                    }
+                    randomName = viewModel::randomAccountName,
+                    randomModifier = Modifier.testTag(TestTags.CREATE_NAME_RANDOM),
+                    clearModifier = Modifier.testTag(TestTags.CREATE_NAME_CLEAR),
                 )
 
                 VSpacer(16.dp)

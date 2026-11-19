@@ -2348,4 +2348,6 @@
     <string name="ImportWallet_ViewOnly">View Only Wallet</string>
     <string name="ImportWallet_ViewOnly_Description">Balance and activity only</string>
     <string name="Balance_NoWallets">No wallets. Add one below.</string>
+    <string name="WalletName_Default">Wallet %d</string>
+    <string name="WalletName_WatchDefault">Watch Wallet %d</string>
 </resources>

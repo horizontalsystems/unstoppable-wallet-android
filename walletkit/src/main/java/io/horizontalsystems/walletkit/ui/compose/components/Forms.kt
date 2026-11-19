@@ -60,6 +60,7 @@ fun FormsInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onChangeFocus: ((Boolean) -> Unit)? = null,
+    clearModifier: Modifier = Modifier,
     trailingContent: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
@@ -110,6 +111,7 @@ fun FormsInput(
             trailingContent()
         } else if (textState.text.isNotEmpty()) {
             HSIconButton(
+                modifier = clearModifier,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
                 icon = painterResource(R.drawable.ic_delete_20),

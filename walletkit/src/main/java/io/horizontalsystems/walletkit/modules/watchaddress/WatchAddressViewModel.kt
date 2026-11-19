@@ -40,13 +40,14 @@ class WatchAddressViewModel(
     private var zcashViewingKey: String? = null
     private var accountType: AccountType? = null
     private var accountNameEdited = false
+    private var assignedAccountName: String? = null
     private var inputState: DataState<String>? = null
     private var viewKeyState: DataState<String>? = null
     private var parseAddressJob: Job? = null
     private var openBirthdayHeightScreen: Boolean = false
 
     val defaultAccountName = watchAddressService.nextWatchAccountName()
-    var accountName: String = watchAddressService.generateRandomWatchAccountName()
+    var accountName: String = defaultAccountName
         get() = field.ifBlank { defaultAccountName }
         private set
 
@@ -55,6 +56,7 @@ class WatchAddressViewModel(
         submitButtonType = submitButtonType,
         accountType = accountType,
         accountName = accountName,
+        assignedAccountName = assignedAccountName,
         inputState = inputState,
         addressType = type,
         viewKeyState = viewKeyState,
@@ -65,13 +67,11 @@ class WatchAddressViewModel(
     fun onEnterAccountName(v: String) {
         accountNameEdited = v.isNotBlank()
         accountName = v
-    }
-
-    fun generateRandomAccountName() {
-        accountName = watchAddressService.generateRandomWatchAccountName()
-        accountNameEdited = true
+        assignedAccountName = null
         emitState()
     }
+
+    fun randomAccountName(): String = watchAddressService.generateRandomWatchAccountName()
 
     fun onEnterInput(v: String) {
         parseAddressJob?.cancel()
@@ -87,6 +87,7 @@ class WatchAddressViewModel(
             inputState = null
             if (!accountNameEdited) {
                 accountName = defaultAccountName
+                assignedAccountName = defaultAccountName
             }
             syncSubmitButtonType()
             emitState()
@@ -200,6 +201,7 @@ class WatchAddressViewModel(
             val name = address.domain ?: address.hex.takeIf { type == Type.NearAddress && it.contains('.') }
             name?.let {
                 accountName = it
+                assignedAccountName = it
             }
         }
 
@@ -404,6 +406,8 @@ data class WatchAddressUiState(
     val submitButtonType: SubmitButtonType,
     val accountType: AccountType?,
     val accountName: String?,
+    // The name the screen chose by itself, for the name field to show; null once the user edits it
+    val assignedAccountName: String?,
     val inputState: DataState<String>?,
     val addressType: WatchAddressViewModel.Type,
     val viewKeyState: DataState<String>?,
