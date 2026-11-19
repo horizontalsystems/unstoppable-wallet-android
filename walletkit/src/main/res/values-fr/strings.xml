@@ -1621,6 +1621,7 @@
     <string name="AddZanoNode_AddNode">Ajouter un nœud</string>
     <string name="AddZanoNode_NodeUrl">URL du nœud</string>
     <string name="ZanoNodeSettings_Description">Choisissez le nœud que l\'application Unstoppable doit utiliser pour synchroniser le(s) portefeuille(s).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Passer à un autre nœud si celui sélectionné ne répond plus</string>
     <string name="LocalBackup_ProtectBackup">Protéger la sauvegarde</string>
     <string name="LocalBackup_ProtectBackupDescription">Créez un mot de passe pour protéger votre fichier de sauvegarde.</string>
     <string name="LocalBackup_BackupName">Nom de la sauvegarde</string>

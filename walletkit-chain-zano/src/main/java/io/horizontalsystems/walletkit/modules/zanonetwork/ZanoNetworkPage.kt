@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +47,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.walletkit.modules.zanonetwork.addnode.AddZanoNodeScreen
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -54,6 +56,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenc
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
+import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -128,7 +131,12 @@ private fun ZanoNetworkScreen(
                         modifier = Modifier.padding(horizontal = 32.dp),
                         text = stringResource(R.string.ZanoNodeSettings_Description)
                     )
-                    VSpacer(32.dp)
+                    VSpacer(24.dp)
+                    AutoSelectCell(
+                        enabled = viewModel.uiState.autoSelect,
+                        onCheckedChange = { viewModel.onToggleAutoSelect(it) }
+                    )
+                    VSpacer(24.dp)
                 }
 
                 item {
@@ -240,6 +248,30 @@ private fun ZanoNodeCell(
             }
         }
     }
+}
+
+@Composable
+private fun AutoSelectCell(
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    body_leah(text = stringResource(R.string.NetworkSettings_AutoSelect))
+                    Spacer(Modifier.height(1.dp))
+                    subhead2_grey(text = stringResource(R.string.ZanoNodeSettings_AutoSelectDescription))
+                }
+                Spacer(Modifier.width(12.dp))
+                HsSwitch(
+                    checked = enabled,
+                    onCheckedChange = onCheckedChange,
+                    modifier = Modifier.testTag(TestTags.ZANO_NETWORK_AUTO_SELECT),
+                )
+            }
+        }
+    )
 }
 
 @Composable

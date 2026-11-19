@@ -17,8 +17,14 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceZano
 import io.horizontalsystems.zanokit.ZanoWallet
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import io.horizontalsystems.walletkit.core.managers.SourceProbe
+import io.horizontalsystems.zanokit.NodePingResult
 import io.horizontalsystems.walletkit.core.managers.statusInfo
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
@@ -101,6 +107,78 @@ class ZanoChainPlugin(
     override val walletReloadTrigger: Flow<*>
         get() = zanoNodeManager().currentNodeUpdatedFlow
 
+    private val reselectScope = CoroutineScope(Dispatchers.Default)
+
+    override suspend fun onAppStart() {
+        val nodeManager = zanoNodeManager()
+        nodeManager.nodePinger = { nodes ->
+            val results = ZanoKit.pingNodes(nodes.map { it.host }).associateBy { it.daemonAddress }
+            nodes.map { node -> nodeProbe(node, results[node.host]) }
+        }
+
+        // Auto-Select: probe only when Zano is in use. The kit has already started on the
+        // stored node; it is restarted on another one only if that node is down or behind.
+        if (!isInUseAtStartup()) return
+        nodeManager.repickNode()
+    }
+
+    override suspend fun onEnterForeground() = reselectNodeIfStalled(retryIfNoSwitch = false)
+
+    override suspend fun refreshKit() = reselectNodeIfStalled(retryIfNoSwitch = false)
+
+    // The watcher's two-strike gate means the stall is persistent, so when no other node
+    // answers the kit is restarted on the current one. Foreground and refresh skip that:
+    // they can fire on a transient blip where a forced restart would churn.
+    override suspend fun onSyncStalled() = reselectNodeIfStalled(retryIfNoSwitch = true, knownStalled = true)
+
+    // The Zano wallet keeps reporting itself synced after its daemon stops answering: it only
+    // reports a daemon it never reached. So with Auto-Select on the current node is asked
+    // directly, one small request per check, and only while a Zano wallet is in use.
+    override suspend fun isSyncStalled(): Boolean {
+        if (hasUnsyncedWallet()) return true
+        if (!hasActiveWallet() || !App.connectivityManager.isConnected) return false
+        return zanoNodeManager().isCurrentNodeDown()
+    }
+
+    private fun hasActiveWallet() =
+        App.walletManager.activeWallets.any { it.token.blockchainType == BlockchainType.Zano }
+
+    /**
+     * Moves to another built-in node when the current one has stopped working.
+     *
+     * Gated on a stalled sync so a healthy connection is never churned, and on connectivity
+     * so a dead phone network is not mistaken for a dead node.
+     *
+     * @param knownStalled the caller has already established the stall.
+     */
+    private fun reselectNodeIfStalled(retryIfNoSwitch: Boolean, knownStalled: Boolean = false) {
+        if (!App.connectivityManager.isConnected) return
+
+        // Launched rather than awaited: the probes can take seconds, refreshKit() is awaited by
+        // the balance pull-to-refresh spinner and the foreground hook runs plugins one after
+        // another. The switch lands through walletReloadTrigger, and the manager lets only one
+        // reselection run at a time.
+        reselectScope.launch {
+            try {
+                val nodeManager = zanoNodeManager()
+                // With the switch off the node is the user's choice and is left alone.
+                if (!nodeManager.autoSelectEnabled) return@launch
+                // The watcher has just asked; foreground and refresh have to ask themselves.
+                if (!knownStalled && !isSyncStalled()) return@launch
+
+                val switched = nodeManager.reselectNode()
+                // Restarting helps a kit that gave up connecting, not one whose node is down.
+                if (!switched && retryIfNoSwitch && hasUnsyncedWallet()) {
+                    nodeManager.retryCurrentNode()
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Timber.e(e, "Zano node reselect failed")
+            }
+        }
+    }
+
     override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 
     override fun networkSettingsPage(): HSPage = ZanoNetworkPage
@@ -131,3 +209,11 @@ class ZanoChainPlugin(
     }
 
 }
+
+/** A kit ping as the Auto-Select probe of [node]: a node that is not valid has neither time nor height. */
+internal fun nodeProbe(node: ZanoNodeManager.ZanoNode, ping: NodePingResult?): SourceProbe<ZanoNodeManager.ZanoNode> =
+    if (ping != null && ping.isValid && ping.responseTime < Double.MAX_VALUE) {
+        SourceProbe(node, ping.responseTime, ping.height)
+    } else {
+        SourceProbe(node, null, null)
+    }

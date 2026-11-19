@@ -1624,6 +1624,7 @@
     <string name="AddZanoNode_AddNode">Adicionar nó</string>
     <string name="AddZanoNode_NodeUrl">URL do nó</string>
     <string name="ZanoNodeSettings_Description">Escolha o nó que o aplicativo Unstoppable deve usar para sincronizar a(s) carteira(s).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Mudar para outro nó quando o selecionado falhar</string>
     <string name="LocalBackup_ProtectBackup">Proteger backup</string>
     <string name="LocalBackup_ProtectBackupDescription">Crie uma senha para proteger seu arquivo de backup.</string>
     <string name="LocalBackup_BackupName">Nome do backup</string>

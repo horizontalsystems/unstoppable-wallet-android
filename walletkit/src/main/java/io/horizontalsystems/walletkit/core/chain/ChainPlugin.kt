@@ -212,6 +212,13 @@ interface ChainPlugin {
     suspend fun onSyncStalled() = Unit
 
     /**
+     * Whether this chain's sync looks stalled right now. Asked by StalledSyncWatcher on every
+     * check, so it must be cheap when all is well. A chain whose kit cannot tell that its node
+     * has died adds its own check to the adapters' state.
+     */
+    suspend fun isSyncStalled(): Boolean = hasUnsyncedWallet()
+
+    /**
      * True when an active wallet of this chain has an adapter reporting [AdapterState.NotSynced].
      *
      * Deliberately narrower than "not Synced": Syncing/Connecting are healthy progress, and a

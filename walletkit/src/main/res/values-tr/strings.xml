@@ -1263,6 +1263,7 @@
     <string name="AddZanoNode_AddNode">Düğüm Ekle</string>
     <string name="AddZanoNode_NodeUrl">Düğüm URL</string>
     <string name="ZanoNodeSettings_Description">Unstoppable uygulamasının cüzdan(lar) senkronizasyonu için kullanması gereken düğümü seçin.</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Seçilen düğüm çalışmadığında başka bir düğüme geç</string>
     <string name="LocalBackup_ProtectBackup">Yedeği Koru</string>
     <string name="LocalBackup_ProtectBackupDescription">Yedek dosyasını korumak için bir parola oluşturun.</string>
     <string name="LocalBackup_BackupName">Yedek Adı</string>

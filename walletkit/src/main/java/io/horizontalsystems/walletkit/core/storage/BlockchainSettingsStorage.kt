@@ -15,6 +15,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyMoneroNode: String = "monero-node"
         const val keyMoneroAutoSelect: String = "monero-auto-select"
         const val keyZanoNode: String = "zano-node"
+        const val keyZanoAutoSelect: String = "zano-auto-select"
         const val keyZcashEndpoint: String = "zcash-endpoint"
         const val keyZcashAutoSelect: String = "zcash-auto-select"
     }
@@ -121,6 +122,18 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 value = host
             )
         )
+    }
+
+    /** Null when never decided: the caller derives the default (see ZanoNodeManager). */
+    fun zanoAutoSelect(): Boolean? =
+        storedBoolean(BlockchainType.Zano, keyZanoAutoSelect)
+
+    fun saveZanoAutoSelect(enabled: Boolean) {
+        saveBoolean(BlockchainType.Zano, keyZanoAutoSelect, enabled)
+    }
+
+    fun deleteZanoAutoSelect() {
+        dao.delete(BlockchainType.Zano.uid, keyZanoAutoSelect)
     }
 
     fun zcashEndpointUrl(): String? =

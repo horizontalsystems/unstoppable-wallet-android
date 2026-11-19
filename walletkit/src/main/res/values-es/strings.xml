@@ -1619,6 +1619,7 @@
     <string name="AddZanoNode_AddNode">Agregar nodo</string>
     <string name="AddZanoNode_NodeUrl">URL del nodo</string>
     <string name="ZanoNodeSettings_Description">Elija el nodo que la aplicación Unstoppable debe usar para sincronizar la(s) billetera(s).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Cambiar a otro nodo cuando el seleccionado falle</string>
     <string name="LocalBackup_ProtectBackup">Proteger copia de seguridad</string>
     <string name="LocalBackup_ProtectBackupDescription">Cree una contraseña para proteger su archivo de copia de seguridad.</string>
     <string name="LocalBackup_BackupName">Nombre de la copia de seguridad</string>

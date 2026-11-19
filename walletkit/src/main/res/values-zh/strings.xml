@@ -1618,6 +1618,7 @@
     <string name="AddZanoNode_AddNode">添加节点</string>
     <string name="AddZanoNode_NodeUrl">节点 URL</string>
     <string name="ZanoNodeSettings_Description">选择 Unstoppable 应用应使用的节点来同步钱包。</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">当所选节点不可用时切换到其他节点</string>
     <string name="LocalBackup_ProtectBackup">保护备份</string>
     <string name="LocalBackup_ProtectBackupDescription">创建密码以保护您的备份文件。</string>
     <string name="LocalBackup_BackupName">备份名称</string>

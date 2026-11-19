@@ -1624,6 +1624,7 @@
     <string name="AddZanoNode_AddNode">Knoten hinzufügen</string>
     <string name="AddZanoNode_NodeUrl">Knoten-URL</string>
     <string name="ZanoNodeSettings_Description">Wählen Sie den Knoten aus, den die Unstoppable-App zur Synchronisierung der Wallet(s) verwenden soll.</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Zu einem anderen Knoten wechseln, wenn der ausgewählte ausfällt</string>
     <string name="LocalBackup_ProtectBackup">Sicherung schützen</string>
     <string name="LocalBackup_ProtectBackupDescription">Erstellen Sie ein Passwort zum Schutz Ihrer Sicherungsdatei.</string>
     <string name="LocalBackup_BackupName">Sicherungsname</string>

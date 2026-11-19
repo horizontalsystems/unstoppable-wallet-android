@@ -603,6 +603,7 @@
     <string name="AddZanoNode_AddNode">افزودن گره</string>
     <string name="AddZanoNode_NodeUrl">URL گره</string>
     <string name="ZanoNodeSettings_Description">گره‌ای را انتخاب کنید که برنامه Unstoppable برای همگام‌سازی کیف پول(ها) استفاده کند.</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">هنگام از کار افتادن گره انتخاب‌شده، به گره دیگری جابه‌جا شود</string>
     <string name="LocalBackup_ProtectBackup">حفاظت پشتیبان</string>
     <string name="LocalBackup_ProtectBackupDescription">یک رمز عبور برای حفاظت از فایل پشتیبان خود ایجاد کنید.</string>
     <string name="LocalBackup_BackupName">نام پشتیبان</string>

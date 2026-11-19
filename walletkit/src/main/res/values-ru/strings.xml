@@ -1626,6 +1626,7 @@
     <string name="AddZanoNode_AddNode">Добавить узел</string>
     <string name="AddZanoNode_NodeUrl">URL узла</string>
     <string name="ZanoNodeSettings_Description">Выберите узел, который приложение Unstoppable должно использовать для синхронизации кошелька(ов).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Переключаться на другой узел, если выбранный не работает</string>
     <string name="LocalBackup_ProtectBackup">Защитить резервную копию</string>
     <string name="LocalBackup_ProtectBackupDescription">Создайте пароль для защиты файла резервной копии.</string>
     <string name="LocalBackup_BackupName">Имя резервной копии</string>
