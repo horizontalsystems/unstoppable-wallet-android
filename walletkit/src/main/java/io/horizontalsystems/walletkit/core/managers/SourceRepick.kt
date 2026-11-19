@@ -16,24 +16,39 @@ object SourceRepick {
     const val SLOWER_FACTOR = 2.0
     const val MIN_GAIN_MS = 300.0
 
-    /** @return the source to switch to, or null to stay where the chain is. */
-    fun <T> choose(current: T, probes: List<SourceProbe<T>>, lagThreshold: Long): T? {
-        val healthy = probes.filter { it.isHealthy }
+    /**
+     * @param switchForSpeed false for a chain whose kit is costly to rebuild: the current source
+     * is then left only when it failed or lags, never for being slower.
+     * @return the source to switch to, or null to stay where the chain is.
+     */
+    fun <T> choose(current: T, probes: List<SourceProbe<T>>, lagThreshold: Long, switchForSpeed: Boolean = true): T? {
+        val fresh = fresh(probes, lagThreshold)
         // Every source failing means the device has no usable network, not that the current
         // source is bad.
-        if (healthy.isEmpty()) return null
+        if (fresh.isEmpty()) return null
 
-        val bestHeight = healthy.maxOf { it.height!! }
-        val fresh = healthy.filter { bestHeight - it.height!! <= lagThreshold }
         val fastest = fresh.minBy { it.responseTimeMs!! }
 
         val currentProbe = fresh.firstOrNull { it.source == current }
             ?: return fastest.source.takeIf { it != current }
+        if (!switchForSpeed) return null
 
         val currentTime = currentProbe.responseTimeMs!!
         val fastestTime = fastest.responseTimeMs!!
         val clearlySlower = currentTime > fastestTime * SLOWER_FACTOR && currentTime - fastestTime > MIN_GAIN_MS
 
         return if (clearlySlower) fastest.source else null
+    }
+
+    /** The fastest source that answered and is not behind, or null when none answered. */
+    fun <T> fastest(probes: List<SourceProbe<T>>, lagThreshold: Long): T? =
+        fresh(probes, lagThreshold).minByOrNull { it.responseTimeMs!! }?.source
+
+    private fun <T> fresh(probes: List<SourceProbe<T>>, lagThreshold: Long): List<SourceProbe<T>> {
+        val healthy = probes.filter { it.isHealthy }
+        if (healthy.isEmpty()) return emptyList()
+
+        val bestHeight = healthy.maxOf { it.height!! }
+        return healthy.filter { bestHeight - it.height!! <= lagThreshold }
     }
 }

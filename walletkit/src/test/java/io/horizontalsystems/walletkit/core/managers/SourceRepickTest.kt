@@ -70,4 +70,30 @@ class SourceRepickTest {
 
         assertNull(SourceRepick.choose("a", probes, lagThreshold = 5))
     }
+
+    // A chain whose kit is costly to rebuild leaves its source only when it failed or lags
+
+    @Test
+    fun withoutSpeedSwitchingStaysOnAClearlySlowerSource() {
+        val probes = listOf(probe("a", 3000.0, 1000), probe("b", 100.0, 1000))
+
+        assertNull(SourceRepick.choose("a", probes, lagThreshold = 5, switchForSpeed = false))
+    }
+
+    @Test
+    fun withoutSpeedSwitchingStillLeavesAFailedOrLaggingSource() {
+        val failed = listOf(probe("a", null, null), probe("b", 900.0, 1000))
+        val lagging = listOf(probe("a", 50.0, 900), probe("b", 900.0, 1000))
+
+        assertEquals("b", SourceRepick.choose("a", failed, lagThreshold = 5, switchForSpeed = false))
+        assertEquals("b", SourceRepick.choose("a", lagging, lagThreshold = 5, switchForSpeed = false))
+    }
+
+    @Test
+    fun fastestSkipsFailedAndLaggingSources() {
+        val probes = listOf(probe("a", null, null), probe("b", 10.0, 900), probe("c", 800.0, 1000), probe("d", 400.0, 998))
+
+        assertEquals("d", SourceRepick.fastest(probes, lagThreshold = 5))
+        assertNull(SourceRepick.fastest(listOf(probe("a", null, null)), lagThreshold = 5))
+    }
 }

@@ -10,10 +10,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withTimeoutOrNull
-import kotlin.time.Duration.Companion.seconds
 import java.util.Objects
 
 class MoneroNodeManager(
@@ -22,8 +18,6 @@ class MoneroNodeManager(
     private val marketKitWrapper: MarketKitWrapper
 ) {
     private val blockchainType = BlockchainType.Monero
-
-    private val reselectMutex = Mutex()
 
     private val _currentNodeUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val currentNodeUpdatedFlow = _currentNodeUpdatedFlow.asSharedFlow()
@@ -103,26 +97,23 @@ class MoneroNodeManager(
     suspend fun pingNodes(serialized: List<String>): List<NodePingResult> =
         nodePinger?.invoke(serialized) ?: emptyList()
 
-    suspend fun autoSelectFastestNodeOnStartup() {
-        if (!autoSelectEnabled || nodePinger == null) return
+    // The probe is capped because the kit's internal per-node timeout is thread-interrupt
+    // based, which OkHttp calls do not reliably honor.
+    private val autoSelector = NodeAutoSelector(
+        isEnabled = { autoSelectEnabled && nodePinger != null },
+        current = { currentNode },
+        probe = ::probeNodes,
+        switchTo = ::save,
+        startupChoice = { _, probes -> NodeAutoSelector.fastest(probes) },
+    )
 
-        try {
-            // The adapter starts on the stored node right away — deferring its creation until the
-            // probe finished left wallet rows interactive with no adapter behind them, which
-            // crashed the send screen. Capped because the kit's internal per-node timeout is
-            // thread-interrupt based, which OkHttp calls do not reliably honor.
-            withTimeoutOrNull(STARTUP_PING_TIMEOUT) {
-                val fastest = pickFastest() ?: return@withTimeoutOrNull
-                // save() emits, so a change rebuilds the adapter once onto the winner; when the
-                // stored node is still the fastest nothing is emitted and nothing reconnects.
-                if (fastest.host != currentNode.host) save(fastest)
-            }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            // keep the stored node on any ping failure
-        }
-    }
+    /**
+     * The adapter starts on the stored node right away: deferring its creation until the probe
+     * finished left wallet rows interactive with no adapter behind them, which crashed the send
+     * screen. save() emits, so a change rebuilds the adapter once onto the winner; when the
+     * stored node is still the fastest nothing is emitted and nothing reconnects.
+     */
+    suspend fun autoSelectFastestNodeOnStartup() = autoSelector.pickOnStartup()
 
     /**
      * Re-runs the ping and switches to the fastest reachable node, for when the current one has
@@ -131,24 +122,7 @@ class MoneroNodeManager(
      *
      * @return true when the node actually changed.
      */
-    suspend fun reselectFastestNode(): Boolean {
-        if (!autoSelectEnabled || nodePinger == null) return false
-        if (!reselectMutex.tryLock()) return false // a ping is already in flight
-
-        return try {
-            // Capped like the startup probe: the kit's internal per-node timeout is
-            // thread-interrupt based, which OkHttp calls do not reliably honor, and a probe that
-            // never returned would hold reselectMutex forever, permanently blocking recovery.
-            // Every node failing means the device has no usable network, not that the current one
-            // is bad — pickFastest returns null there, so nothing is switched.
-            val fastest = withTimeoutOrNull(STARTUP_PING_TIMEOUT) { pickFastest() } ?: return false
-            if (fastest.host == currentNode.host) return false
-            save(fastest)
-            true
-        } finally {
-            reselectMutex.unlock()
-        }
-    }
+    suspend fun reselectFastestNode(): Boolean = autoSelector.reselect()
 
     /**
      * Re-emits the current node so the wallet reload rebuilds the adapter on it. For a stalled
@@ -158,19 +132,17 @@ class MoneroNodeManager(
         _currentNodeUpdatedFlow.tryEmit(currentNode.host)
     }
 
-    /** Pings every node and returns the fastest valid one, or null if none responded. */
-    private suspend fun pickFastest(): MoneroNode? {
+    /** Pings every node. Monero pings report no height, so every node that answers counts as current. */
+    private suspend fun probeNodes(): List<SourceProbe<MoneroNode>> {
         val nodes = allNodes
         val results = pingNodes(nodes.map { it.serialized }).associateBy { it.serialized }
 
-        return nodes
-            .mapNotNull { node ->
-                results[node.serialized]
-                    ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
-                    ?.let { node to it.responseTime }
-            }
-            .minByOrNull { it.second }
-            ?.first
+        return nodes.map { node ->
+            val responseTime = results[node.serialized]
+                ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
+                ?.responseTime
+            SourceProbe(node, responseTime, responseTime?.let { 0L })
+        }
     }
 
     fun save(node: MoneroNode) {
@@ -235,10 +207,6 @@ class MoneroNodeManager(
         }
 
         _nodesUpdatedFlow.tryEmit(node.host)
-    }
-
-    companion object {
-        private val STARTUP_PING_TIMEOUT = 8.seconds
     }
 
     data class NodePingResult(
