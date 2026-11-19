@@ -33,8 +33,15 @@ Unstoppable Wallet - A multi-currency crypto wallet Android app supporting Bitco
 
 ## Static Analysis
 
-Run both checks before finishing a change that touches Kotlin code. Neither
-compiles the app, so they take seconds.
+Both checks must pass before a pull request is opened, and again after every
+later push to it. Run them yourself: no CI job does it yet. When one fails,
+fix the code; do not open the pull request with a failure and a note about
+it. Neither check compiles the app, so they take seconds.
+
+    ./gradlew detekt :architecture-tests:test
+
+The steps still to come (a CI check, a weekly review of the whole project)
+are in `docs/code-quality-plan.md`.
 
 **Detekt** reports code smells: complexity, long methods, swallowed
 exceptions, and Compose mistakes through the Compose Rules plugin. The
@@ -492,6 +499,9 @@ may take several pull requests.
 - For a user-facing change, what the user does and sees, which its UI test
   is written from ([UI tests for features](#ui-tests-for-features)).
 - Dependencies and merge order, or the target branch for a backport.
+
+Before opening one, make sure Detekt and the architecture tests pass, see
+[Static Analysis](#static-analysis).
 
 Cover only the points above that apply, each in a sentence. Most pull
 requests need one or two. Do not list the changes; the diff and the commit
