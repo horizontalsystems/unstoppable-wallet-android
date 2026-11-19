@@ -1987,4 +1987,5 @@
     <string name="Premium_Agreement">계속하면 %1$s 및 %2$s에 동의하게 됩니다.</string>
     <string name="Premium_Agreement_Terms">약관</string>
     <string name="Premium_Agreement_Privacy">개인정보 처리방침</string>
+    <string name="NetworkSettings_NotSynced">동기화되지 않음</string>
 </resources>

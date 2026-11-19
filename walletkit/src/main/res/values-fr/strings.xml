@@ -1994,4 +1994,5 @@
     <string name="Premium_Agreement">En continuant, vous acceptez les %1$s et la %2$s.</string>
     <string name="Premium_Agreement_Terms">Conditions</string>
     <string name="Premium_Agreement_Privacy">Confidentialité</string>
+    <string name="NetworkSettings_NotSynced">Non synchronisé</string>
 </resources>

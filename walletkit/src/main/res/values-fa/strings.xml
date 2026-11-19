@@ -1980,4 +1980,5 @@
     <string name="Premium_Agreement">با ادامه، با %1$s و %2$s موافقت می‌کنید.</string>
     <string name="Premium_Agreement_Terms">شرایط</string>
     <string name="Premium_Agreement_Privacy">حریم خصوصی</string>
+    <string name="NetworkSettings_NotSynced">همگام‌سازی نشده</string>
 </resources>

@@ -22,6 +22,9 @@ import io.horizontalsystems.walletkit.ui.compose.components.caption_remus
 sealed interface PingState {
     object Loading : PingState
     object Unreachable : PingState
+
+    /** The node answers but has not caught up with the chain. */
+    object NotSynced : PingState
     data class Reachable(val responseTimeMs: Int, val level: Level) : PingState
 
     enum class Level { Good, Medium, Slow }
@@ -40,6 +43,10 @@ fun PingBadge(ping: PingState) {
 
         PingState.Unreachable -> {
             caption_lucian(text = stringResource(R.string.NetworkSettings_Unreachable))
+        }
+
+        PingState.NotSynced -> {
+            caption_jacob(text = stringResource(R.string.NetworkSettings_NotSynced))
         }
 
         is PingState.Reachable -> {

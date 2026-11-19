@@ -169,9 +169,21 @@ class ZcashLightWalletEndpointManager(
 
     data class EndpointPingResult(
         val url: String,
-        val isValid: Boolean,
+        val status: Status,
         val responseTime: Double,
-    )
+    ) {
+        val isValid: Boolean get() = status == Status.Ok
+
+        enum class Status {
+            Ok,
+
+            /** No usable answer: connection, TLS or request failure, or a server of another network. */
+            Unreachable,
+
+            /** The server answered but its chain is behind, so a wallet on it would not sync to the tip. */
+            NotSynced,
+        }
+    }
 
     data class ZcashEndpoint(val url: String, val name: String) {
     }

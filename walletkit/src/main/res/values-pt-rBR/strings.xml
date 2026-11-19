@@ -1997,4 +1997,5 @@
     <string name="Premium_Agreement">Ao continuar, você concorda com os %1$s e a %2$s.</string>
     <string name="Premium_Agreement_Terms">Termos</string>
     <string name="Premium_Agreement_Privacy">Privacidade</string>
+    <string name="NetworkSettings_NotSynced">Não sincronizado</string>
 </resources>

@@ -112,8 +112,10 @@ class ZcashNetworkViewModel(
     }
 
     private fun pingState(result: EndpointPingResult): PingState {
-        if (!result.isValid || result.responseTime >= Double.MAX_VALUE) {
-            return PingState.Unreachable
+        when (result.status) {
+            EndpointPingResult.Status.Unreachable -> return PingState.Unreachable
+            EndpointPingResult.Status.NotSynced -> return PingState.NotSynced
+            EndpointPingResult.Status.Ok -> if (result.responseTime >= Double.MAX_VALUE) return PingState.Unreachable
         }
         val level = when {
             result.responseTime <= PING_GOOD -> PingState.Level.Good
