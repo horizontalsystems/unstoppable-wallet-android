@@ -354,11 +354,12 @@ controls inside it do.
   look for the control in both apps' `TestTags`: this app's, and the iOS
   app's (`packages/WalletCore/Sources/WalletCore/UserInterface/TestTags.swift`
   in `horizontalsystems/unstoppable-wallet-ios`). Read the iOS file from
-  GitHub at its default branch with
+  GitHub with
   `gh api -H 'Accept: application/vnd.github.raw+json' 'repos/horizontalsystems/unstoppable-wallet-ios/contents/<path>'`,
-  which prints the file itself, adding `?ref=<branch>` inside the quotes
-  when it is not on the default branch yet, never from a local checkout,
-  which may be stale. Reuse a name you find. Only
+  which prints the file itself, never from a local checkout, which may be
+  stale. Read the default branch first, always; when the counterpart work
+  sits on a branch not merged yet, read that branch too, with
+  `?ref=<branch>` inside the quotes. Reuse a name you find. Only
   when none exists, declare a new one.
 - One control, one name. Where the two apps already named a control
   differently, the older name wins.
