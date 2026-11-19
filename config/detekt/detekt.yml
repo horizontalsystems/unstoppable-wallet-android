@@ -1,0 +1,18 @@
+# Overrides on top of Detekt's default configuration. Findings that predate
+# Detekt are recorded in baseline.xml; only new ones fail the run.
+
+naming:
+  FunctionNaming:
+    # Composable functions are PascalCase; Compose Rules' ComposableNaming
+    # checks them instead.
+    ignoreAnnotated: ['Composable']
+
+style:
+  # Layout code is written with literal dp, alpha and colour values.
+  MagicNumber:
+    active: false
+  # Formatting is not checked here: no formatter is enforced in this project.
+  MaxLineLength:
+    active: false
+  NewLineAtEndOfFile:
+    active: false
