@@ -304,10 +304,7 @@ string:
 - Unit tests in `src/test/` of the module that holds the code (`walletkit`,
   `walletkit-chain-<chain>`, `app`)
 - Instrumentation tests in `app/src/androidTest/`
-- Maestro UI tests, run against the `ciE2e` build by the test station
-  (`horizontalsystems/uw-testlab`). The flows are shared with iOS and live
-  in appkb (`flows/` on its `flows` branch). How to fetch and run them:
-  `maestro/README.md`. How to write a flow: the flows' own `README.md`
+- UI tests select controls by test tag, see [UI test tags](#ui-test-tags)
 
 ### Tests a change needs
 
@@ -321,7 +318,6 @@ calling the work done:
 | Logic: amounts, fees, parsing, address validation, sync or state handling in a ViewModel, Service, or adapter | Unit tests for the changed behaviour and its edge cases |
 | Bug fix | A unit test that fails without the fix. When only the UI shows the bug, the steps that reproduce it in the pull request description instead |
 | A chain added or changed | As `docs/chain-integration/README.md` says |
-| A test tag renamed or removed | The flows in appkb that select it |
 
 No new test is needed for a refactor that keeps behaviour, for strings and
 translations, styling, build configuration, or dependency updates. Existing
@@ -334,8 +330,8 @@ pull request description and in your summary to the developer.
 
 ### UI test tags
 
-Maestro selects elements by test tag (`id:` in a flow). Tags are added while
-the code is written, in the same change as the control, never later.
+UI tests select elements by test tag. Tags are added while the code is
+written, in the same change as the control, never later.
 
 **When.** Give a test tag to every control the user interacts with, and to
 every value a test checks. A control is anything given an `onClick*`,
@@ -347,8 +343,7 @@ controls inside it do.
 **Name protocol.**
 
 - Names are declared only in code: `TestTags` in
-  `walletkit/.../uiv3/TestTags.kt`. appkb holds the shared flows, not a list
-  of names; the flows select names as plain strings (`id: send_next`).
+  `walletkit/.../uiv3/TestTags.kt`.
 - Form: `<screen>_<element>` in snake_case (`send_next`, `confirm_amount`).
   `<screen>` is the screen's name without `Screen`/`Page`.
 - A name with a variable part is a function. Add a suffix (coin code,
@@ -356,41 +351,33 @@ controls inside it do.
   a list: `fun balanceItem(coinCode: String) = "balance_item_$coinCode"`.
 - No app is the source of truth. A name belongs to whichever app declares
   it first, and both apps use the same string. Before declaring a name,
-  look for the control in, in this order:
-  1. the shared flows (appkb `flows/`): a name a flow selects is the
-     contract, and an app that differs renames;
-  2. both apps' `TestTags`: this app's, and the iOS app's
-     (`packages/WalletCore/Sources/WalletCore/UserInterface/TestTags.swift` in
-     `horizontalsystems/unstoppable-wallet-ios`, readable with
-     `gh api repos/horizontalsystems/unstoppable-wallet-ios/contents/<path>`;
-     add `?ref=<branch>` when it is not on the default branch yet).
-
-  Reuse a name you find. Only when none exists, declare a new one.
-- One control, one name. If the two apps already named a control
-  differently and no flow selects either name, the older name wins.
+  look for the control in both apps' `TestTags`: this app's, and the iOS
+  app's (`packages/WalletCore/Sources/WalletCore/UserInterface/TestTags.swift`
+  in `horizontalsystems/unstoppable-wallet-ios`). Read the iOS file from
+  GitHub with
+  `gh api -H 'Accept: application/vnd.github.raw+json' 'repos/horizontalsystems/unstoppable-wallet-ios/contents/<path>'`,
+  which prints the file itself, never from a local checkout, which may be
+  stale. Read the default branch first, always; when the counterpart work
+  sits on a branch not merged yet, read that branch too, with
+  `?ref=<branch>` inside the quotes. Reuse a name you find. Only
+  when none exists, declare a new one.
+- One control, one name. Where the two apps already named a control
+  differently, the older name wins.
+- A declared name is kept: a control that replaces another takes its name.
+- A control only this app has takes a name by the same convention; nothing
+  more is asked of the developer.
 - Apply it with `Modifier.testTag(TestTags.X)` through the component's
   `modifier` parameter. If a shared component has none, add one rather than
   wrapping it.
-- Tags reach Maestro only inside `Modifier.exposeTestTags()`. The activity
+- Tags reach UI tests only inside `Modifier.exposeTestTags()`. The activity
   root has it; a new `Dialog` or `ModalBottomSheet` needs it on its
   content, because it opens its own window.
-- A name is renamed or removed only together with every flow in appkb that
-  selects it.
-
-**Undeclared names fail silently.** A flow step that selects an undeclared
-name fails the run, unless the step is conditional (`when: visible`,
-`optional: true`). Then Maestro skips it and the flow passes. When you add
-an `id:` to a flow, check that `TestTags` declares it. Pull request CI does
-not check this; the test station checks it when it writes flows. So a pull
-request that renames or removes a tag a flow selects is not stopped by CI:
-change appkb together with it.
 
 ### UI tests for features
 
-A pull request does not write Maestro tests; it adds test tags only. As soon
-as a pull request is merged, a job on the test station reads its code and
-description, writes Maestro tests for its new features into appkb's `flows`
-branch, selecting their test tags, and runs them. It can only test what the pull request gives it:
+A pull request adds test tags and a description of the feature; it writes
+no UI tests. A test for a new feature can only check what the pull request
+gives it:
 
 - a test tag on every control and every checked value, as
   [UI test tags](#ui-test-tags) says;
