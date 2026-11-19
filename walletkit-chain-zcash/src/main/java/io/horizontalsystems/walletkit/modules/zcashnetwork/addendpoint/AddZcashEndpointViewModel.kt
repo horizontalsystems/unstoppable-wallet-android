@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.core.providers.Translator
-import java.net.MalformedURLException
 import java.net.URI
 
 class AddZcashEndpointViewModel(
@@ -34,26 +33,20 @@ class AddZcashEndpointViewModel(
     }
 
     fun onAddClick() {
-        val sourceUri: URI
-        try {
-            sourceUri = URI(url)
-            val scheme = sourceUri.scheme?.lowercase()
-            val hasRequiredProtocol = scheme == "https"
-            val hasHost = !sourceUri.host.isNullOrBlank()
-            if (!hasRequiredProtocol || !hasHost) throw MalformedURLException()
-        } catch (_: Exception) {
+        val endpointUrl = ZcashEndpointUrl.parse(url)
+        if (endpointUrl == null) {
             urlCaution = Caution(Translator.getString(R.string.AddZcashEndpoint_Error_InvalidUrl), Caution.Type.Error)
             emitState()
             return
         }
 
-        if (endpointManager.allEndpoints.any { normalizeUrl(it.url) == normalizeUrl(url) }) {
+        if (endpointManager.allEndpoints.any { normalizeUrl(it.url) == normalizeUrl(endpointUrl) }) {
             urlCaution = Caution(Translator.getString(R.string.AddZcashEndpoint_Warning_UrlExists), Caution.Type.Warning)
             emitState()
             return
         }
 
-        endpointManager.addCustomEndpoint(url)
+        endpointManager.addCustomEndpoint(endpointUrl)
         closeScreen = true
         emitState()
     }
