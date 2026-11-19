@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import io.horizontalsystems.walletkit.core.LocalNetworkAccess
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.walletkit.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.walletkit.entities.ZcashEndpointRecord
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
 
 class ZcashLightWalletEndpointManager(
@@ -54,6 +56,54 @@ class ZcashLightWalletEndpointManager(
             val url = blockchainSettingsStorage.zcashEndpointUrl()
             return allEndpoints.firstOrNull { it.url == url } ?: defaultEndpoints.first()
         }
+
+    /**
+     * True when the wallet syncs through a server in the device's local network. Only a custom
+     * endpoint can be one; the default endpoints are public servers.
+     */
+    suspend fun currentEndpointIsLocal(): Boolean {
+        val current = currentEndpoint
+        return current in customEndpoints && isLocalEndpoint(current.url)
+    }
+
+    /**
+     * True when the endpoint at [url] is in the device's local network. Every screen that asks
+     * for local network access classifies through here, so that what it found is remembered for
+     * [retryCurrentEndpointIfLocal].
+     */
+    suspend fun isLocalEndpoint(url: String): Boolean {
+        val isLocal = LocalNetworkAccess.classifyUrl(url)
+        when (isLocal) {
+            true -> knownLocalUrls.add(url)
+            false -> knownLocalUrls.remove(url)
+            // The lookup failed: what was known before still stands.
+            null -> Unit
+        }
+        return isLocal == true
+    }
+
+    // Endpoints found to be local by their latest lookup that gave an answer. A lookup that fails
+    // says nothing, so the recovery after an access grant must not hang on one more lookup of an
+    // endpoint already known to be local: the grant was asked for because of it. An endpoint that
+    // has since resolved to a public address is dropped, so it is not rebuilt for a grant that
+    // another endpoint asked for.
+    private val knownLocalUrls = ConcurrentHashMap.newKeySet<String>()
+
+    /**
+     * Rebuilds the wallet on its endpoint when that endpoint is local, for when local network
+     * access has just been granted. Classifying the endpoint may take a name lookup, so the
+     * selection is read again afterwards: an endpoint chosen in the meantime has already been
+     * started by its own selection.
+     */
+    suspend fun retryCurrentEndpointIfLocal() {
+        val endpoint = currentEndpoint
+        if (endpoint !in customEndpoints) return
+        // Read again after the lookup: while it ran, or failed, a screen's own lookup of the same
+        // endpoint may have found it local.
+        val isLocal = endpoint.url in knownLocalUrls || isLocalEndpoint(endpoint.url) || endpoint.url in knownLocalUrls
+        if (!isLocal) return
+        if (currentEndpoint == endpoint) retryCurrentEndpoint()
+    }
 
     var autoSelectEnabled: Boolean
         get() = blockchainSettingsStorage.zcashAutoSelect()

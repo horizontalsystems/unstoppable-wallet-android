@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.LocalNetworkPermissionEffect
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager.ZcashEndpoint
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -81,6 +82,11 @@ private fun ZcashNetworkScreen(
     val listState = rememberLazyListState()
     ConcealOnScroll(listState) { revealedCardId = null }
     val view = LocalView.current
+
+    LocalNetworkPermissionEffect(
+        needed = viewModel.uiState.hasLocalNetworkEndpoint,
+        onGranted = viewModel::onLocalNetworkAccessGranted,
+    )
 
     HSScaffold(
         title = viewModel.title,

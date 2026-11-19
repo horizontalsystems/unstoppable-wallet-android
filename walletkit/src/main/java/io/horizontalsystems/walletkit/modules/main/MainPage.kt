@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.LocalNetworkPermissionEffect
 import io.horizontalsystems.walletkit.core.managers.RateAppManager
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -95,6 +96,16 @@ private fun MainScreen(
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     val isLocked by App.pinComponent.isLockedFlow.collectAsStateWithLifecycle()
+
+    // Not while locked: the system dialog would come up over the unlock screen.
+    val localNetworkAccessViewModel = viewModel<LocalNetworkAccessViewModel>(factory = LocalNetworkAccessViewModel.Factory())
+    LocalNetworkPermissionEffect(
+        needed = localNetworkAccessViewModel.uiState.accessNeeded && !isLocked,
+        onGranted = localNetworkAccessViewModel::onAccessGranted,
+    )
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        localNetworkAccessViewModel.refresh()
+    }
     // MainScreen stays composed under the unlock overlay, so without this gate a deeplink opened
     // while the app is locked would be acted on behind the lock screen — referral registration,
     // TonConnect links, prefilled send flows, the WalletConnect list. The intent is deliberately
