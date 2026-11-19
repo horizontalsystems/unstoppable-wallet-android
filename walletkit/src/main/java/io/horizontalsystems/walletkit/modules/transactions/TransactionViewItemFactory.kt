@@ -69,20 +69,16 @@ class TransactionViewItemFactory(
     private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
     private val roundCoinAmount get() = localStorage.amountRoundingEnabled
 
-    fun updateCache() {
+    // TransactionsViewModel calls both functions from collectors running in parallel
+    // on Dispatchers.Default, so every access to the cache goes through its lock.
+    fun updateCache() = synchronized(cache) {
         showAmount = !balanceHiddenManager.balanceHidden
-        cache.forEach { (recordUid, map) ->
-            map.forEach { (createdAt, viewItem) ->
-                cache[recordUid] = mapOf(
-                    createdAt to viewItem.copy(
-                        showAmount = showAmount,
-                    )
-                )
-            }
+        cache.replaceAll { _, map ->
+            map.mapValues { (_, viewItem) -> viewItem.copy(showAmount = showAmount) }
         }
     }
 
-    fun convertToViewItemCached(transactionItem: TransactionItem): TransactionViewItem {
+    fun convertToViewItemCached(transactionItem: TransactionItem): TransactionViewItem = synchronized(cache) {
         cache[transactionItem.record.uid]?.get(transactionItem.createdAt)?.let {
             return it
         }
@@ -90,7 +86,7 @@ class TransactionViewItemFactory(
         val transactionViewItem = convertToViewItem(transactionItem)
         cache[transactionItem.record.uid] = mapOf(transactionItem.createdAt to transactionViewItem)
 
-        return transactionViewItem
+        transactionViewItem
     }
 
     fun convertToViewItem(item: SwapRecordItem): TransactionViewItem {
