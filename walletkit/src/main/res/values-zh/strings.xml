@@ -1879,6 +1879,10 @@
     <string name="Send_DestinationTag_Title">目标标签</string>
     <string name="SwapHistory_StatusActionRequired">需要操作</string>
     <string name="Send_Error_MemoTooLong">备忘录过长</string>
+    <string name="Send_NodeSwitched_Title">节点已切换</string>
+    <string name="Send_NodeSwitched_Description">节点停止响应，钱包已切换到 %s。请核对详情后重新发送。</string>
+    <string name="Send_MaybeSent_Title">交易可能已发送</string>
+    <string name="Send_MaybeSent_Description">节点未确认该交易，因此交易可能已发送。重新发送前请先查看交易记录。</string>
     <string name="Transactions_TrustLimit">信任额度</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="other">签署 %d 笔交易</item>

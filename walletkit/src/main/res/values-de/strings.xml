@@ -1884,6 +1884,10 @@
     <string name="Send_DestinationTag_Title">Ziel-Tag</string>
     <string name="SwapHistory_StatusActionRequired">Aktion erforderlich</string>
     <string name="Send_Error_MemoTooLong">Memo ist zu lang</string>
+    <string name="Send_NodeSwitched_Title">Knoten gewechselt</string>
+    <string name="Send_NodeSwitched_Description">Der Knoten hat nicht mehr geantwortet, daher hat die Wallet zu %s gewechselt. Prüfen Sie die Angaben und senden Sie erneut.</string>
+    <string name="Send_MaybeSent_Title">Transaktion wurde möglicherweise gesendet</string>
+    <string name="Send_MaybeSent_Description">Der Knoten hat die Transaktion nicht bestätigt, sie wurde also möglicherweise gesendet. Prüfen Sie den Transaktionsverlauf, bevor Sie erneut senden.</string>
     <string name="Transactions_TrustLimit">Vertrauenslimit</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">%d Transaktion signieren</item>

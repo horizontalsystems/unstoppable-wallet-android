@@ -1884,6 +1884,10 @@
     <string name="Send_DestinationTag_Title">Tag de destino</string>
     <string name="SwapHistory_StatusActionRequired">Ação necessária</string>
     <string name="Send_Error_MemoTooLong">Memo é muito longo</string>
+    <string name="Send_NodeSwitched_Title">Nó alterado</string>
+    <string name="Send_NodeSwitched_Description">O nó parou de responder, então a carteira mudou para %s. Confira os detalhes e envie novamente.</string>
+    <string name="Send_MaybeSent_Title">A transação pode ter sido enviada</string>
+    <string name="Send_MaybeSent_Description">O nó não confirmou a transação, então ela pode ter sido enviada. Confira o histórico de transações antes de enviar novamente.</string>
     <string name="Transactions_TrustLimit">Limite de Confiança</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">Assinar %d transação</item>

@@ -1879,6 +1879,10 @@
     <string name="Send_DestinationTag_Title">Etiqueta de destino</string>
     <string name="SwapHistory_StatusActionRequired">Se requiere acción</string>
     <string name="Send_Error_MemoTooLong">El memo es demasiado largo</string>
+    <string name="Send_NodeSwitched_Title">Nodo cambiado</string>
+    <string name="Send_NodeSwitched_Description">El nodo dejó de responder, así que la billetera cambió a %s. Revise los datos y envíe de nuevo.</string>
+    <string name="Send_MaybeSent_Title">Es posible que la transacción se haya enviado</string>
+    <string name="Send_MaybeSent_Description">El nodo no confirmó la transacción, por lo que es posible que se haya enviado. Revise el historial de transacciones antes de enviar de nuevo.</string>
     <string name="Transactions_TrustLimit">Límite de Confianza</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">Firmar %d transacción</item>

@@ -1886,6 +1886,10 @@
     <string name="Send_DestinationTag_Title">Тег назначения</string>
     <string name="SwapHistory_StatusActionRequired">Требуется действие</string>
     <string name="Send_Error_MemoTooLong">Заметка слишком длинная</string>
+    <string name="Send_NodeSwitched_Title">Узел изменён</string>
+    <string name="Send_NodeSwitched_Description">Узел перестал отвечать, поэтому кошелёк переключился на %s. Проверьте данные и отправьте ещё раз.</string>
+    <string name="Send_MaybeSent_Title">Транзакция могла быть отправлена</string>
+    <string name="Send_MaybeSent_Description">Узел не подтвердил транзакцию, поэтому она могла быть отправлена. Проверьте историю транзакций, прежде чем отправлять снова.</string>
     <string name="Transactions_TrustLimit">Лимит доверия</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">Подписать %d транзакцию</item>

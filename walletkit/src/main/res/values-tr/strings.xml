@@ -1880,6 +1880,10 @@
     <string name="Send_DestinationTag_Title">Hedef etiketi</string>
     <string name="SwapHistory_StatusActionRequired">İşlem gerekli</string>
     <string name="Send_Error_MemoTooLong">Not çok uzun</string>
+    <string name="Send_NodeSwitched_Title">Düğüm değişti</string>
+    <string name="Send_NodeSwitched_Description">Düğüm yanıt vermeyi bıraktı, bu yüzden cüzdan %s düğümüne geçti. Ayrıntıları kontrol edip yeniden gönderin.</string>
+    <string name="Send_MaybeSent_Title">İşlem gönderilmiş olabilir</string>
+    <string name="Send_MaybeSent_Description">Düğüm işlemi onaylamadı, bu yüzden işlem gönderilmiş olabilir. Yeniden göndermeden önce işlem geçmişini kontrol edin.</string>
     <string name="Transactions_TrustLimit">Güven Limiti</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">%d işlemi imzala</item>

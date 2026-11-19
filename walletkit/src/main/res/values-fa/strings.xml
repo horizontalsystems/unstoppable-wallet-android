@@ -857,6 +857,10 @@
     <string name="Send_DestinationTag_Title">برچسب مقصد</string>
     <string name="SwapHistory_StatusActionRequired">نیاز به اقدام</string>
     <string name="Send_Error_MemoTooLong">یادداشت بیش از حد طولانی است</string>
+    <string name="Send_NodeSwitched_Title">گره تغییر کرد</string>
+    <string name="Send_NodeSwitched_Description">گره دیگر پاسخ نمی‌داد، بنابراین کیف پول به %s منتقل شد. جزئیات را بررسی کنید و دوباره ارسال کنید.</string>
+    <string name="Send_MaybeSent_Title">ممکن است تراکنش ارسال شده باشد</string>
+    <string name="Send_MaybeSent_Description">گره تراکنش را تأیید نکرد، بنابراین ممکن است ارسال شده باشد. پیش از ارسال دوباره، تاریخچه تراکنش‌ها را بررسی کنید.</string>
     <string name="Transactions_TrustLimit">حد اعتماد</string>
     <string name="Error_BrowserNotFound">برنامه‌ای برای باز کردن این پیوند پیدا نشد</string>
     <string name="Error_ParameterNotSet">پارامتر تنظیم نشده است</string>

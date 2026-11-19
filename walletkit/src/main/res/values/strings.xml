@@ -585,6 +585,10 @@
     <string name="Send_Error_MinimumAmount_Description">Minimum amount must be %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MemoTooLong">Memo is too long</string>
+    <string name="Send_NodeSwitched_Title">Node switched</string>
+    <string name="Send_NodeSwitched_Description">The node stopped responding, so the wallet moved to %s. Check the details and send again.</string>
+    <string name="Send_MaybeSent_Title">Transaction may have been sent</string>
+    <string name="Send_MaybeSent_Description">The node did not confirm the transaction, so it may have been sent. Check the transaction history before sending again.</string>
     <string name="Send_Error_SendToSelf">Sending %s to your own address is not allowed. Please enter a different recipient address.</string>
 
     <string name="Send_DialogSpeed">Transaction Speed</string>
