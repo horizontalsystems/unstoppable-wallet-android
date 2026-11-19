@@ -55,7 +55,13 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
         } catch (e: Exception) {
             //was not registered, or already unregistered
         }
-        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
+        try {
+            connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
+        } catch (e: RuntimeException) {
+            // The system refuses a registration once the app holds too many network
+            // requests. isConnected then keeps the status read above until the next
+            // return to the foreground.
+        }
     }
 
     private fun didEnterBackground() {
