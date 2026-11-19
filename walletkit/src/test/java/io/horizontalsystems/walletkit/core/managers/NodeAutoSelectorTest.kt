@@ -250,6 +250,40 @@ class NodeAutoSelectorTest {
         assertFalse(selector.isCurrentDown { emptyList() })
     }
 
+    // Leaving a node that failed a send although it answers probes
+
+    @Test
+    fun switchAwayLeavesTheCurrentNodeEvenWhenItIsTheFastest() = runBlocking {
+        probes = { listOf(up("a", 50.0), up("b", 900.0), up("c", 300.0)) }
+
+        assertEquals("c", selector.switchAway())
+        assertEquals(listOf("c"), switches)
+    }
+
+    @Test
+    fun switchAwayNeverPicksANodeThatIsBehind() = runBlocking {
+        probes = { listOf(up("a", 50.0), up("b", 10.0, height = 900), up("c", 800.0, height = 1000)) }
+
+        assertEquals("c", selector.switchAway())
+    }
+
+    @Test
+    fun switchAwayStaysWhenNoOtherNodeAnswers() = runBlocking {
+        probes = { listOf(up("a", 50.0), down("b")) }
+
+        assertEquals(null, selector.switchAway())
+        assertTrue(switches.isEmpty())
+    }
+
+    @Test
+    fun switchAwayDoesNothingWhenOff() = runBlocking {
+        enabled = false
+        probes = { listOf(up("a", 50.0), up("b", 100.0)) }
+
+        assertEquals(null, selector.switchAway())
+        assertEquals(0, probeCount)
+    }
+
     // The startup rule Monero and Zcash use: always the fastest node that answered
     @Test
     fun fastestStartupRuleMovesToAFasterNode() = runBlocking {

@@ -125,6 +125,14 @@ class MoneroNodeManager(
     suspend fun reselectFastestNode(): Boolean = autoSelector.reselect()
 
     /**
+     * Leaves the current node for the fastest other one that answers, for a node that failed
+     * a send although it may still answer pings.
+     *
+     * @return the node moved to, or null when Auto-Select is off or no other node answers.
+     */
+    suspend fun switchAwayFromNode(): MoneroNode? = autoSelector.switchAway()
+
+    /**
      * Re-emits the current node so the wallet reload rebuilds the adapter on it. For a stalled
      * sync where reselection found nothing better, a kit restart is the recovery.
      */

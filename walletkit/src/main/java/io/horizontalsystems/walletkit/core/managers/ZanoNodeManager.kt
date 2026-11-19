@@ -107,6 +107,14 @@ class ZanoNodeManager(
     suspend fun reselectNode(): Boolean = autoSelector.reselect()
 
     /**
+     * Leaves the current node for the fastest other built-in one that answers, for a node that
+     * failed a send although it may still answer probes.
+     *
+     * @return the node moved to, or null when Auto-Select is off or no other node answers.
+     */
+    suspend fun switchAwayFromNode(): ZanoNode? = autoSelector.switchAway()
+
+    /**
      * Whether the current node has stopped answering, with Auto-Select on. The kit cannot be
      * asked: once connected it keeps reporting the wallet as synced when its daemon dies.
      */

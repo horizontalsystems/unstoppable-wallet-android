@@ -28,13 +28,51 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.Date
 import kotlin.reflect.KClass
+
+/**
+ * A node failed a fee estimate or a send.
+ *
+ * @param preBroadcast true when the failed step is known to come before the broadcast, so
+ * nothing was sent and trying again on another node is safe. False when the transaction may
+ * have reached the network: sending again could pay twice.
+ */
+data class NodeError(val preBroadcast: Boolean)
+
+/**
+ * For [ChainPlugin.failoverForSend]: runs [switchNode] and waits until [token] has a new
+ * adapter that has synced on the new node, so a send right after has a wallet that is ready.
+ * Gives the node's name back as soon as the adapter exists if syncing takes longer than that.
+ */
+suspend fun switchNodeForSend(token: Token, switchNode: suspend () -> String?): String? {
+    val previous = App.adapterManager.getAdapterForToken<IAdapter>(token)
+    val nodeName = switchNode() ?: return null
+
+    withTimeoutOrNull(ADAPTER_REBUILD_TIMEOUT) {
+        while (App.adapterManager.getAdapterForToken<IAdapter>(token).let { it == null || it === previous }) {
+            delay(ADAPTER_POLL_INTERVAL)
+        }
+    } ?: return null
+
+    withTimeoutOrNull(ADAPTER_SYNC_TIMEOUT) {
+        while (App.adapterManager.getAdapterForToken<IBalanceAdapter>(token)?.balanceState !is AdapterState.Synced) {
+            delay(ADAPTER_POLL_INTERVAL)
+        }
+    }
+    return nodeName
+}
+
+private val ADAPTER_REBUILD_TIMEOUT = 15.seconds
+private val ADAPTER_SYNC_TIMEOUT = 30.seconds
+private val ADAPTER_POLL_INTERVAL = 250.milliseconds
 
 // How long startup work waits for the wallets to be read before giving up on this launch
 private val WALLETS_LOAD_TIMEOUT = 30.seconds
@@ -210,6 +248,21 @@ interface ChainPlugin {
      * themselves, but must tolerate being called while a previous attempt is still running.
      */
     suspend fun onSyncStalled() = Unit
+
+    /**
+     * Whether a failed fee estimate or send was the node's failure, not the transaction's.
+     * Null when it was not, or when the chain cannot tell.
+     */
+    fun classifyNodeError(error: Throwable): NodeError? = null
+
+    /**
+     * Moves the chain off its current node now, for a send that the node failed, and returns
+     * the new node's name once [token]'s adapter runs on it. Null when Auto-Select is off or
+     * no other node answers: the send error then stands as it is.
+     *
+     * The adapter is rebuilt, so a send service created before the call must be replaced.
+     */
+    suspend fun failoverForSend(token: Token): String? = null
 
     /**
      * Whether this chain's sync looks stalled right now. Asked by StalledSyncWatcher on every

@@ -143,6 +143,14 @@ class ZcashLightWalletEndpointManager(
     suspend fun reselectFastestEndpoint(): Boolean = autoSelector.reselect()
 
     /**
+     * Leaves the current endpoint for the fastest other one that answers, for an endpoint
+     * that failed a send although it may still answer pings.
+     *
+     * @return the endpoint moved to, or null when Auto-Select is off or no other one answers.
+     */
+    suspend fun switchAwayFromEndpoint(): ZcashEndpoint? = autoSelector.switchAway()
+
+    /**
      * Re-emits the current endpoint so the wallet reload rebuilds the adapter on it. For a stalled
      * sync where reselection found nothing better — the current server may answer pings yet fail
      * block downloads, leaving the synchronizer terminally STOPPED — a fresh synchronizer is the

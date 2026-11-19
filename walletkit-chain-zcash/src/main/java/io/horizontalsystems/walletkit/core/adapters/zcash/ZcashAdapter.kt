@@ -532,7 +532,7 @@ class ZcashAdapter(
                             append("Code: ${result.code}, ")
                             append("Description: ${result.description ?: "None"}")
                         }
-                        throw IllegalStateException(errorMsg)
+                        throw ZcashSubmitException(errorMsg, result.grpcError)
                     }
 
                     is TransactionSubmitResult.NotAttempted -> {
@@ -858,6 +858,13 @@ class ZcashAdapter(
     enum class ZCashAddressType {
         Shielded, Transparent, Unified
     }
+
+    /**
+     * The server did not take a transaction the wallet built. [grpcError]: the call itself
+     * failed, so whether the server received the transaction is not known. Otherwise the
+     * server answered and refused it.
+     */
+    class ZcashSubmitException(message: String, val grpcError: Boolean) : IllegalStateException(message)
 
     sealed class ZcashError : Exception() {
         object InvalidAddress : ZcashError()

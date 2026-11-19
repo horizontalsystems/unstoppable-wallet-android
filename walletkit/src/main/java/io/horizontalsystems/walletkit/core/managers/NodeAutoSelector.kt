@@ -70,6 +70,26 @@ class NodeAutoSelector<T>(
     }
 
     /**
+     * Moves to the fastest other node that answers, for a node that failed a request (a send)
+     * although it may still answer probes.
+     *
+     * @return the node moved to, or null when Auto-Select is off or no other node answers.
+     */
+    suspend fun switchAway(): T? {
+        if (!isEnabled()) return null
+        if (!reselectMutex.tryLock()) return null // a probe is already in flight
+
+        return try {
+            val before = current()
+            val probes = withTimeoutOrNull(timeout) { probe() } ?: return null
+            val winner = SourceRepick.fastest(probes.filter { it.source != before }, lagThreshold) ?: return null
+            winner.takeIf { switchIfUnchanged(before, it) }
+        } finally {
+            reselectMutex.unlock()
+        }
+    }
+
+    /**
      * Whether the current node fails [probeNode], for a chain whose kit cannot tell that its
      * node has died. False when Auto-Select is off or probing is not available: the node is
      * then not this class's business.
