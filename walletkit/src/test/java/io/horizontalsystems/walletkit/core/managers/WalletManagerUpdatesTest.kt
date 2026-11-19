@@ -13,12 +13,15 @@ import io.horizontalsystems.walletkit.testutil.FakeAccountManager
 import io.horizontalsystems.walletkit.testutil.FakeWalletStorage
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -67,5 +70,22 @@ class WalletManagerUpdatesTest {
         } finally {
             dispatcher.close()
         }
+    }
+
+    // Startup work that depends on which chains are in use (the Auto-Select re-pick) runs
+    // while the wallets are still being read, when the list is empty for every chain.
+    @Test
+    fun walletsAreLoadedOnlyOnceTheActiveAccountIsKnown() = runBlocking {
+        val accountState = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
+        val storage = FakeWalletStorage().apply { save(listOf(ethereum)) }
+        val walletManager = WalletManager(FakeAccountManager(account, accountState), storage)
+
+        assertNull(withTimeoutOrNull(200) { walletManager.awaitLoaded() })
+        assertEquals(emptyList<Wallet>(), walletManager.activeWallets)
+
+        accountState.value = ActiveAccountState.ActiveAccount(account)
+
+        withTimeout(5_000) { walletManager.awaitLoaded() }
+        assertEquals(listOf(ethereum), walletManager.activeWallets)
     }
 }

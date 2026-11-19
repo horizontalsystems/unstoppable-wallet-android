@@ -83,7 +83,7 @@ class TronChainPlugin : ChainPlugin {
         // Auto-Select: probe only when Tron is in use. The kit already falls over between
         // built-in sources on its own; this only moves the preferred one when the stored
         // source is dead, stale or clearly slower.
-        if (App.walletManager.activeWallets.none { it.token.blockchainType == BlockchainType.Tron }) return
+        if (!isInUseAtStartup()) return
         App.evmSyncSourceManager.repickOnStartup(
             BlockchainType.Tron,
             TronSourcePinger.LAG_THRESHOLD,

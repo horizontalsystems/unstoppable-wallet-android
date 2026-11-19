@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -43,6 +44,7 @@ class WalletManager(
     val activeWalletsUpdatedFlow = _activeWalletsUpdatedFlow.asSharedFlow()
 
     private val walletsSet = mutableSetOf<Wallet>()
+    private val loaded = CompletableDeferred<Unit>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
@@ -99,8 +101,15 @@ class WalletManager(
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
         setWallets(activeWallets)
+        loaded.complete(Unit)
         notifyActiveWallets()
     }
+
+    /**
+     * Suspends until the active account's wallets have been read for the first time. Before
+     * that [activeWallets] is empty, which at app start says nothing about what is in use.
+     */
+    suspend fun awaitLoaded() = loaded.await()
 
     @Synchronized
     private fun setWallets(activeWallets: List<Wallet>) {

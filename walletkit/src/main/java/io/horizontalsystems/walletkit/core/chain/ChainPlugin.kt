@@ -29,10 +29,15 @@ import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.Account
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.Date
 import kotlin.reflect.KClass
+
+// How long startup work waits for the wallets to be read before giving up on this launch
+private val WALLETS_LOAD_TIMEOUT = 30.seconds
 
 /**
  * Per-blockchain extension point. Optional chains implement this and register in
@@ -180,6 +185,17 @@ interface ChainPlugin {
 
     /** Startup work after core managers are ready (e.g. Monero fastest-node auto-select). */
     suspend fun onAppStart() = Unit
+
+    /**
+     * Whether the active account has a wallet of this chain, for startup work that only
+     * matters to a chain in use. Waits for the wallets to be read first: [onAppStart] runs
+     * while they are still loading. False when they do not load in time, e.g. while the
+     * device keystore is locked.
+     */
+    suspend fun isInUseAtStartup(): Boolean {
+        withTimeoutOrNull(WALLETS_LOAD_TIMEOUT) { App.walletManager.awaitLoaded() } ?: return false
+        return App.walletManager.activeWallets.any { it.token.blockchainType == blockchainType }
+    }
 
     /**
      * Work when the app returns to the foreground. Runs on every foreground transition,

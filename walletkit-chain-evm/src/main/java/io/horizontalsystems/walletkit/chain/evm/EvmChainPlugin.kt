@@ -147,7 +147,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         // Auto-Select: probe only chains in use. The kit already falls over between built-in
         // sources on its own; this only moves the preferred one when the stored source is
         // dead, stale or clearly slower.
-        if (App.walletManager.activeWallets.none { it.token.blockchainType == blockchainType }) return
+        if (!isInUseAtStartup()) return
         App.evmSyncSourceManager.repickOnStartup(
             blockchainType,
             EvmSourcePinger.lagThreshold(blockchainType),
