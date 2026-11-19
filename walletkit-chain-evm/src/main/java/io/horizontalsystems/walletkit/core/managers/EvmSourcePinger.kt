@@ -42,8 +42,9 @@ object EvmSourcePinger {
 
             val start = System.nanoTime()
             client.newCall(request).execute().use { response ->
-                val elapsedMs = (System.nanoTime() - start) / 1_000_000.0
                 val body = response.body?.string()
+                // Taken once the answer is read: the headers can arrive long before it
+                val elapsedMs = (System.nanoTime() - start) / 1_000_000.0
                 if (!response.isSuccessful || body == null) return@withContext failed(source)
 
                 val result = JsonParser.parseString(body).asJsonObject.get("result")?.asString
