@@ -275,6 +275,7 @@ fun BalanceItems(
                             },
                             balanceHidden = uiState.balanceHidden,
                             loading = uiState.loading,
+                        networkAvailable = uiState.networkAvailable,
                         )
                         if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                             BalanceButtonsGroup {
@@ -615,6 +616,7 @@ fun TotalBalanceRow(
     onClickSubtitle: () -> Unit,
     balanceHidden: Boolean,
     loading: Boolean,
+    networkAvailable: Boolean,
 ) {
     HSAmountText(
         modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
@@ -622,7 +624,16 @@ fun TotalBalanceRow(
         subtitle = if (balanceHidden) "" else totalState.secondaryAmountStr,
         onClickTitle = onClickTitle,
         onClickSubtitle = onClickSubtitle,
-        trailingContent = if (loading) {
+        trailingContent = if (!networkAvailable) {
+            {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.globe_error_24),
+                    contentDescription = stringResource(R.string.Hud_Text_NoInternet),
+                    tint = ComposeAppTheme.colors.lucian,
+                )
+            }
+        } else if (loading) {
             {
                 CircularProgressIndicator(
                     modifier = Modifier
