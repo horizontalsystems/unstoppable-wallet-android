@@ -2000,4 +2000,6 @@
     <string name="WalletName_Default">钱包 %d</string>
     <string name="WalletName_WatchDefault">观察钱包 %d</string>
     <string name="EvmNetwork_AutoSelectDescription">当所选提供商不可用时切换到其他提供商</string>
+    <string name="Send_MaybeSent_Checking">节点未确认该交易。钱包正在切换到其他节点，以检查交易是否已发送。</string>
+    <string name="Send_MaybeSent_NotFound">钱包已切换到 %s，但未在那里找到该交易。重新发送前请先查看交易记录。</string>
 </resources>

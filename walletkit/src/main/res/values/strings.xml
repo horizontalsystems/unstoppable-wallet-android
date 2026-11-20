@@ -2356,4 +2356,6 @@
     <string name="Balance_NoWallets">No wallets. Add one below.</string>
     <string name="WalletName_Default">Wallet %d</string>
     <string name="WalletName_WatchDefault">Watch Wallet %d</string>
+    <string name="Send_MaybeSent_Checking">The node did not confirm the transaction. The wallet is switching to another node to check whether it was sent.</string>
+    <string name="Send_MaybeSent_NotFound">The wallet moved to %s and did not find the transaction there. Check the transaction history before sending again.</string>
 </resources>

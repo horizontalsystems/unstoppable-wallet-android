@@ -119,10 +119,10 @@ fun SendConfirmationScreen(
             }
 
             is SendResult.Failed -> {
-                if (sendResult.expected) {
-                    HudHelper.showErrorMessage(view, failureText.orEmpty())
-                } else {
-                    navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failureText.orEmpty())))
+                when {
+                    sendResult.shownOnScreen -> Unit
+                    sendResult.expected -> HudHelper.showErrorMessage(view, failureText.orEmpty())
+                    else -> navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failureText.orEmpty())))
                 }
                 onFailureShown?.invoke()
             }

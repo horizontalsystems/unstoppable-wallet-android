@@ -1989,4 +1989,6 @@
     <string name="WalletName_Default">کیف پول %d</string>
     <string name="WalletName_WatchDefault">کیف پول نظارتی %d</string>
     <string name="EvmNetwork_AutoSelectDescription">هنگام از کار افتادن ارائه‌دهنده انتخاب‌شده، به ارائه‌دهنده دیگری تغییر کن</string>
+    <string name="Send_MaybeSent_Checking">گره تراکنش را تأیید نکرد. کیف پول در حال انتقال به گره دیگری است تا بررسی کند که آیا تراکنش ارسال شده است.</string>
+    <string name="Send_MaybeSent_NotFound">کیف پول به %s منتقل شد و تراکنش را در آنجا پیدا نکرد. پیش از ارسال دوباره، تاریخچه تراکنش‌ها را بررسی کنید.</string>
 </resources>

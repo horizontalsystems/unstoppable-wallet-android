@@ -2003,4 +2003,6 @@
     <string name="WalletName_Default">Portefeuille %d</string>
     <string name="WalletName_WatchDefault">Portefeuille d\'observation %d</string>
     <string name="EvmNetwork_AutoSelectDescription">Passer à un autre fournisseur si celui sélectionné ne répond plus</string>
+    <string name="Send_MaybeSent_Checking">Le nœud n\'a pas confirmé la transaction. Le portefeuille passe à un autre nœud pour vérifier si elle a été envoyée.</string>
+    <string name="Send_MaybeSent_NotFound">Le portefeuille est passé à %s et n\'y a pas trouvé la transaction. Vérifiez l\'historique des transactions avant d\'envoyer à nouveau.</string>
 </resources>

@@ -2006,4 +2006,6 @@
     <string name="WalletName_Default">Wallet %d</string>
     <string name="WalletName_WatchDefault">Watch-Wallet %d</string>
     <string name="EvmNetwork_AutoSelectDescription">Zu einem anderen Anbieter wechseln, wenn der ausgewählte ausfällt</string>
+    <string name="Send_MaybeSent_Checking">Der Knoten hat die Transaktion nicht bestätigt. Die Wallet wechselt zu einem anderen Knoten, um zu prüfen, ob sie gesendet wurde.</string>
+    <string name="Send_MaybeSent_NotFound">Die Wallet hat zu %s gewechselt und die Transaktion dort nicht gefunden. Prüfen Sie den Transaktionsverlauf, bevor Sie erneut senden.</string>
 </resources>

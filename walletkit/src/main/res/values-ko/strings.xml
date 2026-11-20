@@ -1996,4 +1996,6 @@
     <string name="WalletName_Default">지갑 %d</string>
     <string name="WalletName_WatchDefault">조회 전용 지갑 %d</string>
     <string name="EvmNetwork_AutoSelectDescription">선택한 제공자에 문제가 생기면 다른 제공자로 전환</string>
+    <string name="Send_MaybeSent_Checking">노드가 거래를 확인해 주지 않았습니다. 전송되었는지 확인하기 위해 지갑이 다른 노드로 전환하고 있습니다.</string>
+    <string name="Send_MaybeSent_NotFound">지갑이 %s(으)로 전환했지만 그곳에서 거래를 찾지 못했습니다. 다시 보내기 전에 거래 내역을 확인하세요.</string>
 </resources>

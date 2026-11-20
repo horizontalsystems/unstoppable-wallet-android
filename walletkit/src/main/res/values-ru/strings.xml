@@ -2010,4 +2010,6 @@
     <string name="WalletName_Default">Кошелёк %d</string>
     <string name="WalletName_WatchDefault">Кошелёк наблюдения %d</string>
     <string name="EvmNetwork_AutoSelectDescription">Переключаться на другого провайдера, если выбранный не работает</string>
+    <string name="Send_MaybeSent_Checking">Узел не подтвердил транзакцию. Кошелёк переключается на другой узел, чтобы проверить, была ли она отправлена.</string>
+    <string name="Send_MaybeSent_NotFound">Кошелёк переключился на %s и не нашёл там транзакцию. Проверьте историю транзакций, прежде чем отправлять снова.</string>
 </resources>

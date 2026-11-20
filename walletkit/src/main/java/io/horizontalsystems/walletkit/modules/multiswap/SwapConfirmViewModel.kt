@@ -552,6 +552,9 @@ class SwapConfirmViewModel(
             // the next press, through a notice.
             val recordId = saveSwapRecord(commitment, recipient)
 
+            val startedAt = System.currentTimeMillis()
+            // Set when the send failed but the wallet lists the deposit afterwards
+            var deliveredHash: String? = null
             val result = try {
                 try {
                     service.sendTransaction(swapDefenseState.mevProtectionEnabled)
@@ -571,24 +574,34 @@ class SwapConfirmViewModel(
                         throw SwapCommitFailedException(SwapCommitFailure.Failed, DepositNotSendableException(nodeSwitched))
                     }
 
-                    // As on the send screen: the node is changed in the background so that the
-                    // wallet syncs and shows what happened, and nothing is sent again from here.
+                    // As on the send screen: the screen says what is being done while the
+                    // chain is moved to another node and the deposit is looked for there.
+                    // Nothing is sent again from here either way.
                     SendNodeFailover.Outcome.MaybeSent -> {
-                        val text = Translator.getString(R.string.Send_MaybeSent_Description)
-                        maybeSentCaution = CautionViewItem(
-                            title = Translator.getString(R.string.Send_MaybeSent_Title),
-                            text = text,
-                            type = CautionViewItem.Type.Error,
-                        )
-                        emitState()
-                        throw DepositMaybeSentException(text)
+                        showMaybeSent(Translator.getString(R.string.Send_MaybeSent_Checking))
+                        when (val delivery = nodeFailover.confirmDelivery(amountIn, startedAt)) {
+                            is SendNodeFailover.Delivery.Found -> {
+                                maybeSentCaution = null
+                                emitState()
+                                deliveredHash = delivery.transactionHash
+                                null
+                            }
+
+                            is SendNodeFailover.Delivery.NotFound -> {
+                                val text = delivery.nodeName
+                                    ?.let { Translator.getString(R.string.Send_MaybeSent_NotFound, it) }
+                                    ?: Translator.getString(R.string.Send_MaybeSent_Description)
+                                showMaybeSent(text)
+                                throw DepositMaybeSentException(text)
+                            }
+                        }
                     }
 
                     SendNodeFailover.Outcome.Unhandled -> throw e
                 }
             }
 
-            val txHash = transactionHash(result)
+            val txHash = deliveredHash ?: result?.let { transactionHash(it) }
             val providerSwapId = commitment.providerSwapId
             if (txHash != null) {
                 App.swapRecordManager.updateTransactionHash(recordId, txHash)
@@ -664,6 +677,15 @@ class SwapConfirmViewModel(
             if (service !== sendTransactionService) service.clear()
             throw e
         }
+    }
+
+    private fun showMaybeSent(text: String) {
+        maybeSentCaution = CautionViewItem(
+            title = Translator.getString(R.string.Send_MaybeSent_Title),
+            text = text,
+            type = CautionViewItem.Type.Error,
+        )
+        emitState()
     }
 
     private fun transactionHash(result: SendTransactionResult): String? = when (result) {

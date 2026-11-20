@@ -293,6 +293,8 @@ private fun SwapConfirmInternal(
                                 // No deposit was sent; a fresh quote is already loading, so the
                                 // reason is a passing notice rather than an error sheet.
                                 HudHelper.showErrorMessage(view, t.detail ?: Translator.getString(t.failure.messageRes))
+                            } catch (expected: DepositMaybeSentException) {
+                                // The screen says so itself, in a caution that stays
                             } catch (t: Throwable) {
                                 val message = when (t) {
                                     is WatchAccountException ->

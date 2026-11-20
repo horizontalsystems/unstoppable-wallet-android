@@ -2006,4 +2006,6 @@
     <string name="WalletName_Default">Carteira %d</string>
     <string name="WalletName_WatchDefault">Carteira de observação %d</string>
     <string name="EvmNetwork_AutoSelectDescription">Mudar para outro provedor quando o selecionado falhar</string>
+    <string name="Send_MaybeSent_Checking">O nó não confirmou a transação. A carteira está mudando para outro nó para verificar se ela foi enviada.</string>
+    <string name="Send_MaybeSent_NotFound">A carteira mudou para %s e não encontrou a transação lá. Confira o histórico de transações antes de enviar novamente.</string>
 </resources>

@@ -343,6 +343,15 @@ class SendV2ConfirmViewModel(
         }
     }
 
+    private fun showMaybeSent(text: String) {
+        maybeSentCaution = CautionViewItem(
+            title = Translator.getString(R.string.Send_MaybeSent_Title),
+            text = text,
+            type = CautionViewItem.Type.Error,
+        )
+        emitState()
+    }
+
     // The service's fields are read while broadcasting, so this takes the same confined
     // thread and lock as the submissions that write them.
     private suspend fun send() = withContext(serviceDispatcher) {
@@ -351,6 +360,13 @@ class SendV2ConfirmViewModel(
 
     private suspend fun broadcast() {
         sendResult = SendResult.Sending
+        val startedAt = System.currentTimeMillis()
+        // Read before the send: a node change rebuilds the adapter
+        val toSelf = try {
+            App.adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress == address.hex
+        } catch (e: Throwable) {
+            false
+        }
         val result = try {
             sendTransactionService.sendTransaction()
         } catch (e: Throwable) {
@@ -363,18 +379,32 @@ class SendV2ConfirmViewModel(
                     SendResult.Failed(
                         HSCaution(TranslatableString.PlainString(nodeSwitchedCaution?.text.orEmpty())),
                         expected = true,
+                        shownOnScreen = true,
                     )
                 }
 
+                // The screen says what is being done while the chain is moved to another node
+                // and the transfer is looked for there. The button stays in its sending state.
                 SendNodeFailover.Outcome.MaybeSent -> {
-                    val text = Translator.getString(R.string.Send_MaybeSent_Description)
-                    maybeSentCaution = CautionViewItem(
-                        title = Translator.getString(R.string.Send_MaybeSent_Title),
-                        text = text,
-                        type = CautionViewItem.Type.Error,
-                    )
-                    emitState()
-                    SendResult.Failed(HSCaution(TranslatableString.PlainString(text)), expected = true)
+                    showMaybeSent(Translator.getString(R.string.Send_MaybeSent_Checking))
+                    when (val delivery = nodeFailover.confirmDelivery(submittedAmount ?: amount, startedAt, toSelf)) {
+                        is SendNodeFailover.Delivery.Found -> {
+                            maybeSentCaution = null
+                            SendResult.Sent(txHash = delivery.transactionHash)
+                        }
+
+                        is SendNodeFailover.Delivery.NotFound -> {
+                            val text = delivery.nodeName
+                                ?.let { Translator.getString(R.string.Send_MaybeSent_NotFound, it) }
+                                ?: Translator.getString(R.string.Send_MaybeSent_Description)
+                            showMaybeSent(text)
+                            SendResult.Failed(
+                                HSCaution(TranslatableString.PlainString(text)),
+                                expected = true,
+                                shownOnScreen = true,
+                            )
+                        }
+                    }
                 }
 
                 SendNodeFailover.Outcome.Unhandled -> SendResult.Failed(
@@ -382,11 +412,15 @@ class SendV2ConfirmViewModel(
                     expected = e is UnknownHostException || e is LocalizedException,
                 )
             }
+            if (sendResult is SendResult.Sent) rememberRecipient()
             return
         }
         sendResult = SendResult.Sent(txHash = txHash(result))
+        rememberRecipient()
+    }
 
-        // Bookkeeping after a broadcast transaction; its failure is not the send's.
+    // Bookkeeping after a broadcast transaction; its failure is not the send's.
+    private fun rememberRecipient() {
         try {
             recentAddressManager.setRecentAddress(address, token.blockchainType)
         } catch (e: Throwable) {

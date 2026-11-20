@@ -2001,4 +2001,6 @@
     <string name="WalletName_Default">Cartera %d</string>
     <string name="WalletName_WatchDefault">Cartera de observación %d</string>
     <string name="EvmNetwork_AutoSelectDescription">Cambiar a otro proveedor cuando el seleccionado falle</string>
+    <string name="Send_MaybeSent_Checking">El nodo no confirmó la transacción. La billetera está cambiando a otro nodo para comprobar si se envió.</string>
+    <string name="Send_MaybeSent_NotFound">La billetera cambió a %s y no encontró allí la transacción. Revise el historial de transacciones antes de enviar de nuevo.</string>
 </resources>
