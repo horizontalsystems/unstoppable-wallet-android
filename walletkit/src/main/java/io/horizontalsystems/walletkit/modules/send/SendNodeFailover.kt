@@ -71,18 +71,11 @@ class SendNodeFailover(
     companion object {
         private val backgroundScope = CoroutineScope(Dispatchers.Default)
 
-        /**
-         * @param preBroadcastOnly leave a failure that may have delivered the transaction to
-         * the screen as it is, node included. For a screen that stays usable after it and so
-         * must not have its adapter rebuilt in the background.
-         */
-        fun forToken(token: Token, preBroadcastOnly: Boolean = false): SendNodeFailover {
+        fun forToken(token: Token): SendNodeFailover {
             val plugin = ChainRegistry[token.blockchainType]
             return SendNodeFailover(
                 token = token,
-                classify = { error ->
-                    plugin?.classifyNodeError(error)?.takeIf { it.preBroadcast || !preBroadcastOnly }
-                },
+                classify = { error -> plugin?.classifyNodeError(error) },
                 switchNode = { plugin?.failoverForSend(it) },
                 backgroundScope = backgroundScope,
             )

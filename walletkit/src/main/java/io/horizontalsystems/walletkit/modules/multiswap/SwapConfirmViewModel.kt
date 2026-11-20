@@ -73,9 +73,13 @@ class SwapConfirmViewModel(
         private set
     private var sendTransactionServiceJob: Job? = null
 
-    // Only a failure before the broadcast is acted on here. After one that may have sent the
-    // deposit the screen stays as it is, and its record tracks the swap.
-    private val nodeFailover = SendNodeFailover.forToken(tokenIn, preBroadcastOnly = true)
+    private val nodeFailover = SendNodeFailover.forToken(tokenIn)
+    // The deposit may have reached the network although its send failed. Sending it again could
+    // pay twice, so this screen offers neither Swap nor a new quote any more, and the swap it
+    // shows is not edited; the record saved before the broadcast tracks the swap.
+    // Set while sending, off the main thread.
+    @Volatile
+    private var maybeSentCaution: CautionViewItem? = null
     private val tokenOut = swapQuote.tokenOut
 
     val isSplit: Boolean = splitRecipients != null
@@ -272,6 +276,10 @@ class SwapConfirmViewModel(
      */
     private suspend fun switchNodeAfter(failure: Throwable): String? {
         val outcome = nodeFailover.handle(failure) as? SendNodeFailover.Outcome.Switched ?: return null
+        return serviceOnNewNode(outcome)
+    }
+
+    private fun serviceOnNewNode(outcome: SendNodeFailover.Outcome.Switched): String? {
         return try {
             replaceSendTransactionService()
             Translator.getString(R.string.Send_NodeSwitched_Description, outcome.nodeName)
@@ -306,7 +314,9 @@ class SwapConfirmViewModel(
             fiatAmountOutMin = fiatAmountOutMin,
             currency = currency,
             networkFee = if (unpriced) null else sendTransactionState.networkFee,
-            cautions = if (unpriced) listOfNotNull(unpricedCaution) else sendTransactionState.cautions,
+            cautions = listOfNotNull(maybeSentCaution) +
+                if (unpriced) listOfNotNull(unpricedCaution) else sendTransactionState.cautions,
+            maybeSent = maybeSentCaution != null,
             // Frozen while sending: the committed deposit is re-estimated through the on-screen
             // service on chains without a fresh instance, and its interim not-sendable state
             // must not swap the button out from under the send running in its scope.
@@ -354,7 +364,7 @@ class SwapConfirmViewModel(
     }
 
     fun refresh(silent: Boolean = false) {
-        if (isInBackground || sending) return
+        if (isInBackground || sending || maybeSentCaution != null) return
 
         if (!silent) {
             loading = true
@@ -485,6 +495,8 @@ class SwapConfirmViewModel(
         val recipient = this@SwapConfirmViewModel.recipient
 
         synchronized(this@SwapConfirmViewModel) {
+            // Checked here and not only by the button: nothing may send this swap again
+            maybeSentCaution?.let { throw DepositMaybeSentException(it.text) }
             if (sending) throw IllegalStateException("A swap is already being sent")
             sending = true
         }
@@ -549,12 +561,31 @@ class SwapConfirmViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {
-                // The node failed before anything was sent: the order lapses unfunded like one
-                // whose deposit could not be built, and the next press commits a new one on
-                // the node the chain was moved to.
-                val nodeSwitched = switchNodeAfter(e) ?: throw e
-                requote()
-                throw SwapCommitFailedException(SwapCommitFailure.Failed, DepositNotSendableException(nodeSwitched))
+                when (val outcome = nodeFailover.handle(e)) {
+                    // The node failed before anything was sent: the order lapses unfunded like
+                    // one whose deposit could not be built, and the next press commits a new
+                    // one on the node the chain was moved to.
+                    is SendNodeFailover.Outcome.Switched -> {
+                        val nodeSwitched = serviceOnNewNode(outcome) ?: throw e
+                        requote()
+                        throw SwapCommitFailedException(SwapCommitFailure.Failed, DepositNotSendableException(nodeSwitched))
+                    }
+
+                    // As on the send screen: the node is changed in the background so that the
+                    // wallet syncs and shows what happened, and nothing is sent again from here.
+                    SendNodeFailover.Outcome.MaybeSent -> {
+                        val text = Translator.getString(R.string.Send_MaybeSent_Description)
+                        maybeSentCaution = CautionViewItem(
+                            title = Translator.getString(R.string.Send_MaybeSent_Title),
+                            text = text,
+                            type = CautionViewItem.Type.Error,
+                        )
+                        emitState()
+                        throw DepositMaybeSentException(text)
+                    }
+
+                    SendNodeFailover.Outcome.Unhandled -> throw e
+                }
             }
 
             val txHash = transactionHash(result)
@@ -702,6 +733,8 @@ class SwapConfirmViewModel(
     }
 
     fun setRecipient(recipient: Address?) {
+        // The swap that may have been sent pays the recipient on screen
+        if (maybeSentCaution != null) return
         // A split's recipients were fixed before this screen.
         if (isSplit) return
         // a mandatory external recipient can be changed but never cleared
@@ -713,6 +746,7 @@ class SwapConfirmViewModel(
     }
 
     fun setSlippage(slippage: BigDecimal) {
+        if (maybeSentCaution != null) return
         if (slippage == this.slippage) return
 
         this.slippage = slippage
@@ -767,6 +801,8 @@ data class SwapConfirmUiState(
     val currency: Currency,
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
+    // The deposit may have been sent: the screen shows why and offers nothing to press
+    val maybeSent: Boolean,
     val validQuote: Boolean,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: PriceImpactLevel?,
