@@ -11,7 +11,6 @@ import io.horizontalsystems.walletkit.core.storage.StatsDao
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.LaunchPage
 import io.horizontalsystems.walletkit.entities.StatRecord
-import io.horizontalsystems.walletkit.modules.balance.BalanceSortType
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewType
 import io.horizontalsystems.walletkit.modules.coin.CoinModule
 import io.horizontalsystems.walletkit.modules.coin.analytics.CoinAnalyticsModule
@@ -136,13 +135,6 @@ class StatsManager(
     }
 
 }
-
-val BalanceSortType.statSortType
-    get() = when (this) {
-        BalanceSortType.Name -> StatSortType.Name
-        BalanceSortType.PercentGrowth -> StatSortType.PriceChange
-        BalanceSortType.Value -> StatSortType.Balance
-    }
 
 val ProChartModule.ChartType.statPage
     get() = when (this) {

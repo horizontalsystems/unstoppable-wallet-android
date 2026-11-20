@@ -22,7 +22,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.walletkit.modules.amount.AmountInputType
-import io.horizontalsystems.walletkit.modules.balance.BalanceSortType
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewType
 import io.horizontalsystems.walletkit.modules.main.MainModule
 import io.horizontalsystems.walletkit.modules.market.MarketModule
@@ -81,7 +80,6 @@ interface ILocalStorage {
     var baseDashProvider: String?
     var baseZcashProvider: String?
     var syncMode: SyncMode?
-    var sortType: BalanceSortType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
     var encryptedSampleText: String?

@@ -18,7 +18,6 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
-import io.horizontalsystems.walletkit.core.stats.statSortType
 import io.horizontalsystems.walletkit.core.utils.AddressUriParser
 import io.horizontalsystems.walletkit.core.utils.ToncoinUriParser
 import io.horizontalsystems.walletkit.entities.Account
@@ -73,10 +72,6 @@ class BalanceViewModel(
     private var zcashMigrationAlertWallet: Wallet? = null
     private var zcashMigrationAlertShown = false
     private var totalUiState = createTotalUiState(totalService.stateFlow.value)
-
-    private val sortTypes =
-        listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-    private var sortType = service.sortType
 
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
         private set
@@ -198,8 +193,6 @@ class BalanceViewModel(
         openSend = openSendTokenSelect,
         openOcpPayment = openOcpPayment,
         balanceTabButtonsEnabled = balanceTabButtonsEnabled,
-        sortType = sortType,
-        sortTypes = sortTypes,
         networkAvailable = service.networkAvailable,
         loading = balanceViewItems.any {
             it.loading
@@ -289,16 +282,6 @@ class BalanceViewModel(
 
             isRefreshing = false
             emitState()
-        }
-    }
-
-    fun setSortType(sortType: BalanceSortType) {
-        this.sortType = sortType
-        emitState()
-
-        viewModelScope.launch(Dispatchers.Default) {
-            service.setSortType(sortType)
-            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(sortType.statSortType))
         }
     }
 
@@ -473,8 +456,6 @@ data class BalanceUiState(
     val openSend: OpenSendTokenSelect? = null,
     val openOcpPayment: String? = null,
     val balanceTabButtonsEnabled: Boolean,
-    val sortType: BalanceSortType,
-    val sortTypes: List<BalanceSortType>,
     val networkAvailable: Boolean,
     val loading: Boolean,
     val balanceHidden: Boolean,

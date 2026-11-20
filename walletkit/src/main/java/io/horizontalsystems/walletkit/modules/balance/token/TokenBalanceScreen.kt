@@ -70,6 +70,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.TextAttention
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.BalanceAmountGroup
 import io.horizontalsystems.walletkit.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -489,26 +490,36 @@ private fun TokenBalanceHeader(
             }
         }
 
-        HSAmountText(
-            modifier = Modifier.testTag(TestTags.TOKEN_BALANCE),
-            title = title,
-            subtitle = subtitle,
-            titleColor = titleColor,
-            subtitleColor = subtitleColor,
-            onClickTitle = {
-                viewModel.toggleBalanceVisibility()
-                HudHelper.vibrate(context)
+        BalanceAmountGroup {
+            HSAmountText(
+                modifier = Modifier.testTag(TestTags.TOKEN_BALANCE),
+                title = title,
+                subtitle = subtitle,
+                titleColor = titleColor,
+                subtitleColor = subtitleColor,
+                onClickTitle = {
+                    viewModel.toggleBalanceVisibility()
+                    HudHelper.vibrate(context)
 
-                stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
-            },
-            onClickSubtitle = {
-                viewModel.toggleBalanceVisibility()
-                HudHelper.vibrate(context)
+                    stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
+                },
+                onClickSubtitle = {
+                    viewModel.toggleBalanceVisibility()
+                    HudHelper.vibrate(context)
 
-                stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
-            },
-            trailingContent = trailingContent,
-        )
+                    stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
+                },
+                trailingContent = trailingContent,
+            )
+            if (!balanceViewItem.isWatchAccount) {
+                ButtonsRow(
+                    viewItem = balanceViewItem,
+                    navigation = navigation,
+                    chartButtonEnabled = chartButtonEnabled,
+                    onClickReceive = onClickReceive
+                )
+            }
+        }
         if (balanceViewItem.isWatchAccount) {
             receiveAddress?.let { receiveAddress ->
                 CellPrimary(
@@ -525,14 +536,6 @@ private fun TokenBalanceHeader(
                     onClick = onClickReceive
                 )
             }
-        }
-        if (!balanceViewItem.isWatchAccount) {
-            ButtonsRow(
-                viewItem = balanceViewItem,
-                navigation = navigation,
-                chartButtonEnabled = chartButtonEnabled,
-                onClickReceive = onClickReceive
-            )
         }
         warning?.let { warning ->
             TextAttention(

@@ -323,10 +323,7 @@
     <string name="Balance_Downloading">Téléchargement de…</string>
     <string name="Balance_FoundTx">%s Tx</string>
     <string name="Balance_BlocksRemaining">Blocs restants - %d</string>
-    <string name="Balance_Sort_Balance">Solde</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
-    <string name="Balance_Sort_Az">Nom</string>
-    <string name="Balance_Sort_24hPriceChange">Changement de prix</string>
     <string name="Balance_NoCoinsAlert">Aucun token ici. Ajoutez-en un pour commencer.</string>
     <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
     <string name="Balance_Network">Réseau</string>

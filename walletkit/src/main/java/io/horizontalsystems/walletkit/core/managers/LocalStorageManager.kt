@@ -17,7 +17,6 @@ import io.horizontalsystems.walletkit.entities.LaunchPage
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.entities.SyncMode
 import io.horizontalsystems.walletkit.modules.amount.AmountInputType
-import io.horizontalsystems.walletkit.modules.balance.BalanceSortType
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewType
 import io.horizontalsystems.walletkit.modules.main.MainModule
 import io.horizontalsystems.walletkit.modules.market.MarketModule
@@ -57,7 +56,6 @@ class LocalStorageManager(
     private val BASE_DASH_PROVIDER = "base_dash_provider"
     private val BASE_ZCASH_PROVIDER = "base_zcash_provider"
     private val SYNC_MODE = "sync_mode"
-    private val SORT_TYPE = "balance_sort_type"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
@@ -244,16 +242,6 @@ class LocalStorageManager(
         get() = preferences.getString(BASE_ZCASH_PROVIDER, null)
         set(value) {
             preferences.edit().putString(BASE_ZCASH_PROVIDER, value).apply()
-        }
-
-    override var sortType: BalanceSortType
-        get() {
-            val sortString = preferences.getString(SORT_TYPE, null)
-                ?: BalanceSortType.Value.getAsString()
-            return BalanceSortType.getTypeFromString(sortString)
-        }
-        set(sortType) {
-            preferences.edit().putString(SORT_TYPE, sortType.getAsString()).apply()
         }
 
     override var appVersions: List<AppVersion>

@@ -2,6 +2,11 @@ package io.horizontalsystems.walletkit.modules.balance.ui
 
 import android.view.View
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -31,7 +35,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
@@ -46,7 +54,6 @@ import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSAmountText
 import io.horizontalsystems.designkit.components.HSButton
-import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -59,7 +66,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.balance.AccountViewItem
 import io.horizontalsystems.walletkit.modules.balance.BalanceContextMenuItem
-import io.horizontalsystems.walletkit.modules.balance.BalanceSortType
 import io.horizontalsystems.walletkit.modules.balance.BalanceUiState
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem2
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewModel
@@ -77,16 +83,15 @@ import io.horizontalsystems.walletkit.modules.sendtokenselect.SendTokenSelectPag
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
+import io.horizontalsystems.walletkit.uiv3.components.BalanceAmountGroup
 import io.horizontalsystems.walletkit.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftImage
@@ -95,9 +100,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsButtonText
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
-import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
-import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
-import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
 
 @Composable
 fun Note(
@@ -175,7 +177,6 @@ fun BalanceItems(
     var revealedCardId by remember { mutableStateOf<Int?>(null) }
     val listState = rememberSaveable(
         accountViewItem.id,
-        uiState.sortType,
         saver = LazyListState.Saver
     ) {
         LazyListState()
@@ -203,290 +204,260 @@ fun BalanceItems(
         }
     }
 
+    val openCoinManager: () -> Unit = remember {
+        {
+            navigation.slideFromRight(ManageWalletsPage)
+
+            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.CoinManager))
+        }
+    }
+
     val onDisable: (BalanceViewItem2) -> Unit = remember {
         {
             viewModel.disable(it)
         }
     }
 
-    HSSwipeRefresh(
-        refreshing = uiState.isRefreshing,
-        onRefresh = viewModel::onRefresh
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(ComposeAppTheme.colors.lawrence),
-            state = listState,
-            contentPadding = PaddingValues(bottom = 32.dp)
+    // The list's own consumption decides the direction, so a pull-to-refresh
+    // drag at the top of the list does not count as scrolling up.
+    var scrolledDown by rememberSaveable(accountViewItem.id) { mutableStateOf(false) }
+    val scrollDirectionConnection = remember(accountViewItem.id) {
+        object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                if (consumed.y < 0) {
+                    scrolledDown = true
+                } else if (consumed.y > 0) {
+                    scrolledDown = false
+                }
+                return Offset.Zero
+            }
+        }
+    }
+    // At the top no upward scroll is left to bring the button back.
+    val atTop = !listState.canScrollBackward
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        HSSwipeRefresh(
+            refreshing = uiState.isRefreshing,
+            onRefresh = viewModel::onRefresh
         ) {
-            item {
-                TotalBalanceRow(
-                    totalState = uiState.totalUiState,
-                    onClickTitle = remember {
-                        {
-                            viewModel.toggleBalanceVisibility()
-                            HudHelper.vibrate(context)
-
-                            stat(page = StatPage.Balance, event = StatEvent.ToggleBalanceHidden)
-                        }
-                    },
-                    onClickSubtitle = remember {
-                        {
-                            viewModel.toggleTotalType()
-                            HudHelper.vibrate(context)
-
-                            stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
-                        }
-                    },
-                    balanceHidden = uiState.balanceHidden
-                )
-            }
-
-            if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .nestedScroll(scrollDirectionConnection),
+                state = listState,
+                contentPadding = PaddingValues(bottom = ListBottomPadding)
+            ) {
                 item {
-                    BalanceButtonsGroup {
-                        BalanceActionButton(
-                            variant = ButtonVariant.Primary,
-                            icon = R.drawable.ic_scan_24,
-                            title = stringResource(R.string.Button_ScanQr),
-                            modifier = Modifier.testTag(TestTags.BALANCE_SCAN),
-                            onClick = onScanClick
-                        )
-                        BalanceActionButton(
-                            variant = ButtonVariant.Secondary,
-                            icon = R.drawable.ic_arrow_down_24,
-                            title = stringResource(R.string.Balance_Receive),
-                            modifier = Modifier.testTag(TestTags.BALANCE_RECEIVE),
-                            enabled = true,
-                            onClick = {
-                                navigation.slideFromRight(ReceiveChooseCoinPage)
+                    BalanceAmountGroup {
+                        TotalBalanceRow(
+                            totalState = uiState.totalUiState,
+                            onClickTitle = remember {
+                                {
+                                    viewModel.toggleBalanceVisibility()
+                                    HudHelper.vibrate(context)
 
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.ReceiveTokenList)
-                                )
-                            }
-                        )
-                        BalanceActionButton(
-                            variant = ButtonVariant.Secondary,
-                            icon = R.drawable.ic_arrow_up_24,
-                            title = stringResource(R.string.Balance_Send),
-                            modifier = Modifier.testTag(TestTags.BALANCE_SEND),
-                            onClick = {
-                                navigation.slideFromRight(SendTokenSelectPage())
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.SendTokenList)
-                                )
-                            }
-                        )
-                        if (viewModel.isSwapEnabled) {
-                            BalanceActionButton(
-                                variant = ButtonVariant.Secondary,
-                                icon = R.drawable.ic_swap_circle_24,
-                                title = stringResource(R.string.Swap),
-                                modifier = Modifier.testTag(TestTags.BALANCE_SWAP),
-                                onClick = {
-                                    navigation.slideFromRight(SwapPage())
-
-                                    stat(
-                                        page = StatPage.Balance,
-                                        event = StatEvent.Open(StatPage.Swap)
-                                    )
+                                    stat(page = StatPage.Balance, event = StatEvent.ToggleBalanceHidden)
                                 }
-                            )
-                        }
-                    }
-                }
-            }
+                            },
+                            onClickSubtitle = remember {
+                                {
+                                    viewModel.toggleTotalType()
+                                    HudHelper.vibrate(context)
 
-            item {
-                if (uiState.nonStandardAccount) {
-                    AlertCard(
-                        modifier = Modifier
-                            .background(ComposeAppTheme.colors.tyler)
-                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
-                            .fillMaxWidth(),
-                        format = AlertFormat.Structured,
-                        type = AlertType.Critical,
-                        text = stringResource(R.string.AccountRecovery_MigrationRequired),
-                        onClick = {
-                            FaqManager.showFaqPage(
-                                navigation,
-                                FaqManager.faqPathMigrationRequired
-                            )
-                        }
-                    )
-                }
-            }
-
-            if (accountViewItem.isWatchAccount) {
-                item {
-                    CellPrimary(
-                        left = {
-                            CellLeftImage(
-                                painter = painterResource(R.drawable.binocular_24),
-                                contentDescription = "binoculars icon",
-                                type = ImageType.Ellipse,
-                                size = 24
-                            )
-                        },
-                        middle = {
-                            CellMiddleInfoTextIcon(text = stringResource(R.string.WatchWallet).hs)
-                        },
-                        right = {
-                            accountViewItem.watchAddress?.let { watchAddress ->
-                                CellRightControlsButtonText(
-                                    subtitle = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
-                                    icon = painterResource(id = R.drawable.copy_filled_24),
-                                    iconTint = ComposeAppTheme.colors.leah,
+                                    stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
+                                }
+                            },
+                            balanceHidden = uiState.balanceHidden,
+                            loading = uiState.loading,
+                        )
+                        if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
+                            BalanceButtonsGroup {
+                                BalanceActionButton(
+                                    variant = ButtonVariant.Primary,
+                                    icon = R.drawable.ic_scan_24,
+                                    title = stringResource(R.string.Button_ScanQr),
+                                    modifier = Modifier.testTag(TestTags.BALANCE_SCAN),
+                                    onClick = onScanClick
+                                )
+                                BalanceActionButton(
+                                    variant = ButtonVariant.Secondary,
+                                    icon = R.drawable.ic_arrow_down_24,
+                                    title = stringResource(R.string.Balance_Receive),
+                                    modifier = Modifier.testTag(TestTags.BALANCE_RECEIVE),
+                                    enabled = true,
                                     onClick = {
-                                        TextHelper.copyText(accountViewItem.watchAddress)
-                                        HudHelper.showSuccessMessage(
-                                            view,
-                                            R.string.Hud_Text_Copied
+                                        navigation.slideFromRight(ReceiveChooseCoinPage)
+
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
                                         )
                                     }
                                 )
-                            }
-                        },
-                        backgroundColor = ComposeAppTheme.colors.tyler,
-                    )
-                }
-            }
+                                BalanceActionButton(
+                                    variant = ButtonVariant.Secondary,
+                                    icon = R.drawable.ic_arrow_up_24,
+                                    title = stringResource(R.string.Balance_Send),
+                                    modifier = Modifier.testTag(TestTags.BALANCE_SEND),
+                                    onClick = {
+                                        navigation.slideFromRight(SendTokenSelectPage())
 
-            if (balanceViewItems.isNotEmpty()) {
-                stickyHeader {
-                    TabsSectionButtons(
-                        left = {
-                            BalanceSortingSelector(
-                                sortType = uiState.sortType,
-                                sortTypes = uiState.sortTypes
-                            ) {
-                                viewModel.setSortType(it)
-                            }
-                            HSIconButton(
-                                variant = ButtonVariant.Secondary,
-                                size = ButtonSize.Small,
-                                icon = painterResource(R.drawable.ic_manage_20),
-                                contentDescription = stringResource(R.string.ManageCoins_title),
-                                modifier = Modifier.testTag(TestTags.BALANCE_MANAGE_COINS),
-                                onClick = {
-                                    navigation.slideFromRight(ManageWalletsPage)
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.SendTokenList)
+                                        )
+                                    }
+                                )
+                                if (viewModel.isSwapEnabled) {
+                                    BalanceActionButton(
+                                        variant = ButtonVariant.Secondary,
+                                        icon = R.drawable.ic_swap_circle_24,
+                                        title = stringResource(R.string.Swap),
+                                        modifier = Modifier.testTag(TestTags.BALANCE_SWAP),
+                                        onClick = {
+                                            navigation.slideFromRight(SwapPage())
 
-                                    stat(
-                                        page = StatPage.Balance,
-                                        event = StatEvent.Open(StatPage.CoinManager)
+                                            stat(
+                                                page = StatPage.Balance,
+                                                event = StatEvent.Open(StatPage.Swap)
+                                            )
+                                        }
                                     )
                                 }
-                            )
-                        },
-                        right = {
-                            if (!uiState.networkAvailable) {
-                                subheadSB_lucian(stringResource(R.string.Hud_Text_NoInternet))
                             }
-                            if (uiState.loading) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .testTag(TestTags.BALANCE_SYNC_INDICATOR),
-                                    color = ComposeAppTheme.colors.leah,
-                                    backgroundColor = ComposeAppTheme.colors.andy,
-                                    strokeWidth = 2.dp
+                        }
+                    }
+                }
+
+                item {
+                    if (uiState.nonStandardAccount) {
+                        AlertCard(
+                            modifier = Modifier
+                                .background(ComposeAppTheme.colors.tyler)
+                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp)
+                                .fillMaxWidth(),
+                            format = AlertFormat.Structured,
+                            type = AlertType.Critical,
+                            text = stringResource(R.string.AccountRecovery_MigrationRequired),
+                            onClick = {
+                                FaqManager.showFaqPage(
+                                    navigation,
+                                    FaqManager.faqPathMigrationRequired
                                 )
                             }
-                        }
-                    )
-                }
-            }
-
-            if (balanceViewItems.isEmpty()) {
-                item {
-                    NoCoinsBlock(
-                        onAddClick = {
-                            navigation.slideFromRight(ManageWalletsPage)
-
-                            stat(
-                                page = StatPage.Balance,
-                                event = StatEvent.Open(StatPage.CoinManager)
-                            )
-                        }
-                    )
-                }
-            } else {
-                itemsIndexed(
-                    items = balanceViewItems,
-                    key = { _, item ->
-                        item.wallet.hashCode()
+                        )
                     }
-                ) { index, item ->
-                    BoxBordered(top = true, bottom = index == balanceViewItems.size - 1) {
-                        BalanceCardSwipable(
-                            viewItem = item,
-                            balanceHidden = uiState.balanceHidden,
-                            revealed = revealedCardId == item.wallet.hashCode(),
-                            onReveal = { walletHashCode ->
-                                if (revealedCardId != walletHashCode) {
-                                    revealedCardId = walletHashCode
+                }
+
+                if (accountViewItem.isWatchAccount) {
+                    item {
+                        CellPrimary(
+                            left = {
+                                CellLeftImage(
+                                    painter = painterResource(R.drawable.binocular_24),
+                                    contentDescription = "binoculars icon",
+                                    type = ImageType.Ellipse,
+                                    size = 24
+                                )
+                            },
+                            middle = {
+                                CellMiddleInfoTextIcon(text = stringResource(R.string.WatchWallet).hs)
+                            },
+                            right = {
+                                accountViewItem.watchAddress?.let { watchAddress ->
+                                    CellRightControlsButtonText(
+                                        subtitle = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
+                                        icon = painterResource(id = R.drawable.copy_filled_24),
+                                        iconTint = ComposeAppTheme.colors.leah,
+                                        onClick = {
+                                            TextHelper.copyText(accountViewItem.watchAddress)
+                                            HudHelper.showSuccessMessage(
+                                                view,
+                                                R.string.Hud_Text_Copied
+                                            )
+                                        }
+                                    )
                                 }
                             },
-                            onConceal = {
-                                revealedCardId = null
-                            },
-                            onClick = {
-                                navigateToTokenBalance.invoke(item)
-                            },
-                            onClickSyncError = {
-                                onClickSyncError.invoke(item)
-                            },
-                            onContextMenuItemClick = {
-                                handleContextMenuClick(
-                                    menuItem = it,
-                                    balanceViewItem = item,
-                                    navigation = navigation,
-                                    onAddressCopyClick = { wallet ->
-                                        handleReceiveAddress(viewModel, wallet, view, navigation)
-                                    },
-                                    onDisable = onDisable
-                                )
-                            },
-                            onDisable = {
-                                onDisable.invoke(item)
-                            }
-                        )
-                    }
-
-                }
-
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 24.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        HSButton(
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            title = stringResource(R.string.Button_Add),
-                            icon = painterResource(R.drawable.ic_plus_20),
-                            onClick = {
-                                navigation.slideFromRight(ManageWalletsPage)
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.CoinManager)
-                                )
-                            }
+                            backgroundColor = ComposeAppTheme.colors.tyler,
                         )
                     }
                 }
+
+                if (balanceViewItems.isEmpty()) {
+                    item {
+                        NoCoinsBlock(onAddClick = openCoinManager)
+                    }
+                } else {
+                    itemsIndexed(
+                        items = balanceViewItems,
+                        key = { _, item ->
+                            item.wallet.hashCode()
+                        }
+                    ) { index, item ->
+                        BoxBordered(top = index != 0, bottom = index == balanceViewItems.size - 1) {
+                            BalanceCardSwipable(
+                                viewItem = item,
+                                balanceHidden = uiState.balanceHidden,
+                                revealed = revealedCardId == item.wallet.hashCode(),
+                                onReveal = { walletHashCode ->
+                                    if (revealedCardId != walletHashCode) {
+                                        revealedCardId = walletHashCode
+                                    }
+                                },
+                                onConceal = {
+                                    revealedCardId = null
+                                },
+                                onClick = {
+                                    navigateToTokenBalance.invoke(item)
+                                },
+                                onClickSyncError = {
+                                    onClickSyncError.invoke(item)
+                                },
+                                onContextMenuItemClick = {
+                                    handleContextMenuClick(
+                                        menuItem = it,
+                                        balanceViewItem = item,
+                                        navigation = navigation,
+                                        onAddressCopyClick = { wallet ->
+                                            handleReceiveAddress(viewModel, wallet, view, navigation)
+                                        },
+                                        onDisable = onDisable
+                                    )
+                                },
+                                onDisable = {
+                                    onDisable.invoke(item)
+                                }
+                            )
+                        }
+
+                    }
+
+                }
             }
-            item{
-                VSpacer(70.dp)
-            }
+        }
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = BottomNavigationHeight + 24.dp),
+            visible = balanceViewItems.isNotEmpty() && (!scrolledDown || atTop),
+            enter = slideInVertically { it } + fadeIn(),
+            exit = slideOutVertically { it } + fadeOut(),
+        ) {
+            HSButton(
+                modifier = Modifier.testTag(TestTags.BALANCE_MANAGE_COINS),
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                title = stringResource(R.string.Button_Add),
+                icon = painterResource(R.drawable.ic_plus_20),
+                onClick = openCoinManager
+            )
         }
     }
     uiState.openSend?.let { openSend ->
@@ -586,23 +557,14 @@ fun BalanceActionButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HSIconButton(
-            modifier = modifier,
-            variant = variant,
-            icon = painterResource(icon),
-            contentDescription = title,
-            enabled = enabled,
-            onClick = onClick
-        )
-        VSpacer(8.dp)
-        caption_grey(
-            text = title,
-            maxLines = 1
-        )
-    }
+    HSIconButton(
+        modifier = modifier,
+        variant = variant,
+        icon = painterResource(icon),
+        contentDescription = title,
+        enabled = enabled,
+        onClick = onClick
+    )
 }
 
 @Composable
@@ -611,94 +573,68 @@ private fun NoCoinsBlock(onAddClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        VSpacer(height = 100.dp)
-        Box(
+        VSpacer(height = 88.dp)
+        Icon(
             modifier = Modifier
-                .size(100.dp)
-                .background(
-                    color = ComposeAppTheme.colors.raina,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                modifier = Modifier.size(72.dp),
-                painter = painterResource(R.drawable.wallet_in_24),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
-        VSpacer(32.dp)
+                .padding(16.dp)
+                .size(72.dp),
+            painter = painterResource(R.drawable.wallet_in_24),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        VSpacer(16.dp)
         subhead2_grey(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 64.dp),
             text = stringResource(R.string.Balance_NoCoinsAlert),
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
         )
-        VSpacer(height = 16.dp)
+        VSpacer(height = 24.dp)
         HSButton(
-            variant = ButtonVariant.Primary,
+            modifier = Modifier.testTag(TestTags.BALANCE_MANAGE_COINS),
+            variant = ButtonVariant.Secondary,
             style = ButtonStyle.Transparent,
             size = ButtonSize.Small,
-            title = stringResource(R.string.ManageCoins_AddToken),
+            title = stringResource(R.string.Button_Add),
+            icon = painterResource(R.drawable.ic_plus_20),
             onClick = onAddClick
         )
-        VSpacer(height = 32.dp)
     }
 }
 
-@Composable
-fun BalanceSortingSelector(
-    sortType: BalanceSortType,
-    sortTypes: List<BalanceSortType>,
-    onSelectSortType: (BalanceSortType) -> Unit
-) {
-    var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
+// The Balance tab is drawn behind the bottom navigation.
+private val BottomNavigationHeight = 56.dp
 
-    HSDropdownButton(
-        variant = ButtonVariant.Secondary,
-        title = stringResource(sortType.getTitleRes()),
-        onClick = {
-            showSortTypeSelectorDialog = true
-        }
-    )
-
-    if (showSortTypeSelectorDialog) {
-        MenuGroup(
-            title = stringResource(R.string.Balance_Sort_PopupTitle),
-            items = sortTypes.map {
-                MenuItemX(stringResource(it.getTitleRes()), it == sortType, it)
-            },
-            onDismissRequest = {
-                showSortTypeSelectorDialog = false
-            },
-            onSelectItem = onSelectSortType
-        )
-    }
-}
+// Lets the last row scroll clear of the floating Add button.
+private val ListBottomPadding = BottomNavigationHeight + 80.dp
 
 @Composable
 fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
-    balanceHidden: Boolean
+    balanceHidden: Boolean,
+    loading: Boolean,
 ) {
-    if (balanceHidden) {
-        HSAmountText(
-            modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
-            title = "* * *",
-            subtitle = "",
-            onClickTitle = onClickTitle,
-            onClickSubtitle = onClickSubtitle
-        )
-    } else {
-        HSAmountText(
-            modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
-            title = totalState.primaryAmountStr,
-            subtitle = totalState.secondaryAmountStr,
-            onClickTitle = onClickTitle,
-            onClickSubtitle = onClickSubtitle,
-        )
-    }
+    HSAmountText(
+        modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
+        title = if (balanceHidden) "* * *" else totalState.primaryAmountStr,
+        subtitle = if (balanceHidden) "" else totalState.secondaryAmountStr,
+        onClickTitle = onClickTitle,
+        onClickSubtitle = onClickSubtitle,
+        trailingContent = if (loading) {
+            {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .testTag(TestTags.BALANCE_SYNC_INDICATOR),
+                    color = ComposeAppTheme.colors.leah,
+                    backgroundColor = ComposeAppTheme.colors.andy,
+                    strokeWidth = 2.dp
+                )
+            }
+        } else {
+            null
+        },
+    )
 }

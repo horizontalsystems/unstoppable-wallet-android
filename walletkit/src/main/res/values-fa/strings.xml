@@ -107,9 +107,7 @@
     <string name="Balance_SyncedUntil">تا %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
-    <string name="Balance_Sort_Balance">بالانس</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
-    <string name="Balance_Sort_Az">نام</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
@@ -1078,7 +1076,6 @@
     <string name="Balance_Downloading">در حال دانلود…</string>
     <string name="Balance_FoundTx">%s تراکنش</string>
     <string name="Balance_BlocksRemaining">بلاک‌های باقی‌مانده - %d</string>
-    <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_NoAssetsToSend">دارایی‌ای برای ارسال ندارید.</string>
     <string name="Balance_Network">شبکه</string>
     <string name="Balance_Format">فرمت</string>
