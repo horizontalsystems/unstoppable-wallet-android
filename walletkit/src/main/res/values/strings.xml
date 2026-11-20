@@ -2350,4 +2350,10 @@
     <string name="Balance_NoWallets">No wallets. Add one below.</string>
     <string name="WalletName_Default">Wallet %d</string>
     <string name="WalletName_WatchDefault">Watch Wallet %d</string>
+    <!-- TEMP: repairs test, remove after testing -->
+    <string name="RepairsTest_Title" translatable="false">Repairs Test</string>
+    <string name="RepairsTest_Description" translatable="false">Temporary screen for TestLab repair testing</string>
+    <string name="RepairsTest_Switch" translatable="false">Test switch</string>
+    <string name="RepairsTest_ShowResult" translatable="false">Show result</string>
+    <string name="RepairsTest_Result" translatable="false">Result shown</string>
 </resources>

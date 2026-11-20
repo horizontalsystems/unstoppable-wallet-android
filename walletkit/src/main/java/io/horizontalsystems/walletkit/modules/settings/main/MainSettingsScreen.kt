@@ -66,6 +66,7 @@ import io.horizontalsystems.walletkit.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.walletkit.modules.settings.faq.FaqListPage
 import io.horizontalsystems.walletkit.modules.settings.labs.UnstoppableLabsPage
 import io.horizontalsystems.walletkit.modules.settings.privacy.PrivacySettingsPage
+import io.horizontalsystems.walletkit.modules.settings.repairstest.RepairsTestPage // TEMP: repairs test, remove after testing
 import io.horizontalsystems.walletkit.modules.settings.security.SecuritySettingsPage
 import io.horizontalsystems.walletkit.modules.settings.subscription.SubscriptionPage
 import io.horizontalsystems.walletkit.modules.walletconnect.WCAccountTypeNotSupportedSheet
@@ -433,6 +434,32 @@ private fun SettingSections(
 
     if (BuildConfig.DEBUG) {
         DebugSettingsSection()
+    }
+
+    // TEMP: repairs test, remove after testing
+    SettingsSection {
+        cell {
+            CellPrimary(
+                modifier = Modifier.heightIn(min = 64.dp),
+                left = {
+                    CellLeftImage(
+                        painter = painterResource(R.drawable.flask_24),
+                        type = ImageType.Rectangle,
+                        size = 24,
+                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey),
+                    )
+                },
+                middle = {
+                    CellMiddleInfo(title = stringResource(R.string.RepairsTest_Title).hs)
+                },
+                right = {
+                    CellRightNavigation()
+                },
+                onClick = {
+                    navigation.slideFromRight(RepairsTestPage)
+                },
+            )
+        }
     }
 }
 
