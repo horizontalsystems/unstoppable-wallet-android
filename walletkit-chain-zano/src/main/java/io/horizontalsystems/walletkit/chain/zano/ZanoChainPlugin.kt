@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.chain.NodeError
 import io.horizontalsystems.walletkit.core.chain.switchNodeForSend
+import io.horizontalsystems.zanokit.BroadcastUnconfirmedException
 import io.horizontalsystems.zanokit.NodeUnreachableException
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.BackgroundManager
@@ -182,10 +183,13 @@ class ZanoChainPlugin(
         }
     }
 
-    // The kit raises this for a daemon call that failed while the transfer was being built,
-    // before anything was relayed.
-    override fun classifyNodeError(error: Throwable): NodeError? =
-        if (error is NodeUnreachableException) NodeError(preBroadcast = true) else null
+    // The kit tells a daemon call that failed while the transfer was being built, before anything
+    // was relayed, from a broadcast that got no answer, where the daemon may have the transaction.
+    override fun classifyNodeError(error: Throwable): NodeError? = when (error) {
+        is NodeUnreachableException -> NodeError(preBroadcast = true)
+        is BroadcastUnconfirmedException -> NodeError(preBroadcast = false)
+        else -> null
+    }
 
     override suspend fun failoverForSend(token: Token): String? =
         switchNodeForSend(token) { zanoNodeManager().switchAwayFromNode()?.name }

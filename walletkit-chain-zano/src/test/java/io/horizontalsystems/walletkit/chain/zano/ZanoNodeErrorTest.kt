@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.chain.zano
 
 import io.horizontalsystems.walletkit.core.chain.NodeError
+import io.horizontalsystems.zanokit.BroadcastUnconfirmedException
 import io.horizontalsystems.zanokit.InsufficientFundsException
 import io.horizontalsystems.zanokit.NodeUnreachableException
 import io.horizontalsystems.zanokit.SendFailedException
@@ -19,6 +20,15 @@ class ZanoNodeErrorTest {
     @Test
     fun unreachableNodeIsBeforeTheBroadcast() {
         assertEquals(NodeError(preBroadcast = true), plugin.classifyNodeError(NodeUnreachableException("no connection to daemon")))
+    }
+
+    // The daemon may have taken the transaction, so sending again could pay twice
+    @Test
+    fun broadcastWithoutAnAnswerMayHaveBeenSent() {
+        assertEquals(
+            NodeError(preBroadcast = false),
+            plugin.classifyNodeError(BroadcastUnconfirmedException("no connection to daemon, request = sendrawtransaction")),
+        )
     }
 
     @Test
