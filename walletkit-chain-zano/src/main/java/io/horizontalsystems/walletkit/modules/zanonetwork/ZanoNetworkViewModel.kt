@@ -15,6 +15,7 @@ class ZanoNetworkViewModel(
     override fun createState(): ViewState {
         val selectedNode = zanoNodeManager.currentNode
         return ViewState(
+            autoSelect = zanoNodeManager.autoSelectEnabled,
             defaultItems = viewItems(zanoNodeManager.defaultNodes, selectedNode),
             customItems = viewItems(zanoNodeManager.customNodes, selectedNode)
         )
@@ -43,10 +44,21 @@ class ZanoNetworkViewModel(
             )
         }
 
+    // Picking a node, even the current one, pins it: Auto-Select turns off.
     fun onSelectNode(node: ZanoNode) {
-        if (zanoNodeManager.currentNode == node) return
+        if (zanoNodeManager.currentNode == node && !zanoNodeManager.autoSelectEnabled) return
         zanoNodeManager.save(node)
         emitState()
+    }
+
+    fun onToggleAutoSelect(enabled: Boolean) {
+        zanoNodeManager.setAutoSelect(enabled)
+        emitState()
+        if (enabled) {
+            // Check the node right away instead of waiting for the next sync failure. The
+            // manager reports a switch through nodesUpdatedFlow.
+            viewModelScope.launch { zanoNodeManager.repickNode() }
+        }
     }
 
     fun onRemoveCustomNode(node: ZanoNode) {
@@ -62,6 +74,7 @@ class ZanoNetworkViewModel(
     )
 
     data class ViewState(
+        val autoSelect: Boolean,
         val defaultItems: List<ViewItem>,
         val customItems: List<ViewItem>,
     )

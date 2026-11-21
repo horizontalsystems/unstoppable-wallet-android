@@ -12,6 +12,8 @@ import io.horizontalsystems.walletkit.core.adapters.MoneroAdapter
 import io.horizontalsystems.walletkit.core.adapters.toMoneroSeed
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
+import io.horizontalsystems.walletkit.core.chain.NodeError
+import io.horizontalsystems.walletkit.core.chain.switchNodeForSend
 import io.horizontalsystems.walletkit.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -153,6 +155,11 @@ class MoneroChainPlugin(
             }
         }
     }
+
+    override fun classifyNodeError(error: Throwable): NodeError? = moneroNodeError(error)
+
+    override suspend fun failoverForSend(token: Token): String? =
+        switchNodeForSend(token) { moneroNodeManager().switchAwayFromNode()?.name }
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerMonero())
 

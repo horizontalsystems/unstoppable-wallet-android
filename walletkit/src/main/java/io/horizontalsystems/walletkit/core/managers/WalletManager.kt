@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,15 +30,21 @@ class WalletManager(
 
     // SharedFlow, not StateFlow: equal lists are re-emitted on purpose as a
     // "rebuild adapters" trigger (see refreshActiveWallets/reloadWallets);
-    // StateFlow's equality dedup would swallow them. DROP_OLDEST keeps tryEmit
-    // non-blocking on the main thread; collectors only need the latest list.
+    // StateFlow's equality dedup would swallow them. Every emission must reach
+    // the collectors: reloadWallets emits the list without a chain's wallets and
+    // then the full list back to back, and AdapterManager only rebuilds those
+    // adapters when it sees the first one. With room for a single value the
+    // first was dropped and the adapters stayed on the kit just stopped.
+    // DROP_OLDEST keeps tryEmit non-blocking on the main thread; 64 values
+    // never overflow in practice.
     private val _activeWalletsUpdatedFlow = MutableSharedFlow<List<Wallet>>(
-        extraBufferCapacity = 1,
+        extraBufferCapacity = 64,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
     val activeWalletsUpdatedFlow = _activeWalletsUpdatedFlow.asSharedFlow()
 
     private val walletsSet = mutableSetOf<Wallet>()
+    private val loaded = CompletableDeferred<Unit>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
@@ -94,8 +101,15 @@ class WalletManager(
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
         setWallets(activeWallets)
+        loaded.complete(Unit)
         notifyActiveWallets()
     }
+
+    /**
+     * Suspends until the active account's wallets have been read for the first time. Before
+     * that [activeWallets] is empty, which at app start says nothing about what is in use.
+     */
+    suspend fun awaitLoaded() = loaded.await()
 
     @Synchronized
     private fun setWallets(activeWallets: List<Wallet>) {

@@ -44,9 +44,11 @@ internal class FakeRestoreSettingsStorage : IRestoreSettingsStorage {
     }
 }
 
-internal class FakeAccountManager(override val activeAccount: Account?) : IAccountManager {
+internal class FakeAccountManager(
+    override val activeAccount: Account?,
+    override val activeAccountStateFlow: Flow<ActiveAccountState> = emptyFlow(),
+) : IAccountManager {
     override val hasNonStandardAccount = false
-    override val activeAccountStateFlow: Flow<ActiveAccountState> = emptyFlow()
     override val isAccountsEmpty = false
     override val accounts = listOfNotNull(activeAccount)
     override val accountsFlow: Flow<List<Account>> = emptyFlow()

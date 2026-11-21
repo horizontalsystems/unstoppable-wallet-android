@@ -9,6 +9,8 @@ import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
+import io.horizontalsystems.walletkit.core.chain.NodeError
+import io.horizontalsystems.walletkit.core.chain.switchNodeForSend
 import io.horizontalsystems.walletkit.core.managers.NoActiveAccount
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.ZcashBirthdayProvider
@@ -137,6 +139,11 @@ class ZcashChainPlugin(
         }
         manager.autoSelectFastestEndpointOnStartup()
     }
+
+    override fun classifyNodeError(error: Throwable): NodeError? = zcashNodeError(error)
+
+    override suspend fun failoverForSend(token: Token): String? =
+        switchNodeForSend(token) { endpointManager().switchAwayFromEndpoint()?.name }
 
     override suspend fun onEnterForeground() = reselectFastestIfUnsynced(retryIfNoSwitch = false)
 

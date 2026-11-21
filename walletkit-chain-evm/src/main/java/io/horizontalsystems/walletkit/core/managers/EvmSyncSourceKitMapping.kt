@@ -14,6 +14,18 @@ val EvmSyncSource.rpcSource: RpcSource
         RpcSource.Http(uris, auth)
     }
 
+/**
+ * One HTTP source over every URI of the given sources, in order; ethereum-kit falls over to the
+ * next URI when one fails and sticks with the one that answered. The sources belong to different
+ * providers, so each URI carries the auth of its own source and no provider receives another's.
+ */
+val List<EvmSyncSource>.failoverRpcSource: RpcSource
+    get() = if (size == 1) {
+        first().rpcSource
+    } else {
+        RpcSource.Http(flatMap { source -> source.uris.map { RpcSource.Endpoint(it, source.auth) } })
+    }
+
 fun evmTransactionSource(blockchainType: BlockchainType, appConfigProvider: IAppConfigProvider): TransactionSource =
     when (blockchainType) {
         BlockchainType.Ethereum -> TransactionSource.ethereum(appConfigProvider.etherscanApiKey)

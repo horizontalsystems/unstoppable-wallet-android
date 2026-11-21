@@ -11,9 +11,11 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyBtcRestore: String = "btc-restore"
         const val keyBtcTransactionSort: String = "btc-transaction-sort"
         const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
+        const val keyEvmAutoSelect: String = "evm-auto-select"
         const val keyMoneroNode: String = "monero-node"
         const val keyMoneroAutoSelect: String = "monero-auto-select"
         const val keyZanoNode: String = "zano-node"
+        const val keyZanoAutoSelect: String = "zano-auto-select"
         const val keyZcashEndpoint: String = "zcash-endpoint"
         const val keyZcashAutoSelect: String = "zcash-auto-select"
     }
@@ -67,6 +69,18 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         )
     }
 
+    /** Null when never decided: the caller derives the default (see EvmSyncSourceManager). */
+    fun evmAutoSelect(blockchainType: BlockchainType): Boolean? =
+        storedBoolean(blockchainType, keyEvmAutoSelect)
+
+    fun saveEvmAutoSelect(enabled: Boolean, blockchainType: BlockchainType) {
+        saveBoolean(blockchainType, keyEvmAutoSelect, enabled)
+    }
+
+    fun deleteEvmAutoSelect(blockchainType: BlockchainType) {
+        dao.delete(blockchainType.uid, keyEvmAutoSelect)
+    }
+
     fun moneroNodeHost(): String? {
         return dao.getBlockchainSetting(BlockchainType.Monero.uid, keyMoneroNode)?.value
     }
@@ -110,6 +124,18 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         )
     }
 
+    /** Null when never decided: the caller derives the default (see ZanoNodeManager). */
+    fun zanoAutoSelect(): Boolean? =
+        storedBoolean(BlockchainType.Zano, keyZanoAutoSelect)
+
+    fun saveZanoAutoSelect(enabled: Boolean) {
+        saveBoolean(BlockchainType.Zano, keyZanoAutoSelect, enabled)
+    }
+
+    fun deleteZanoAutoSelect() {
+        dao.delete(BlockchainType.Zano.uid, keyZanoAutoSelect)
+    }
+
     fun zcashEndpointUrl(): String? =
         dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashEndpoint)?.value
 
@@ -135,6 +161,15 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 value = enabled.toString()
             )
         )
+    }
+
+    // Only an explicit "false" reads as off, as for Monero: a malformed value must not
+    // silently turn the feature off.
+    private fun storedBoolean(blockchainType: BlockchainType, key: String): Boolean? =
+        dao.getBlockchainSetting(blockchainType.uid, key)?.value?.let { !it.equals("false", ignoreCase = true) }
+
+    private fun saveBoolean(blockchainType: BlockchainType, key: String, value: Boolean) {
+        dao.insert(BlockchainSettingRecord(blockchainUid = blockchainType.uid, key = key, value = value.toString()))
     }
 
 }

@@ -28,6 +28,9 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
+import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.modules.send.SendNodeFailover
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDepositAddress
@@ -49,7 +52,7 @@ class SwapConfirmViewModel(
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val fiatServiceOutMin: FiatService,
-    val sendTransactionService: AbstractSendTransactionService,
+    sendTransactionService: AbstractSendTransactionService,
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService,
     private val swapDefenseSystemService: SwapDefenseSystemService,
@@ -63,6 +66,16 @@ class SwapConfirmViewModel(
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
     private val tokenIn = swapQuote.tokenIn
+
+    // Replaced when the chain is moved to another node: see replaceSendTransactionService
+    @Volatile
+    var sendTransactionService: AbstractSendTransactionService = sendTransactionService
+        private set
+    private var sendTransactionServiceJob: Job? = null
+
+    // Only a failure before the broadcast is acted on here. After one that may have sent the
+    // deposit the screen stays as it is, and its record tracks the swap.
+    private val nodeFailover = SendNodeFailover.forToken(tokenIn, preBroadcastOnly = true)
     private val tokenOut = swapQuote.tokenOut
 
     val isSplit: Boolean = splitRecipients != null
@@ -158,32 +171,7 @@ class SwapConfirmViewModel(
             }
         }
 
-        viewModelScope.launch {
-            sendTransactionService.sendTransactionSettingsFlow.collect {
-                sendTransactionSettings = it
-
-                if (!isInBackground && !sending) {
-                    fetchFinalQuote()
-                }
-            }
-        }
-
-        viewModelScope.launch {
-            sendTransactionService.stateFlow.collect { transactionState ->
-                sendTransactionState = transactionState
-
-                initialLoading = initialLoading && transactionState.loading
-                loading = transactionState.loading
-
-                swapDefenseSystemService.setSendable(sendTransactionState.sendable)
-
-                emitState()
-
-                if (sendTransactionState.sendable) {
-                    timerService.start(20)
-                }
-            }
-        }
+        collectSendTransactionService()
 
         viewModelScope.launch {
             timerService.stateFlow.collect {
@@ -231,6 +219,65 @@ class SwapConfirmViewModel(
 
         sendTransactionService.start(viewModelScope)
         swapDefenseSystemService.start(viewModelScope)
+    }
+
+    private fun collectSendTransactionService() {
+        val service = sendTransactionService
+        sendTransactionServiceJob = viewModelScope.launch {
+            launch {
+                service.sendTransactionSettingsFlow.collect {
+                    sendTransactionSettings = it
+
+                    if (!isInBackground && !sending) {
+                        fetchFinalQuote()
+                    }
+                }
+            }
+
+            launch {
+                service.stateFlow.collect { transactionState ->
+                    sendTransactionState = transactionState
+
+                    initialLoading = initialLoading && transactionState.loading
+                    loading = transactionState.loading
+
+                    swapDefenseSystemService.setSendable(sendTransactionState.sendable)
+
+                    emitState()
+
+                    if (sendTransactionState.sendable) {
+                        timerService.start(20)
+                    }
+                }
+            }
+        }
+    }
+
+    // The chain's adapter was rebuilt on another node. The service in use holds the adapter
+    // that was stopped, so a new one takes its place. Collecting its settings asks for a new
+    // quote unless a swap is being sent; then the caller re-quotes.
+    private fun replaceSendTransactionService() {
+        val replacement = SendTransactionServiceFactory.create(tokenIn)
+        sendTransactionServiceJob?.cancel()
+        sendTransactionService.clear()
+        sendTransactionService = replacement
+        sendTransactionState = replacement.stateFlow.value
+        collectSendTransactionService()
+        replacement.start(viewModelScope)
+    }
+
+    /**
+     * Lets the chain move to another node if [failure] was its node's and nothing was sent.
+     * Returns what to tell the user, or null when the failure stands as it is.
+     */
+    private suspend fun switchNodeAfter(failure: Throwable): String? {
+        val outcome = nodeFailover.handle(failure) as? SendNodeFailover.Outcome.Switched ?: return null
+        return try {
+            replaceSendTransactionService()
+            Translator.getString(R.string.Send_NodeSwitched_Description, outcome.nodeName)
+        } catch (e: Throwable) {
+            null
+        }
     }
 
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
@@ -412,6 +459,10 @@ class SwapConfirmViewModel(
                 // in this case we should keep state as loading
                 // temp solution. need find better one
             } catch (t: Throwable) {
+                // The node failed the estimate, so the chain moves to another one. The new
+                // send service asks for a fresh quote as soon as it is collected.
+                if (switchNodeAfter(t) != null) return@launch
+
                 loading = false
                 initialLoading = false
                 error = t
@@ -473,8 +524,12 @@ class SwapConfirmViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {
+                val nodeSwitched = switchNodeAfter(e)
                 requote()
-                throw SwapCommitFailedException(SwapCommitFailure.Failed, e)
+                throw SwapCommitFailedException(
+                    SwapCommitFailure.Failed,
+                    nodeSwitched?.let { DepositNotSendableException(it) } ?: e,
+                )
             }
 
             // Saved before broadcasting so the record survives the app dying between the two, and
@@ -486,9 +541,20 @@ class SwapConfirmViewModel(
             val recordId = saveSwapRecord(commitment, recipient)
 
             val result = try {
-                service.sendTransaction(swapDefenseState.mevProtectionEnabled)
-            } finally {
-                if (service !== sendTransactionService) service.clear()
+                try {
+                    service.sendTransaction(swapDefenseState.mevProtectionEnabled)
+                } finally {
+                    if (service !== sendTransactionService) service.clear()
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                // The node failed before anything was sent: the order lapses unfunded like one
+                // whose deposit could not be built, and the next press commits a new one on
+                // the node the chain was moved to.
+                val nodeSwitched = switchNodeAfter(e) ?: throw e
+                requote()
+                throw SwapCommitFailedException(SwapCommitFailure.Failed, DepositNotSendableException(nodeSwitched))
             }
 
             val txHash = transactionHash(result)

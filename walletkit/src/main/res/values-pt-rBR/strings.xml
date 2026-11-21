@@ -1621,6 +1621,7 @@
     <string name="AddZanoNode_AddNode">Adicionar nó</string>
     <string name="AddZanoNode_NodeUrl">URL do nó</string>
     <string name="ZanoNodeSettings_Description">Escolha o nó que o aplicativo Unstoppable deve usar para sincronizar a(s) carteira(s).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Mudar para outro nó quando o selecionado falhar</string>
     <string name="LocalBackup_ProtectBackup">Proteger backup</string>
     <string name="LocalBackup_ProtectBackupDescription">Crie uma senha para proteger seu arquivo de backup.</string>
     <string name="LocalBackup_BackupName">Nome do backup</string>
@@ -1880,6 +1881,10 @@
     <string name="Send_DestinationTag_Title">Tag de destino</string>
     <string name="SwapHistory_StatusActionRequired">Ação necessária</string>
     <string name="Send_Error_MemoTooLong">Memo é muito longo</string>
+    <string name="Send_NodeSwitched_Title">Nó alterado</string>
+    <string name="Send_NodeSwitched_Description">O nó parou de responder, então a carteira mudou para %s. Confira os detalhes e envie novamente.</string>
+    <string name="Send_MaybeSent_Title">A transação pode ter sido enviada</string>
+    <string name="Send_MaybeSent_Description">O nó não confirmou a transação, então ela pode ter sido enviada. Confira o histórico de transações antes de enviar novamente.</string>
     <string name="Transactions_TrustLimit">Limite de Confiança</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">Assinar %d transação</item>
@@ -1997,4 +2002,5 @@
     <string name="NetworkSettings_NotSynced">Não sincronizado</string>
     <string name="WalletName_Default">Carteira %d</string>
     <string name="WalletName_WatchDefault">Carteira de observação %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Mudar para outro provedor quando o selecionado falhar</string>
 </resources>

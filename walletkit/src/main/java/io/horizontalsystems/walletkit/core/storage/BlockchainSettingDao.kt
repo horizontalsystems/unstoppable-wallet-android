@@ -18,4 +18,7 @@ interface BlockchainSettingDao {
     @Query("SELECT * FROM BlockchainSettingRecord WHERE blockchainUid = :blockchainUid AND `key` == :key")
     fun getBlockchainSetting(blockchainUid: String, key: String): BlockchainSettingRecord?
 
+    @Query("DELETE FROM BlockchainSettingRecord WHERE blockchainUid = :blockchainUid AND `key` == :key")
+    fun delete(blockchainUid: String, key: String)
+
 }

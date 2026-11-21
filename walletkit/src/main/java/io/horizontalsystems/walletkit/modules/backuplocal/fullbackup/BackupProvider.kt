@@ -296,6 +296,16 @@ class BackupProvider(
             settings.evmSyncSources.selected.forEach { syncSource ->
                 val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
                 blockchainSettingsStorage.save(syncSource.url, blockchainType)
+
+                // Restoring custom RPCs above turned Auto-Select off for their chains. A backup
+                // that carries the setting restores it; an older one lets the default be derived
+                // again from the restored selection.
+                val autoSelect = syncSource.autoSelect
+                if (autoSelect != null) {
+                    blockchainSettingsStorage.saveEvmAutoSelect(autoSelect, blockchainType)
+                } else {
+                    blockchainSettingsStorage.deleteEvmAutoSelect(blockchainType)
+                }
             }
 
             settings.moneroNodes?.custom?.forEach { node ->
@@ -320,6 +330,17 @@ class BackupProvider(
 
             settings.zanoNodes?.selected?.forEach { node ->
                 blockchainSettingsStorage.saveZanoNode(node.url)
+            }
+
+            settings.zanoNodes?.let { zanoNodes ->
+                // A backup that carries the setting restores it; an older one lets the default
+                // be derived again from the restored selection.
+                val autoSelect = zanoNodes.autoSelect
+                if (autoSelect != null) {
+                    blockchainSettingsStorage.saveZanoAutoSelect(autoSelect)
+                } else {
+                    blockchainSettingsStorage.deleteZanoAutoSelect()
+                }
             }
 
             settings.zcashEndpoints?.custom?.forEach { endpoint ->
@@ -537,7 +558,9 @@ class BackupProvider(
 
         val selectedEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
             val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
-            EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), null)
+            val autoSelect = evmSyncSourceManager.autoSelectEnabled(blockchain.type)
+                .takeIf { evmSyncSourceManager.autoSelectSupported(blockchain.type) }
+            EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), null, autoSelect)
         }
 
         val customEvmSyncSources = if (BackupSection.CustomRpc in sections) {
@@ -591,7 +614,7 @@ class BackupProvider(
         } else {
             listOf()
         }
-        val zanoNodes = ZanoNodes(listOf(selectedZanoNode), customZanoNodes)
+        val zanoNodes = ZanoNodes(listOf(selectedZanoNode), customZanoNodes, zanoNodeManager.autoSelectEnabled)
 
         val selectedZcashEndpoint = ZcashEndpointBackup(BlockchainType.Zcash.uid, zcashEndpointManager.currentEndpoint.url)
         val customZcashEndpoints = if (BackupSection.CustomRpc in sections) {
@@ -808,7 +831,11 @@ data class EvmSyncSourceBackup(
     @SerializedName("blockchain_type_id")
     val blockchainTypeId: String,
     val url: String,
-    val auth: BackupLocalModule.BackupCrypto?
+    val auth: BackupLocalModule.BackupCrypto?,
+    // Only on selected sources. Nullable: absent in older backups, which must not decide the
+    // setting on restore.
+    @SerializedName("auto_select")
+    val autoSelect: Boolean? = null,
 )
 
 data class EvmSyncSources(
@@ -855,6 +882,9 @@ data class ZanoNodeBackup(
 data class ZanoNodes(
     val selected: List<ZanoNodeBackup>,
     val custom: List<ZanoNodeBackup>,
+    // Nullable: absent in backups made before Auto-Select was included.
+    @SerializedName("auto_select")
+    val autoSelect: Boolean? = null,
 )
 
 data class ZcashEndpointBackup(

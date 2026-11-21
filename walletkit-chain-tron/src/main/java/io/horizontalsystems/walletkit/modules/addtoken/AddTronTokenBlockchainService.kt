@@ -2,14 +2,15 @@ package io.horizontalsystems.walletkit.modules.addtoken
 
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.customCoinUid
+import io.horizontalsystems.walletkit.core.managers.tronRpcSource
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.models.Address
-import io.horizontalsystems.tronkit.models.RpcSource
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.rpc.Trc20Provider
 
@@ -48,7 +49,9 @@ class AddTronTokenBlockchainService(
 
     companion object {
         fun getInstance(blockchain: Blockchain): AddTronTokenBlockchainService {
-            val trc20Provider = Trc20Provider.getInstance(RpcSource.tronGrid(Network.Mainnet, App.appConfigProvider.trongridApiKeys))
+            val rpcSource = App.evmSyncSourceManager.failoverSyncSources(BlockchainType.Tron)
+                .tronRpcSource(Network.Mainnet, App.appConfigProvider.trongridApiKeys)
+            val trc20Provider = Trc20Provider.getInstance(rpcSource)
             return AddTronTokenBlockchainService(blockchain, trc20Provider)
         }
     }
