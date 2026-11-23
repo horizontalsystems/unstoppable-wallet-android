@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartTransition
 import io.horizontalsystems.chartview.CurveAnimator2
@@ -37,8 +38,15 @@ class ChartHelper(
     private var macdSignalCurve: CurveAnimator2? = null
     private var macdHistogramBars: CurveAnimatorBars? = null
 
-    var mainCurveColor = colors.greenD
-    var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
+    // The colours a data change leaves and the ones it moves to. The curve is drawn in a blend
+    // of the two that follows the same fraction as its points.
+    private var mainCurveColorsFrom: MainCurveColors
+    private var mainCurveColorsTo: MainCurveColors
+
+    var mainCurveColor by mutableStateOf(colors.greenD)
+        private set
+    var mainCurveGradientColors by mutableStateOf(Pair(Color(0x00416BFF), Color(0x8013D670)))
+        private set
     var mainCurvePressedColor = colors.leah
     var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
     var mainBarsColor = colors.orange
@@ -82,7 +90,9 @@ class ChartHelper(
             }
         }
 
-        defineColors()
+        mainCurveColorsTo = targetColors()
+        mainCurveColorsFrom = mainCurveColorsTo
+        showColors(mainCurveColorsTo)
     }
 
     private fun initDominanceCurve() {
@@ -100,30 +110,35 @@ class ChartHelper(
         }
     }
 
-    private fun defineColors() {
+    private fun targetColors(): MainCurveColors {
         val chartData = target
 
-        when {
-            chartData.disabled -> {
-                mainCurveColor = colors.grey
-                mainCurveGradientColors = Pair(colors.grey.copy(alpha = 0f), colors.grey.copy(alpha = 0.5f))
-            }
+        return when {
+            chartData.disabled -> MainCurveColors(
+                curve = colors.grey,
+                gradient = Pair(colors.grey.copy(alpha = 0f), colors.grey.copy(alpha = 0.5f))
+            )
 
-            !chartData.isMovementChart -> {
-                mainCurveColor = colors.orange
-                mainCurveGradientColors = Pair(Color(0x00FE4A11), Color(0x80FE4A11))
-            }
+            !chartData.isMovementChart -> MainCurveColors(
+                curve = colors.orange,
+                gradient = Pair(Color(0x00FE4A11), Color(0x80FE4A11))
+            )
 
-            chartData.diff() < BigDecimal.ZERO -> {
-                mainCurveColor = colors.redD
-                mainCurveGradientColors = Pair(Color(0x007413D6), Color(0x80FF0303))
-            }
+            chartData.diff() < BigDecimal.ZERO -> MainCurveColors(
+                curve = colors.redD,
+                gradient = Pair(Color(0x007413D6), Color(0x80FF0303))
+            )
 
-            else -> {
-                mainCurveColor = colors.greenD
-                mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
-            }
+            else -> MainCurveColors(
+                curve = colors.greenD,
+                gradient = Pair(Color(0x00416BFF), Color(0x8013D670))
+            )
         }
+    }
+
+    private fun showColors(colors: MainCurveColors) {
+        mainCurveColor = colors.curve
+        mainCurveGradientColors = colors.gradient
     }
 
     private fun initMacdCurves() {
@@ -395,10 +410,24 @@ class ChartHelper(
             )
         }
 
-        defineColors()
+        // From the colours on screen, which are a blend when a transition was interrupted.
+        mainCurveColorsFrom = MainCurveColors(mainCurveColor, mainCurveGradientColors)
+        mainCurveColorsTo = targetColors()
     }
 
     fun onNextFrame(value: Float) {
+        // A colour has no room to overshoot, so the fraction of a bouncing spec is held in 0..1.
+        val colorFraction = value.coerceIn(0f, 1f)
+        showColors(
+            MainCurveColors(
+                curve = lerp(mainCurveColorsFrom.curve, mainCurveColorsTo.curve, colorFraction),
+                gradient = Pair(
+                    lerp(mainCurveColorsFrom.gradient.first, mainCurveColorsTo.gradient.first, colorFraction),
+                    lerp(mainCurveColorsFrom.gradient.second, mainCurveColorsTo.gradient.second, colorFraction),
+                )
+            )
+        )
+
         mainCurve.onNextFrame(value)
         dominanceCurve?.onNextFrame(value)
         movingAverageCurves.forEach { (_, curve) ->
@@ -464,6 +493,8 @@ class ChartHelper(
     }
 
 }
+
+private data class MainCurveColors(val curve: Color, val gradient: Pair<Color, Color>)
 
 data class SelectedItem(
     val percentagePositionX: Float,
