@@ -34,9 +34,12 @@ fun BalanceButtonsGroup(content: @Composable RowScope.() -> Unit) {
  * are left out.
  */
 @Composable
-fun BalanceAmountGroup(content: @Composable ColumnScope.() -> Unit) {
+fun BalanceAmountGroup(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(ComposeAppTheme.colors.tyler)
             .padding(bottom = 8.dp),
