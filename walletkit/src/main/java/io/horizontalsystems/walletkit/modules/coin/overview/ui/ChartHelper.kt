@@ -20,6 +20,7 @@ class ChartHelper(
     var hasVolumes: Boolean,
     private val colors: Colors,
     private val transition: ChartTransition,
+    private val appear: ChartTransition,
 ) {
 
     private var minValue: Float = 0.0f
@@ -52,7 +53,8 @@ class ChartHelper(
             maxKey,
             minValue,
             maxValue,
-            transition
+            transition,
+            appear
         )
 
         initDominanceCurve()
@@ -74,7 +76,8 @@ class ChartHelper(
                     maxKey,
                     volumeByTimestamp.minOf { it.value },
                     volumeByTimestamp.maxOf { it.value },
-                    transition
+                    transition,
+                    appear
                 )
             }
         }
@@ -91,7 +94,8 @@ class ChartHelper(
                 maxKey,
                 dominanceValues.minOf { it.value },
                 dominanceValues.maxOf { it.value },
-                transition
+                transition,
+                appear
             )
         }
     }
@@ -143,7 +147,8 @@ class ChartHelper(
                 maxKey,
                 absMin,
                 absMax,
-                transition
+                transition,
+                appear
             )
             macdSignalCurve = CurveAnimator2(
                 signalLine,
@@ -151,7 +156,8 @@ class ChartHelper(
                 maxKey,
                 absMin,
                 absMax,
-                transition
+                transition,
+                appear
             )
             val histogram = macd.histogram
             val histogramAbsMax = histogram.values.maxOfOrNull { it.absoluteValue } ?: 0f
@@ -162,7 +168,8 @@ class ChartHelper(
                 maxKey,
                 histogramAbsMin,
                 histogramAbsMax,
-                transition
+                transition,
+                appear
             )
         }
     }
@@ -180,7 +187,8 @@ class ChartHelper(
                 maxKey,
                 values.minOf { it.value },
                 values.maxOf { it.value },
-                transition
+                transition,
+                appear
             )
         }
     }
@@ -196,7 +204,8 @@ class ChartHelper(
                         maxKey,
                         minValue,
                         maxValue,
-                        transition
+                        transition,
+                        appear
                     ).apply {
                         color = movingAverage.color
                     }
@@ -373,7 +382,8 @@ class ChartHelper(
                 maxKey,
                 volumeByTimestamp.minOf { it.value },
                 volumeByTimestamp.maxOf { it.value },
-                transition
+                transition,
+                appear
             )
 
             else -> volumeBars?.setValues(

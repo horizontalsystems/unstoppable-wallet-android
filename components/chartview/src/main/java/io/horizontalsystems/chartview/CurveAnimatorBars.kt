@@ -11,10 +11,15 @@ class CurveAnimatorBars(
     targetMinValue: Float,
     targetMaxValue: Float,
     private val transition: ChartTransition,
+    private val appear: ChartTransition,
 ) {
     private var target = CurveFrame(targetValues, targetMinKey, targetMaxKey, targetMinValue, targetMaxValue)
-    private var frame = target
-    private var frameAt: (Float) -> CurveFrame = { target }
+
+    // New bars have no old frame to leave, so they play the appear transition from their own
+    // data, and already show that transition's first frame before the animation starts.
+    private var frameAt: (Float) -> CurveFrame = appear.bars(target, target)
+    private var frame = frameAt(0f)
+    private var appeared = false
 
     data class UiState(
         val values: LinkedHashMap<Long, Float>,
@@ -46,16 +51,17 @@ class CurveAnimatorBars(
         )
 
         target = to
-        frameAt = if (animated) {
-            transition.bars(frame, to)
-        } else {
-            { to }
+        frameAt = when {
+            !appeared -> appear.bars(to, to)
+            animated -> transition.bars(frame, to)
+            else -> { _ -> to }
         }
     }
 
     fun onNextFrame(animatedFraction: Float) {
         // The last frame is the target itself, not a computed copy that may differ by rounding.
         frame = if (animatedFraction == 1f) target else frameAt(animatedFraction)
+        appeared = true
 
         state = uiState()
     }

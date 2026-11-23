@@ -11,12 +11,17 @@ class CurveAnimator2(
     toMinValue: Float,
     toMaxValue: Float,
     private val transition: ChartTransition,
+    private val appear: ChartTransition,
 ) {
     var color: Long? = null
 
     private var target = CurveFrame(toValues, toStartTimestamp, toEndTimestamp, toMinValue, toMaxValue)
-    private var frame = target
-    private var frameAt: (Float) -> CurveFrame = { target }
+
+    // A new curve has no old frame to leave, so it plays the appear transition from its own
+    // data, and already shows that transition's first frame before the animation starts.
+    private var frameAt: (Float) -> CurveFrame = appear.line(target, target)
+    private var frame = frameAt(0f)
+    private var appeared = false
 
     data class UiState(
         val values: LinkedHashMap<Long, Float>,
@@ -40,16 +45,17 @@ class CurveAnimator2(
         val to = CurveFrame(toValues, toStartTimestamp, toEndTimestamp, toMinValue, toMaxValue)
 
         target = to
-        frameAt = if (frame.values.isEmpty()) {
-            { to }
-        } else {
-            transition.line(frame, to)
+        frameAt = when {
+            !appeared -> appear.line(to, to)
+            frame.values.isEmpty() -> { _ -> to }
+            else -> transition.line(frame, to)
         }
     }
 
     fun onNextFrame(animatedFraction: Float) {
         // The last frame is the target itself, not a computed copy that may differ by rounding.
         frame = if (animatedFraction == 1f) target else frameAt(animatedFraction)
+        appeared = true
 
         state = uiState()
     }

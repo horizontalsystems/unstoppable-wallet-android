@@ -25,85 +25,6 @@ interface ChartTransition {
 
     fun bars(from: CurveFrame, to: CurveFrame): (Float) -> CurveFrame = line(from, to)
 
-    /** The new data replaces the old at once. */
-    object None : ChartTransition {
-        override fun line(from: CurveFrame, to: CurveFrame): (Float) -> CurveFrame = { to }
-    }
-
-    /**
-     * The time and value ranges slide from the old ones to the new ones, so the old line is
-     * moved and rescaled like a camera pan and zoom, while points both lines cover move to
-     * their new values.
-     */
-    object MoveAndScale : ChartTransition {
-        override fun line(from: CurveFrame, to: CurveFrame): (Float) -> CurveFrame {
-            val fromValues = fillWith(from.values, to.values)
-            val toValues = fillWith(to.values, from.values)
-
-            return { fraction ->
-                frame(from, to, fraction) {
-                    fromValues.mapValuesTo(LinkedHashMap()) { (timestamp, value) ->
-                        lerp(value, toValues.getValue(timestamp), fraction)
-                    }
-                }
-            }
-        }
-
-        // A bar has no neighbours to interpolate between, so one that exists on only one side
-        // grows from, or shrinks to, a stub below the range.
-        override fun bars(from: CurveFrame, to: CurveFrame): (Float) -> CurveFrame {
-            val timestamps = (from.values.keys + to.values.keys).sorted()
-            val fromStub = from.minValue / 10
-            val toStub = to.minValue / 10
-
-            return { fraction ->
-                frame(from, to, fraction) {
-                    timestamps.associateWithTo(LinkedHashMap()) { timestamp ->
-                        lerp(
-                            from.values[timestamp] ?: fromStub,
-                            to.values[timestamp] ?: toStub,
-                            fraction
-                        )
-                    }
-                }
-            }
-        }
-
-        private fun frame(
-            from: CurveFrame,
-            to: CurveFrame,
-            fraction: Float,
-            values: () -> LinkedHashMap<Long, Float>,
-        ) = CurveFrame(
-            values = values(),
-            startTimestamp = lerp(from.startTimestamp, to.startTimestamp, fraction),
-            endTimestamp = lerp(from.endTimestamp, to.endTimestamp, fraction),
-            minValue = lerp(from.minValue, to.minValue, fraction),
-            maxValue = lerp(from.maxValue, to.maxValue, fraction),
-        )
-
-        /**
-         * [values] with a point added at every timestamp of [other]: interpolated where the
-         * timestamp falls between two of its own points, taken from [other] where it lies
-         * outside them.
-         */
-        internal fun fillWith(
-            values: LinkedHashMap<Long, Float>,
-            other: LinkedHashMap<Long, Float>,
-        ): LinkedHashMap<Long, Float> {
-            val sampler = Sampler(values)
-            val filled = values.toMutableMap()
-
-            for ((timestamp, otherValue) in other) {
-                if (!filled.containsKey(timestamp)) {
-                    filled[timestamp] = sampler.between(timestamp) ?: otherValue
-                }
-            }
-
-            return LinkedHashMap(filled.toSortedMap())
-        }
-    }
-
     /**
      * The new ranges apply at once and every point of the new data moves straight up or down
      * into place, starting from where the old line crossed the same horizontal position.
@@ -136,20 +57,35 @@ interface ChartTransition {
             }
         }
     }
+
+    /**
+     * The new line starts flat on the baseline and grows to its shape. The old line is
+     * dropped at once.
+     */
+    object Rise : ChartTransition {
+        override fun line(from: CurveFrame, to: CurveFrame): (Float) -> CurveFrame {
+            // Zero where the range includes it, so bars below zero grow downwards; else the bottom.
+            val baseline = if (to.minValue <= to.maxValue) {
+                0f.coerceIn(to.minValue, to.maxValue)
+            } else {
+                to.minValue
+            }
+
+            return { fraction ->
+                to.copy(
+                    values = to.values.mapValuesTo(LinkedHashMap()) { (_, value) ->
+                        lerp(baseline, value, fraction)
+                    }
+                )
+            }
+        }
+    }
 }
 
 /** Reads a line at timestamps that fall between its points. */
 private class Sampler(line: Map<Long, Float>) {
     private val timestamps = line.keys.sorted().toLongArray()
     private val values = FloatArray(timestamps.size) { line.getValue(timestamps[it]) }
-
-    /** The line's value at [timestamp], or null when it is not strictly inside the line. */
-    fun between(timestamp: Long): Float? {
-        if (timestamps.isEmpty() || timestamp <= timestamps.first() || timestamp >= timestamps.last()) {
-            return null
-        }
-        return at(timestamp.toDouble())
-    }
 
     /** The line's value at [timestamp], holding the first and last values beyond its ends. */
     fun at(timestamp: Double): Float {
@@ -169,7 +105,3 @@ private class Sampler(line: Map<Long, Float>) {
 }
 
 private fun lerp(start: Float, end: Float, fraction: Float) = start + (end - start) * fraction
-
-// In Double, because a Float cannot hold a Unix timestamp to better than about two minutes.
-private fun lerp(start: Long, end: Long, fraction: Float) =
-    (start + (end - start) * fraction.toDouble()).toLong()

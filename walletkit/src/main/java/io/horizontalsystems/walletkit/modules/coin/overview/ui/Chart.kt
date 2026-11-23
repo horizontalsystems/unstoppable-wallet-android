@@ -388,12 +388,14 @@ fun PriceVolChart(
 
     val colors = ComposeAppTheme.colors
 
-    val chartHelper = remember { ChartHelper(chartData, hasVolumes, colors, ChartAnimation.transition) }
+    val chartHelper = remember {
+        ChartHelper(chartData, hasVolumes, colors, ChartAnimation.transition, ChartAnimation.appear)
+    }
 
     // The target is set once per data change, not in the composable body: every frame
     // recomposes this function, and setting the target again would restart the transition
     // from the frame just drawn.
-    LaunchedEffect(chartData, hasVolumes) {
+    LaunchedEffect(chartHelper, chartData, hasVolumes) {
         chartHelper.setTarget(chartData, hasVolumes)
         animate(
             initialValue = 0f,
