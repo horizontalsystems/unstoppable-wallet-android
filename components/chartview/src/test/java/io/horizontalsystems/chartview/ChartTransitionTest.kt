@@ -94,4 +94,78 @@ class ChartTransitionTest {
 
         assertEquals(linkedMapOf(0L to 10f, 200L to 5f), ChartTransition.Rise.line(day, to)(0.5f).values)
     }
+
+    @Test
+    fun fadeIn_keepsTheNewLineInPlaceAndRaisesItsOpacity() {
+        val frameAt = ChartTransition.FadeIn().line(day.copy(alpha = 0f), day)
+
+        assertEquals(day.copy(alpha = 0f), frameAt(0f))
+        assertEquals(day.copy(alpha = 0.5f), frameAt(0.5f))
+        assertEquals(day, frameAt(1f))
+        // A spec that overshoots cannot make the line more than opaque.
+        assertEquals(day, frameAt(1.2f))
+    }
+
+    @Test
+    fun fadeOut_startsFromTheOpacityOnScreen() {
+        val halfShown = day.copy(alpha = 0.5f)
+        val frameAt = ChartTransition.FadeOut().line(halfShown, halfShown)
+
+        assertEquals(halfShown, frameAt(0f))
+        assertEquals(day.copy(alpha = 0.25f), frameAt(0.5f))
+        assertEquals(day.copy(alpha = 0f), frameAt(1f))
+    }
+
+    @Test
+    fun morph_bringsAHalfFadedLineToFullOpacity() {
+        val to = frame(0, 200, 0f, 20f, 0L to 20f, 100L to 0f, 200L to 5f)
+        val frameAt = ChartTransition.Morph.line(day.copy(alpha = 0.5f), to)
+
+        assertEquals(0.5f, frameAt(0f).alpha)
+        assertEquals(0.75f, frameAt(0.5f).alpha)
+        assertEquals(1f, frameAt(1f).alpha)
+    }
+
+    @Test
+    fun fades_finishAtTheFractionTheyAreGiven() {
+        val fadeIn = ChartTransition.FadeIn(completeAt = 0.5f).line(day.copy(alpha = 0f), day)
+        val fadeOut = ChartTransition.FadeOut(completeAt = 0.5f).line(day, day)
+
+        assertEquals(0.5f, fadeIn(0.25f).alpha)
+        assertEquals(1f, fadeIn(0.5f).alpha)
+        assertEquals(1f, fadeIn(1f).alpha)
+
+        assertEquals(0.5f, fadeOut(0.25f).alpha)
+        assertEquals(0f, fadeOut(0.5f).alpha)
+        assertEquals(0f, fadeOut(1f).alpha)
+    }
+
+    @Test
+    fun fadeIn_startsFromTheOpacityOnScreen() {
+        val frameAt = ChartTransition.FadeIn().line(day.copy(alpha = 0.5f), day)
+
+        assertEquals(0.5f, frameAt(0f).alpha)
+        assertEquals(0.75f, frameAt(0.5f).alpha)
+        assertEquals(1f, frameAt(1f).alpha)
+    }
+
+    @Test
+    fun morph_keepsAPeakOfTheOldLineThatFallsBetweenNewPoints() {
+        val from = frame(0, 100, 0f, 10f, 0L to 2f, 50L to 10f, 100L to 2f)
+        val to = frame(0, 200, 0f, 10f, 0L to 2f, 200L to 2f)
+        val frameAt = ChartTransition.Morph.line(from, to)
+
+        // The old peak was in the middle, where the new line has no point of its own.
+        assertEquals(linkedMapOf(0L to 2f, 100L to 10f, 200L to 2f), LinkedHashMap(frameAt(0f).values))
+        assertEquals(6f, frameAt(0.5f).values.getValue(100))
+        assertEquals(to, frameAt(1f))
+    }
+
+    @Test
+    fun morph_addsNoBarsForTheOldOnes() {
+        val from = frame(0, 100, 0f, 10f, 0L to 2f, 50L to 10f, 100L to 2f)
+        val to = frame(0, 200, 0f, 10f, 0L to 2f, 200L to 2f)
+
+        assertEquals(listOf(0L, 200L), ChartTransition.Morph.bars(from, to)(0f).values.keys.toList())
+    }
 }

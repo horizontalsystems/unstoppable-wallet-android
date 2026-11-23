@@ -19,7 +19,7 @@ class CurveAnimator2(
 
     // A new curve has no old frame to leave, so it plays the appear transition from its own
     // data, and already shows that transition's first frame before the animation starts.
-    private var frameAt: (Float) -> CurveFrame = appear.line(target, target)
+    private var frameAt: (Float) -> CurveFrame = appear.line(target.copy(alpha = 0f), target)
     private var frame = frameAt(0f)
     private var appeared = false
 
@@ -29,6 +29,7 @@ class CurveAnimator2(
         val endTimestamp: Long,
         val minValue: Float,
         val maxValue: Float,
+        val alpha: Float,
         val color: Long?
     )
 
@@ -46,10 +47,19 @@ class CurveAnimator2(
 
         target = to
         frameAt = when {
-            !appeared -> appear.line(to, to)
+            !appeared -> appear.line(to.copy(alpha = 0f), to)
             frame.values.isEmpty() -> { _ -> to }
             else -> transition.line(frame, to)
         }
+    }
+
+    /**
+     * Plays [disappear] on what is on screen. The curve does not remove itself: its owner
+     * drops it when the animation ends.
+     */
+    fun leave(disappear: ChartTransition) {
+        frameAt = disappear.line(frame, frame)
+        target = frameAt(1f)
     }
 
     fun onNextFrame(animatedFraction: Float) {
@@ -66,6 +76,7 @@ class CurveAnimator2(
         endTimestamp = frame.endTimestamp,
         minValue = frame.minValue,
         maxValue = frame.maxValue,
+        alpha = frame.alpha,
         color = color,
     )
 }

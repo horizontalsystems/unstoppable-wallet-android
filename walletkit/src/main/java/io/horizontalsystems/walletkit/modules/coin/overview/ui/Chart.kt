@@ -399,7 +399,15 @@ fun PriceVolChart(
     val colors = ComposeAppTheme.colors
 
     val chartHelper = remember {
-        ChartHelper(chartData, hasVolumes, colors, ChartAnimation.transition, ChartAnimation.appear)
+        ChartHelper(
+            chartData,
+            hasVolumes,
+            colors,
+            ChartAnimation.transition,
+            ChartAnimation.appear,
+            ChartAnimation.show,
+            ChartAnimation.hide
+        )
     }
 
     // The target is set once per data change, not in the composable body: every frame
@@ -508,7 +516,9 @@ fun PriceVolChart(
 
                     dominanceCurveState?.let {
                         GraphicLine(
-                            Modifier.fillMaxSize(),
+                            Modifier
+                                .fillMaxSize()
+                                .graphicsLayer { alpha = dominanceCurveState.alpha },
                             dominanceCurveState.values,
                             dominanceCurveState.startTimestamp,
                             dominanceCurveState.endTimestamp,
@@ -521,7 +531,9 @@ fun PriceVolChart(
                     movingAverageCurveStates.forEach { maCurveState ->
                         val color = maCurveState.color?.let { Color(it) } ?: Color.Gray
                         GraphicLine(
-                            Modifier.fillMaxSize(),
+                            Modifier
+                                .fillMaxSize()
+                                .graphicsLayer { alpha = maCurveState.alpha },
                             maCurveState.values,
                             maCurveState.startTimestamp,
                             maCurveState.endTimestamp,
@@ -559,102 +571,12 @@ fun PriceVolChart(
                             .height(44.dp)
                             .fillMaxWidth()
                     ) {
-                        if (rsiCurveState != null) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight(0.3f)
-                                    .fillMaxWidth()
-                                    .drawBehind {
-                                        val pathEffect =
-                                            PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                                        drawLine(
-                                            color = colors.blade,
-                                            start = Offset(0f, size.height),
-                                            end = Offset(size.width, size.height),
-                                            pathEffect = pathEffect
-                                        )
-                                    }
-                                    .padding(horizontal = 16.dp),
-                            ) {
-                                micro_grey(
-                                    modifier = Modifier.align(Alignment.CenterStart),
-                                    text = "70",
-                                )
-                            }
-
-                            GraphicLine(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp),
-                                data = rsiCurveState.values,
-                                minKey = rsiCurveState.startTimestamp,
-                                maxKey = rsiCurveState.endTimestamp,
-                                minValue = 0f,
-                                maxValue = 100f,
-                                color = ComposeAppTheme.colors.orange50
-                            )
-
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.BottomStart)
-                                    .fillMaxHeight(0.3f)
-                                    .fillMaxWidth()
-                                    .drawBehind {
-                                        val pathEffect =
-                                            PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                                        drawLine(
-                                            color = colors.blade,
-                                            start = Offset(0f, 0f),
-                                            end = Offset(size.width, 0f),
-                                            pathEffect = pathEffect
-                                        )
-                                    }
-                                    .padding(horizontal = 16.dp),
-                            ) {
-                                micro_grey(
-                                    modifier = Modifier.align(Alignment.CenterStart),
-                                    text = "30",
-                                )
-                            }
-                        } else if (macdLineCurveState != null && macdSignalCurveState != null && macdHistogramBarsState != null) {
-                            GraphicBarsWithNegative(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp),
-                                data = macdHistogramBarsState.values,
-                                minKey = macdHistogramBarsState.startTimestamp,
-                                maxKey = macdHistogramBarsState.endTimestamp,
-                                minValue = macdHistogramBarsState.minValue,
-                                maxValue = macdHistogramBarsState.maxValue,
-                                color = ComposeAppTheme.colors.green50,
-                                colorNegative = ComposeAppTheme.colors.red50
-                            )
-                            GraphicLine(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp),
-                                data = macdLineCurveState.values,
-                                minKey = macdLineCurveState.startTimestamp,
-                                maxKey = macdLineCurveState.endTimestamp,
-                                minValue = macdLineCurveState.minValue,
-                                maxValue = macdLineCurveState.maxValue,
-                                color = ComposeAppTheme.colors.orange50
-                            )
-                            GraphicLine(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp),
-                                data = macdSignalCurveState.values,
-                                minKey = macdSignalCurveState.startTimestamp,
-                                maxKey = macdSignalCurveState.endTimestamp,
-                                minValue = macdSignalCurveState.minValue,
-                                maxValue = macdSignalCurveState.maxValue,
-                                color = ComposeAppTheme.colors.issykBlue
-                            )
-                        } else if (volumeBarsState != null) {
+                        // An indicator that is leaving is drawn over the volume bars coming back.
+                        if (volumeBarsState != null) {
                             GraphicBars(
                                 modifier = Modifier
                                     .fillMaxSize()
+                                    .graphicsLayer { alpha = volumeBarsState.alpha }
                                     .padding(horizontal = 8.dp),
                                 data = volumeBarsState.values,
                                 minKey = volumeBarsState.startTimestamp,
@@ -664,6 +586,114 @@ fun PriceVolChart(
                                 color = ComposeAppTheme.colors.blade,
                                 selectedItemKey = null
                             )
+                        }
+
+                        if (rsiCurveState != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .graphicsLayer { alpha = rsiCurveState.alpha }
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight(0.3f)
+                                        .fillMaxWidth()
+                                        .drawBehind {
+                                            val pathEffect =
+                                                PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                            drawLine(
+                                                color = colors.blade,
+                                                start = Offset(0f, size.height),
+                                                end = Offset(size.width, size.height),
+                                                pathEffect = pathEffect
+                                            )
+                                        }
+                                        .padding(horizontal = 16.dp),
+                                ) {
+                                    micro_grey(
+                                        modifier = Modifier.align(Alignment.CenterStart),
+                                        text = "70",
+                                    )
+                                }
+
+                                GraphicLine(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 8.dp),
+                                    data = rsiCurveState.values,
+                                    minKey = rsiCurveState.startTimestamp,
+                                    maxKey = rsiCurveState.endTimestamp,
+                                    minValue = 0f,
+                                    maxValue = 100f,
+                                    color = ComposeAppTheme.colors.orange50
+                                )
+
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomStart)
+                                        .fillMaxHeight(0.3f)
+                                        .fillMaxWidth()
+                                        .drawBehind {
+                                            val pathEffect =
+                                                PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                            drawLine(
+                                                color = colors.blade,
+                                                start = Offset(0f, 0f),
+                                                end = Offset(size.width, 0f),
+                                                pathEffect = pathEffect
+                                            )
+                                        }
+                                        .padding(horizontal = 16.dp),
+                                ) {
+                                    micro_grey(
+                                        modifier = Modifier.align(Alignment.CenterStart),
+                                        text = "30",
+                                    )
+                                }
+                            }
+                        }
+
+                        if (macdLineCurveState != null && macdSignalCurveState != null && macdHistogramBarsState != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .graphicsLayer { alpha = macdLineCurveState.alpha }
+                            ) {
+                                GraphicBarsWithNegative(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 8.dp),
+                                    data = macdHistogramBarsState.values,
+                                    minKey = macdHistogramBarsState.startTimestamp,
+                                    maxKey = macdHistogramBarsState.endTimestamp,
+                                    minValue = macdHistogramBarsState.minValue,
+                                    maxValue = macdHistogramBarsState.maxValue,
+                                    color = ComposeAppTheme.colors.green50,
+                                    colorNegative = ComposeAppTheme.colors.red50
+                                )
+                                GraphicLine(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 8.dp),
+                                    data = macdLineCurveState.values,
+                                    minKey = macdLineCurveState.startTimestamp,
+                                    maxKey = macdLineCurveState.endTimestamp,
+                                    minValue = macdLineCurveState.minValue,
+                                    maxValue = macdLineCurveState.maxValue,
+                                    color = ComposeAppTheme.colors.orange50
+                                )
+                                GraphicLine(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 8.dp),
+                                    data = macdSignalCurveState.values,
+                                    minKey = macdSignalCurveState.startTimestamp,
+                                    maxKey = macdSignalCurveState.endTimestamp,
+                                    minValue = macdSignalCurveState.minValue,
+                                    maxValue = macdSignalCurveState.maxValue,
+                                    color = ComposeAppTheme.colors.issykBlue
+                                )
+                            }
                         }
                     }
                 }
