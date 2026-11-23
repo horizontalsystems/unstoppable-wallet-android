@@ -2,6 +2,8 @@ package io.horizontalsystems.walletkit.modules.coin.overview.ui
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -32,12 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartVolumeType
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.ViewState
@@ -74,7 +77,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 private const val MAX_WIDTH = 600
 
@@ -330,10 +332,17 @@ fun Chart(
                     Column {
                         HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
 
-                        val loadingModifier =
-                            if (uiState.loading) Modifier.alpha(0.5f) else Modifier
+                        // The dim fades in quickly and fades out on the chart's own timing, so the
+                        // chart brightens while the new data moves into place.
+                        val dim by animateFloatAsState(
+                            targetValue = if (uiState.loading) 1f else 0f,
+                            animationSpec = if (uiState.loading) tween(200) else ChartAnimation.spec,
+                            label = "chartLoadingDim"
+                        )
                         Box(
-                            modifier = loadingModifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .graphicsLayer { alpha = 1f - dim * 0.5f }
                         ) {
                             PriceVolChart(
                                 chartInfoData = uiState.chartInfoData,
@@ -345,11 +354,12 @@ fun Chart(
                                 }
                             }
 
-                            if (uiState.loading) {
+                            if (dim > 0f) {
                                 CircularProgressIndicator(
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .align(Alignment.Center),
+                                        .align(Alignment.Center)
+                                        .graphicsLayer { alpha = dim },
                                     color = ComposeAppTheme.colors.grey,
                                     strokeWidth = 2.dp
                                 )
