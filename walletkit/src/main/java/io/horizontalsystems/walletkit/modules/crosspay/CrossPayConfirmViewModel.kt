@@ -22,6 +22,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.FeePriority
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
@@ -456,7 +457,7 @@ class CrossPayConfirmViewModel(
                 request = request,
                 chainSettings = chainSettings,
                 manager = CrossPayManager(),
-                sendTransactionService = SendTransactionServiceFactory.create(request.tokenIn),
+                sendTransactionService = SendTransactionServiceFactory.create(request.tokenIn, FeePriority.Priority),
                 currencyManager = App.currencyManager,
                 timerService = TimerService(),
                 swapRecordManager = App.swapRecordManager,

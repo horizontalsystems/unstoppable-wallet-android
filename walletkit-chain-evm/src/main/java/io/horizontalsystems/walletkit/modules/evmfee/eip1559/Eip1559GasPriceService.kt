@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsError
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsWarning
 import io.horizontalsystems.walletkit.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.walletkit.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.FeePriority
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
@@ -24,12 +25,13 @@ class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
     private val refreshSignalFlow: Flow<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
-    private val initialGasPrice: GasPrice.Eip1559? = null
+    private val initialGasPrice: GasPrice.Eip1559? = null,
+    private val feePriority: FeePriority = FeePriority.Standard,
 ) : IEvmGasPriceService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val blocksCount: Long = 10
-    private val rewardPercentile = listOf(50)
+    private val rewardPercentile = rewardPercentiles(feePriority)
     private val lastNRecommendedBaseFees = 2
 
     private val minBaseFee: Long? = minGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
@@ -164,7 +166,7 @@ class Eip1559GasPriceService(
         val recommendedBaseFee = max(recommendedBaseFee(feeHistory), minBaseFee ?: 0)
         currentBaseFee = recommendedBaseFee
 
-        val recommendedPriorityFee = max(recommendedPriorityFee(feeHistory), minPriorityFee ?: 0)
+        val recommendedPriorityFee = max(recommendedPriorityFee(feeHistory, feePriority), minPriorityFee ?: 0)
         currentPriorityFee = recommendedPriorityFee
 
         val newRecommendGasPrice = GasPrice.Eip1559((recommendedBaseFee + recommendedPriorityFee) * 125 / 100, recommendedPriorityFee)
@@ -187,18 +189,43 @@ class Eip1559GasPriceService(
         return lastNRecommendedBaseFeesList.max()
     }
 
-    private fun recommendedPriorityFee(feeHistory: FeeHistory): Long {
-        var priorityFeesSum = 0L
-        var priorityFeesCount = 0
-        feeHistory.reward.forEach { priorityFeeArray ->
-            priorityFeeArray.firstOrNull()?.let { priorityFee ->
-                priorityFeesSum += priorityFee
-                priorityFeesCount += 1
-            }
+    companion object {
+        private const val STANDARD_REWARD_PERCENTILE = 50
+        private const val PRIORITY_REWARD_PERCENTILE = 75
+
+        fun rewardPercentiles(feePriority: FeePriority): List<Int> = when (feePriority) {
+            FeePriority.Standard -> listOf(STANDARD_REWARD_PERCENTILE)
+            FeePriority.Priority -> listOf(STANDARD_REWARD_PERCENTILE, PRIORITY_REWARD_PERCENTILE)
         }
-        return if (priorityFeesCount > 0)
-            priorityFeesSum / priorityFeesCount
-        else
-            0
+
+        /**
+         * The standard tip is the mean of the 50th-percentile rewards over all blocks. The
+         * priority tip is the median of the 75th-percentile rewards (the second column, as
+         * requested by [rewardPercentiles]) over the blocks that used gas, never below the
+         * standard tip, and the standard tip when no block qualifies.
+         */
+        fun recommendedPriorityFee(feeHistory: FeeHistory, feePriority: FeePriority): Long {
+            val standardTips = feeHistory.reward.mapNotNull { it.firstOrNull() }
+            val standardTip = if (standardTips.isEmpty()) 0 else standardTips.sum() / standardTips.size
+
+            if (feePriority != FeePriority.Priority) return standardTip
+
+            val priorityTips = feeHistory.reward.zip(feeHistory.gasUsedRatio)
+                .mapNotNull { (row, ratio) -> row.getOrNull(1).takeIf { ratio > 0 } }
+
+            return median(priorityTips)?.let { max(it, standardTip) } ?: standardTip
+        }
+
+        private fun median(values: List<Long>): Long? {
+            if (values.isEmpty()) return null
+
+            val sorted = values.sorted()
+            val middle = sorted.size / 2
+
+            return if (sorted.size % 2 == 0) mean(sorted[middle - 1], sorted[middle]) else sorted[middle]
+        }
+
+        // Not (a + b) / 2: node-supplied rewards can be close to Long.MAX_VALUE.
+        private fun mean(a: Long, b: Long): Long = a / 2 + b / 2 + (a % 2 + b % 2) / 2
     }
 }

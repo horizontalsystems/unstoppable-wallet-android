@@ -18,6 +18,7 @@ import io.horizontalsystems.walletkit.modules.eip20approve.AllowanceMode.Unlimit
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.FeePriority
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -143,7 +144,7 @@ class Eip20ApproveViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceFactory.create(token)
+            val sendTransactionService = SendTransactionServiceFactory.create(token, FeePriority.Priority)
 
             return Eip20ApproveViewModel(
                 token,

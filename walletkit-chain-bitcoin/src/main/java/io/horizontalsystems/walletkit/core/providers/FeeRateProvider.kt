@@ -6,6 +6,7 @@ import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig
 import io.horizontalsystems.feeratekit.providers.BitcoinFeeProvider
 import java.math.BigInteger
+import kotlin.math.max
 
 class FeeRateProvider(appConfig: IAppConfigProvider) {
 
@@ -45,7 +46,15 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
 
     override suspend fun getFeeRates(): FeeRates {
         val bitcoinFeeRate = feeRateProvider.bitcoinFeeRate()
-        return FeeRates(bitcoinFeeRate.halfHourFee, bitcoinFeeRate.minimumFee)
+        return FeeRates(
+            recommendedRate(bitcoinFeeRate.fastestFee, bitcoinFeeRate.halfHourFee),
+            bitcoinFeeRate.minimumFee
+        )
+    }
+
+    companion object {
+        // The half-hour rate is the floor, for an estimator that reports a lower fastest rate.
+        fun recommendedRate(fastest: Int, halfHour: Int): Int = max(fastest, halfHour)
     }
 }
 

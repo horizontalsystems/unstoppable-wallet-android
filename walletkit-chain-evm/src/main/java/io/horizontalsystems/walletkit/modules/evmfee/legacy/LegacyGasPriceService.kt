@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.modules.evmfee.Bound
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsWarning
 import io.horizontalsystems.walletkit.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.walletkit.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.FeePriority
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +19,7 @@ class LegacyGasPriceService(
     private val gasPriceProvider: LegacyGasPriceProvider,
     private val minRecommendedGasPrice: Long? = null,
     private val initialGasPrice: Long? = null,
+    private val feePriority: FeePriority = FeePriority.Standard,
 ) : IEvmGasPriceService() {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var setGasPriceJob: Job? = null
@@ -47,7 +49,7 @@ class LegacyGasPriceService(
             return it
         }
 
-        val gasPrice = gasPriceProvider.gasPrice()
+        val gasPrice = prioritized(gasPriceProvider.gasPrice(), feePriority)
         val adjustedGasPrice = gasPrice.coerceAtLeast(minRecommendedGasPrice ?: 0)
 
         recommendedGasPrice = adjustedGasPrice
@@ -102,6 +104,22 @@ class LegacyGasPriceService(
             } catch (e: Throwable) {
                 state = DataState.Error(e)
                 emitState()
+            }
+        }
+    }
+
+    companion object {
+        private const val PRIORITY_PERCENT = 120L
+
+        /** [gasPrice] raised by 20% and rounded up for [FeePriority.Priority]. */
+        fun prioritized(gasPrice: Long, feePriority: FeePriority): Long {
+            // A node-supplied price that would overflow when scaled is used as it is.
+            val scalable = gasPrice in 1..(Long.MAX_VALUE - 99) / PRIORITY_PERCENT
+
+            return if (feePriority == FeePriority.Priority && scalable) {
+                (gasPrice * PRIORITY_PERCENT + 99) / 100
+            } else {
+                gasPrice
             }
         }
     }
