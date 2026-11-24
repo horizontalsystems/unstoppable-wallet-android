@@ -1449,8 +1449,7 @@
     <string name="SettingsSecurity_HideSuspiciousTxs">Hide Suspicious Txs</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Hides suspicious small transfers often used in phishing attacks.</string>
 
-    <string name="SetDuressPin_Title">Duress Passcode</string>
-    <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
+    <string name="SetDuressPin_Description">Set a passcode for Robbery Protection</string>
     <string name="EditDuressPin_Title">Edit Duress Passcode</string>
     <string name="EditDuressPin_Description">Enter new passcode for Duress Mode</string>
 
@@ -2178,24 +2177,23 @@
     <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
 
     <!--Unlock-->
-    <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Passcode</string>
-    <string name="Unlock_EnterPasscode">Enter Passcode</string>
+    <string name="Unlock_EnterPasscode">Enter passcode</string>
     <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
-    <string name="Unlock_WalletDisabledUntil">Disabled until: %s</string>
+    <string name="Unlock_WalletDisabledUntil">Disabled Until: %s</string>
     <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
     <string name="Unlock_Random">Random</string>
 
     <!--Set Pin-->
-    <string name="PinSet_Title">Create Passcode</string>
-    <string name="PinSet_Info">Your passcode will be used to unlock your wallet</string>
+    <string name="PinSet_Title">Create passcode</string>
+    <string name="PinSet_Info">Passcode will be used to unlock</string>
     <string name="PinSet_ConfirmInfo">Confirm</string>
-    <string name="PinSet_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Invalid confirmation</string>
     <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <string name="PinSet_ForBiometrics">Set a passcode to enable Biometrics</string>
-    <string name="PinSet_ForDuress">Set a passcode to enable Duress Mode</string>
+    <string name="PinSet_ForDuress">Set a passcode to enable Robbery Protection</string>
     <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
 
     <!--Edit Pin-->

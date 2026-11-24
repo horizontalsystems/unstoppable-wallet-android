@@ -804,8 +804,7 @@
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 필터링</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">느리지만 개인 정보 보호</string>
-    <string name="SetDuressPin_Title">긴급 상황 비밀번호</string>
-    <string name="SetDuressPin_Description">긴급 상황 모드용 비밀번호를 설정하세요</string>
+    <string name="SetDuressPin_Description">강압 모드용 비밀번호를 설정하세요</string>
     <string name="EditDuressPin_Title">긴급 상황 비밀번호 편집</string>
     <string name="EditDuressPin_Description">긴급 상황 모드용 새 비밀번호를 입력하세요</string>
     <string name="DuressPin_Title">긴급 상황 모드</string>
@@ -1348,7 +1347,6 @@
     <string name="OSPin_Confirm_Desciption">이 앱을 사용하시려면 휴대 전화에 비밀번호 (잠금 화면) 이 활성화 되어야 합니다. \n\n안드로이드 설정에서 활성화 하도록 설정 할 수 있습니다.\n\nOS 수준에서 PIN 번호를 비활성화 하시게 되면 안전한 저장에 대한 보안 조치로 인해 이전에 저장된 데이터가 유효하지 않게 되는 것을 명심하세요. 귀하께서는 지갑으로 돌아가시려면 지갑 암호를 복원해야 합니다.</string>
     <string name="OSPin_Prompt_Desciption">이 앱은 앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 유지하려면 휴대 전화의 PIN 번호가 필요합니다.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">잠금 해제</string>
     <string name="Unlock_Passcode">비밀번호</string>
     <string name="Unlock_EnterPasscode">비밀번호 입력</string>
     <string name="Unlock_BiometricScanner">생체정보 스캐너</string>
@@ -1359,12 +1357,12 @@
     <string name="Unlock_Random">랜덤</string>
     <!--Set Pin-->
     <string name="PinSet_Title">암호 설정</string>
-    <string name="PinSet_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
+    <string name="PinSet_Info">비밀번호는 잠금 해제에 사용됩니다</string>
     <string name="PinSet_ConfirmInfo">확인</string>
-    <string name="PinSet_ErrorPinsDontMatch">비밀번호가 일치하지 않습니다. 다시 시도하세요.</string>
+    <string name="PinSet_ErrorPinsDontMatch">확인이 올바르지 않습니다</string>
     <string name="PinSet_ErrorFailedToSavePin">당신의 비밀번호를 저장하는 동안 오류가 발생했습니다. 다시 시도하세요.</string>
     <string name="PinSet_ForBiometrics">생체인식을 활성화하려면 비밀번호를 설정해주세요.</string>
-    <string name="PinSet_ForDuress">긴급 상황 모드를 활성화하려면 비밀번호를 설정하세요.</string>
+    <string name="PinSet_ForDuress">강압 모드를 활성화하려면 비밀번호를 설정하세요</string>
     <string name="PinSet_ErrorPinInUse">이 비밀번호는 이미 사용 중입니다.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

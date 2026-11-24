@@ -234,9 +234,14 @@ object TestTags {
 
     fun pinKey(digit: Int) = "pin_key_$digit"
     const val PIN_KEY_DELETE = "pin_key_delete"
+    const val PIN_KEY_BIOMETRIC = "pin_key_biometric"
+    const val PIN_RANDOM = "pin_random"
+    const val PIN_BACK = "pin_back"
     const val PIN_TITLE = "pin_title"
+    const val PIN_DESCRIPTION = "pin_description"
     const val PIN_ERROR = "pin_error"
     const val PIN_ATTEMPTS_LEFT = "pin_attempts_left"
+    const val PIN_DISABLED_UNTIL = "pin_disabled_until"
 
     // Index over the list as shown: wallets first, then watch addresses
     fun accountRow(index: Int) = "account_row_$index"

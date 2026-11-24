@@ -981,8 +981,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Ralentissement, privé.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">Cacher les Txs suspects</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Cache les petits transferts suspects souvent utilisés dans les attaques d\'hameçonnage.</string>
-    <string name="SetDuressPin_Title">Code Duress</string>
-    <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
+    <string name="SetDuressPin_Description">Définir un code d\'accès pour le Mode Contrainte</string>
     <string name="EditDuressPin_Title">Modifier le code de détresse</string>
     <string name="EditDuressPin_Description">Entrez le nouveau mot de passe pour le mode Duress</string>
     <string name="DuressPin_Title">Mode de Duress</string>
@@ -1556,7 +1555,6 @@
     <string name="OSPin_Confirm_Desciption">Cette application nécessite qu\'un code secret soit activé sur le téléphone (verrouillage de l\'écran). \n\nVous pouvez activer cette fonction dans les paramètres Android. \n\nVeuillez noter que lorsque vous avez désactivé le code PIN au niveau du système d\'exploitation, les mesures de sécurité stockées sur votre téléphone ont rendu invalide les données précédemment stockées. Vous devrez Restaurer vos clés de porte-monnaie pour revenir à votre porte-monnaie.</string>
     <string name="OSPin_Prompt_Desciption">Cette application nécessite le code PIN de votre téléphone afin de conserver les données confidentielles de votre porte-monnaie dans le stockage sécurisé d\'Android et non dans l\'application elle-même.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">Déverrouiller</string>
     <string name="Unlock_Passcode">Code</string>
     <string name="Unlock_EnterPasscode">Entrez le code d\'accès</string>
     <string name="Unlock_BiometricScanner">Scanner biométrique</string>
@@ -1567,12 +1565,12 @@
     <string name="Unlock_Random">Aléatoire</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Définir le code d\'accès</string>
-    <string name="PinSet_Info">Votre code secret sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
+    <string name="PinSet_Info">Le code d\'accès servira au déverrouillage</string>
     <string name="PinSet_ConfirmInfo">Valider</string>
-    <string name="PinSet_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Confirmation invalide</string>
     <string name="PinSet_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
     <string name="PinSet_ForBiometrics">Définir un code d\'accès pour activer la biométrie</string>
-    <string name="PinSet_ForDuress">Définir un mot de passe pour activer le mode Duress</string>
+    <string name="PinSet_ForDuress">Définir un code d\'accès pour activer le Mode Contrainte</string>
     <string name="PinSet_ErrorPinInUse">Ce mot de passe est déjà utilisé.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

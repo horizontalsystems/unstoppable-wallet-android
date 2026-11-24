@@ -686,8 +686,7 @@
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blok zincirine göre filtrele</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Yavaş, Özel.</string>
-    <string name="SetDuressPin_Title">Duress Şifre Kodu</string>
-    <string name="SetDuressPin_Description">Duress Modu için bir şifre kodu ayarlayın</string>
+    <string name="SetDuressPin_Description">Tehdit Modu için bir şifre belirleyin</string>
     <string name="EditDuressPin_Title">Duress Şifresini Düzenle</string>
     <string name="EditDuressPin_Description">Duress Modu için yeni şifreyi girin</string>
     <string name="DuressPin_Title">Duress Modu</string>
@@ -1201,7 +1200,6 @@
     <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
     <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">Kilidi Aç</string>
     <string name="Unlock_Passcode">Şifre</string>
     <string name="Unlock_EnterPasscode">Şifre Girin</string>
     <string name="Unlock_BiometricScanner">Biyometri Tarayıcı</string>
@@ -1212,12 +1210,12 @@
     <string name="Unlock_Random">Rastgele</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Şifre belirle</string>
-    <string name="PinSet_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
+    <string name="PinSet_Info">Şifre, kilidi açmak için kullanılacak</string>
     <string name="PinSet_ConfirmInfo">Onayla</string>
-    <string name="PinSet_ErrorPinsDontMatch">Kod uyuşmadı. Tekrar deneyin.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Geçersiz onay</string>
     <string name="PinSet_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
     <string name="PinSet_ForBiometrics">Biyometriyi etkinleştirmek için bir şifre belirleyin</string>
-    <string name="PinSet_ForDuress">Duress Modunu etkinleştirmek için bir şifre kodu ayarlayın</string>
+    <string name="PinSet_ForDuress">Tehdit Modunu etkinleştirmek için bir şifre belirleyin</string>
     <string name="PinSet_ErrorPinInUse">Bu şifre zaten kullanılıyor.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

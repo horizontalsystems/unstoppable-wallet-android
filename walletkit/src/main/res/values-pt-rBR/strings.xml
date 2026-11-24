@@ -981,8 +981,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">Ocultar eixos suspeitos</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Esconde pequenas transferências suspeitas frequentemente usadas em ataques de phishing.</string>
-    <string name="SetDuressPin_Title">Senha do Modo Coação</string>
-    <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
+    <string name="SetDuressPin_Description">Defina uma senha para o Modo de Coação</string>
     <string name="EditDuressPin_Title">Editar Senha do Modo Coação</string>
     <string name="EditDuressPin_Description">Defina uma senha para o modo de Coação</string>
     <string name="DuressPin_Title">Modo de dureza</string>
@@ -1559,7 +1558,6 @@
     <string name="OSPin_Confirm_Desciption">Este aplicativo requer que o telefone tenha a senha (bloqueio de tela) ativada.\n\nVocê pode ativá-lo nas configurações do Android.\n\nObserve que quando você desativa o PIN no nível do sistema operacional, as medidas de segurança no armazenamento seguro do seu telefone tornou os dados armazenados anteriormente inválidos. Você precisará Restaurar as chaves da carteira para voltar à sua carteira.</string>
     <string name="OSPin_Prompt_Desciption">Este aplicativo requer o PIN do seu telefone para manter os dados confidenciais de sua carteira no armazenamento seguro do Android e não no próprio aplicativo.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">Desbloquear</string>
     <string name="Unlock_Passcode">Senha</string>
     <string name="Unlock_EnterPasscode">Insira a senha</string>
     <string name="Unlock_BiometricScanner">Leitura Biométrica</string>
@@ -1570,12 +1568,12 @@
     <string name="Unlock_Random">Aleatório</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Definir senha</string>
-    <string name="PinSet_Info">Sua senha será usada para desbloquear sua carteira</string>
+    <string name="PinSet_Info">A senha será usada para desbloquear</string>
     <string name="PinSet_ConfirmInfo">Confirmar</string>
-    <string name="PinSet_ErrorPinsDontMatch">Senhas não conferem. Tente novamente.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Confirmação inválida</string>
     <string name="PinSet_ErrorFailedToSavePin">Ocorreu um erro ao enviar a mensagem. Tente novamente.</string>
     <string name="PinSet_ForBiometrics">Definir uma senha para habilitar Biometria</string>
-    <string name="PinSet_ForDuress">Defina uma senha para ativar o modo de Coação</string>
+    <string name="PinSet_ForDuress">Defina uma senha para ativar o Modo de Coação</string>
     <string name="PinSet_ErrorPinInUse">Esta senha já está sendo usada.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

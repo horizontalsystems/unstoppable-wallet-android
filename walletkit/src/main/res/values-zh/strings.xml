@@ -980,8 +980,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">慢，私密.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">隐藏可疑Txs</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">隐藏经常用于钓鱼攻击的可疑小规模转帐。</string>
-    <string name="SetDuressPin_Title">密码错误</string>
-    <string name="SetDuressPin_Description">设置口令模式密码</string>
+    <string name="SetDuressPin_Description">设置脅迫模式密码</string>
     <string name="EditDuressPin_Title">编辑货币密码</string>
     <string name="EditDuressPin_Description">输入新的密码来复位模式</string>
     <string name="DuressPin_Title">服用模式</string>
@@ -1553,7 +1552,6 @@
     <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
     <string name="OSPin_Prompt_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
     <!--Unlock-->
-    <string name="Unlock_Title">解锁​​​​</string>
     <string name="Unlock_Passcode">密码</string>
     <string name="Unlock_EnterPasscode">输入密码</string>
     <string name="Unlock_BiometricScanner">生物扫描仪</string>
@@ -1564,12 +1562,12 @@
     <string name="Unlock_Random">随机</string>
     <!--Set Pin-->
     <string name="PinSet_Title">设置密码</string>
-    <string name="PinSet_Info">您的密码将用于解锁钱包和发送资金</string>
+    <string name="PinSet_Info">密码将用于解锁</string>
     <string name="PinSet_ConfirmInfo">确认</string>
-    <string name="PinSet_ErrorPinsDontMatch">密码不匹配。请重试。</string>
+    <string name="PinSet_ErrorPinsDontMatch">确认无效</string>
     <string name="PinSet_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
     <string name="PinSet_ForBiometrics">设置密码以启用生物计。</string>
-    <string name="PinSet_ForDuress">设置密码以启用压力模式</string>
+    <string name="PinSet_ForDuress">设置密码以启用脅迫模式</string>
     <string name="PinSet_ErrorPinInUse">此密码已被使用.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

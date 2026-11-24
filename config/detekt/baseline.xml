@@ -197,9 +197,6 @@
     <ID>ComposableParamOrder:MarketFiltersPage.kt:@Composable private fun AdvancedSearchSwitch</ID>
     <ID>ComposableParamOrder:MarketScreen.kt:@Composable private fun RowScope.MarketTotalCard</ID>
     <ID>ComposableParamOrder:MoneroNetworkPage.kt:@Composable fun RpcCell</ID>
-    <ID>ComposableParamOrder:PinNumpad.kt:@Composable fun PinNumpad</ID>
-    <ID>ComposableParamOrder:PinNumpad.kt:@Composable private fun ImageKey</ID>
-    <ID>ComposableParamOrder:PinTopBlock.kt:@Composable fun PinTopBlock</ID>
     <ID>ComposableParamOrder:ReceiveAddressScreen.kt:@Composable fun AmountInputDialog</ID>
     <ID>ComposableParamOrder:ReceiveAddressScreen.kt:@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiveAddressScreen</ID>
     <ID>ComposableParamOrder:RestorePhraseScreen.kt:@Composable fun SuggestionsBar</ID>
@@ -432,7 +429,6 @@
     <ID>LambdaParameterInRestartableEffect:WalletNameInput.kt:onValueChange: (String) -&gt; Unit</ID>
     <ID>LambdaParameterInRestartableEffect:WheelPicker.kt:onChange: (Int, Int, Int) -&gt; Unit</ID>
     <ID>LambdaParameterInRestartableEffect:WheelPicker.kt:onItemSelected: (Int) -&gt; Unit</ID>
-    <ID>LargeClass:LocalStorageManager.kt:LocalStorageManager : ILocalStorageIPinSettingsStorageILockoutStorageIThirdKeyboardIMarketStorage</ID>
     <ID>LargeClass:TransactionInfoViewItemFactory.kt:TransactionInfoViewItemFactory</ID>
     <ID>LargeClass:TransactionViewItemFactory.kt:TransactionViewItemFactory</ID>
     <ID>LargeClass:TransactionViewItemFactoryHelper.kt:TransactionViewItemFactoryHelper</ID>
@@ -554,9 +550,7 @@
     <ID>LongMethod:OpenCryptoPayScreen.kt:@Composable fun OpenCryptoPayScreen</ID>
     <ID>LongMethod:OverallScoreInfoPage.kt:private fun getScores: Map&lt;OverallScore, String&gt;</ID>
     <ID>LongMethod:PasscodeBlock.kt:@Composable fun PasscodeBlock</ID>
-    <ID>LongMethod:PinNumpad.kt:@Composable fun PinNumpad</ID>
     <ID>LongMethod:PinTopBlock.kt:@Composable fun PinTopBlock</ID>
-    <ID>LongMethod:PinUnlockView.kt:@OptIn(ExperimentalMaterial3Api::class) @Composable fun PinUnlock</ID>
     <ID>LongMethod:PrivateSendConfirmationPage.kt:@Composable private fun PrivateSendConfirmationScreen</ID>
     <ID>LongMethod:PrivateSendManager.kt:PrivateSendManager$suspend fun preview: PrivateSendPreview</ID>
     <ID>LongMethod:ProChartService.kt:ProChartService$override suspend fun getItems: ChartPointsWrapper</ID>
@@ -924,10 +918,6 @@
     <ID>ModifierMissing:PassKeyTermsPage.kt:@Composable fun PasskeyTermsScreen</ID>
     <ID>ModifierMissing:PasscodeBlock.kt:@Composable fun PasscodeBlock</ID>
     <ID>ModifierMissing:PasskeyProviderAttentionSheet.kt:@Composable fun PasskeyProviderAttentionScreen</ID>
-    <ID>ModifierMissing:PinConfirm.kt:@Composable fun PinConfirm</ID>
-    <ID>ModifierMissing:PinNumpad.kt:@Composable fun PinNumpad</ID>
-    <ID>ModifierMissing:PinSetView.kt:@Composable fun PinSet</ID>
-    <ID>ModifierMissing:PinUnlockView.kt:@OptIn(ExperimentalMaterial3Api::class) @Composable fun PinUnlock</ID>
     <ID>ModifierMissing:PingBadge.kt:@Composable fun PingBadge</ID>
     <ID>ModifierMissing:PremiumFeaturesSheet.kt:@Composable fun PremiumFeaturesScreen</ID>
     <ID>ModifierMissing:PremiumSubscribedSheet.kt:@Composable fun PremiumSubscribedScreen</ID>
@@ -1100,7 +1090,6 @@
     <ID>ModifierMissing:ZcashMigrationScreen.kt:@Composable fun ZcashMigrationScreen</ID>
     <ID>ModifierNaming:DataFieldFee.kt:valueModifier: Modifier = Modifier</ID>
     <ID>ModifierNaming:FeeRow.kt:valueModifier: Modifier = Modifier</ID>
-    <ID>ModifierNotUsedAtRoot:BalanceItems.kt:modifier = modifier</ID>
     <ID>ModifierNotUsedAtRoot:Cell.kt:modifier = modifier .fillMaxSize() .padding(horizontal = 16.dp)</ID>
     <ID>ModifierNotUsedAtRoot:CellRightControlsSwitcher.kt:modifier = modifier</ID>
     <ID>ModifierNotUsedAtRoot:ReceiveAddressScreen.kt:modifier = modifier</ID>
@@ -1211,10 +1200,6 @@
     <ID>PreviewPublic:MarketPlatformPage.kt:@Preview @Composable fun HeaderContentPreview</ID>
     <ID>PreviewPublic:MarketPostsScreen.kt:@Preview @Composable fun PreviewMarketPostView</ID>
     <ID>PreviewPublic:MarketSearchPage.kt:@Preview(showBackground = true) @Composable fun MarketCoinPreview</ID>
-    <ID>PreviewPublic:PinNumpad.kt:@Preview @Composable fun Preview_Pin</ID>
-    <ID>PreviewPublic:PinNumpad.kt:@Preview @Composable fun Preview_PinLocked</ID>
-    <ID>PreviewPublic:PinTopBlock.kt:@Preview @Composable fun Preview_PinTopBlockEnabled</ID>
-    <ID>PreviewPublic:PinTopBlock.kt:@Preview @Composable fun Preview_PinTopBlockLocked</ID>
     <ID>PreviewPublic:PremiumSubscribedSheet.kt:@Preview @Composable fun PremiumSubscribedScreenPreview</ID>
     <ID>PreviewPublic:PulsingTextColor.kt:@Preview @Composable fun Preview_PulsingTextColor</ID>
     <ID>PreviewPublic:QuoteInfoRow.kt:@Preview @Composable fun QuoteInfoRowPreview</ID>
@@ -1263,7 +1248,6 @@
     <ID>ReturnCount:CrossPayTabViewModel.kt:CrossPayTabViewModel$private fun scheduleQuote</ID>
     <ID>ReturnCount:CrossPayTabViewModel.kt:CrossPayTabViewModel$private fun step: CrossPayStep</ID>
     <ID>ReturnCount:CurveAnimator.kt:CurveAnimator.Companion$private fun valueForTimestamp: Float?</ID>
-    <ID>ReturnCount:CurveAnimator2.kt:CurveAnimator2.Companion$private fun valueForTimestamp: Float?</ID>
     <ID>ReturnCount:CustomSnackbar.kt:internal fun View?.findSuitableParent: ViewGroup?</ID>
     <ID>ReturnCount:DashAdapter.kt:DashAdapter.Companion$fun firstAddress: String</ID>
     <ID>ReturnCount:DashAdapter.kt:DashAdapter.Companion$private fun createKit: DashKit</ID>
@@ -1918,7 +1902,6 @@
     <ID>TooManyFunctions:DAppServiceWalletConnect.kt:DAppServiceWalletConnect : DAppServiceWalletDelegateCoreDelegate</ID>
     <ID>TooManyFunctions:DatabaseConverters.kt:DatabaseConverters</ID>
     <ID>TooManyFunctions:EarnViewModel.kt:MarketEarnViewModel : ViewModelUiState</ID>
-    <ID>TooManyFunctions:Eip1559GasPriceService.kt:Eip1559GasPriceService : IEvmGasPriceService</ID>
     <ID>TooManyFunctions:Eip20Adapter.kt:Eip20Adapter : BaseEvmAdapterIEip20ApproveAdapter</ID>
     <ID>TooManyFunctions:EnterAddressViewModel.kt:EnterAddressViewModel : ViewModelUiState</ID>
     <ID>TooManyFunctions:EtfViewModel.kt:EtfViewModel : ViewModelUiState</ID>
@@ -2062,7 +2045,6 @@
     <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val RBF_ENABLED = "rbf_enabled"</ID>
     <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"</ID>
     <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val SEND_INPUT_TYPE = "send_input_type"</ID>
-    <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val SORT_TYPE = "balance_sort_type"</ID>
     <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val STATS_SYNC_TIME = "stats_sync_time"</ID>
     <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val SYNC_MODE = "sync_mode"</ID>
     <ID>VariableNaming:LocalStorageManager.kt:LocalStorageManager$private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"</ID>

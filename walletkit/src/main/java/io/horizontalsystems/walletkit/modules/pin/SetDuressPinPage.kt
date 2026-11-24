@@ -21,7 +21,7 @@ data class SetDuressPinPage(val input: Input? = null) : HSPage(screenshotEnabled
         )
         val view = LocalView.current
         PinSet(
-            title = stringResource(id = R.string.SetDuressPin_Title),
+            title = stringResource(id = R.string.PinSet_Title),
             description = stringResource(id = R.string.SetDuressPin_Description),
             dismissWithSuccess = {
                 viewModel.onDuressPinSet()
