@@ -1,12 +1,12 @@
 package io.horizontalsystems.walletkit.modules.pin.ui
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.components.ButtonSize
@@ -38,6 +40,8 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.pin.unlock.PinUnlockModule.InputState
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterIsInstance
 
 /**
  * The passcode keypad: three columns across the full width, the digits in
@@ -134,17 +138,24 @@ private fun NumberKey(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
+    val color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy
+    val style = ComposeAppTheme.typography.title2R
+
     NumpadButton(
         enabled = enabled,
         pressedScale = TEXT_PRESSED_SCALE,
         onClick = onClick,
         modifier = modifier.testTag(TestTags.pinKey(number)),
+        // A pressed digit is also heavier
+        pressedContent = {
+            Text(
+                text = number.toString(),
+                style = style.copy(fontWeight = FontWeight.Medium),
+                color = color,
+            )
+        },
     ) {
-        Text(
-            text = number.toString(),
-            style = ComposeAppTheme.typography.title2R,
-            color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy,
-        )
+        Text(text = number.toString(), style = style, color = color)
     }
 }
 
@@ -173,7 +184,14 @@ private fun IconKey(
 
 /**
  * One key of the keypad. A press has no ripple: the content grows to
- * [pressedScale] while the key is held and shrinks back on release.
+ * [pressedScale] while the key is held and shrinks back on release. A
+ * release that comes before the content has grown shows it at full size at
+ * once and shrinks it from there, as the Figma prototype plays a quick
+ * click, so a short tap is as visible as a long press and takes no longer
+ * than the way back.
+ *
+ * @param pressedContent what the content fades into while it grows, when
+ * the pressed key looks different beyond its size.
  */
 @Composable
 private fun NumpadButton(
@@ -181,16 +199,28 @@ private fun NumpadButton(
     pressedScale: Float,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    pressedContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
-    val pressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (pressed) pressedScale else 1f,
-        animationSpec = tween(durationMillis = PRESS_ANIMATION_MILLIS, easing = EaseOut),
-        label = "numpad button scale",
-    )
+    val press = remember { Animatable(0f) }
+
+    LaunchedEffect(interactionSource) {
+        val spec = tween<Float>(durationMillis = PRESS_ANIMATION_MILLIS, easing = EaseOut)
+        // The latest press interaction only, so the release cuts the growth
+        // short. Hover and focus interactions are left out: one arriving
+        // mid-animation would cancel it and leave the key enlarged.
+        interactionSource.interactions.filterIsInstance<PressInteraction>().collectLatest { interaction ->
+            when (interaction) {
+                is PressInteraction.Press -> press.animateTo(1f, spec)
+                is PressInteraction.Release, is PressInteraction.Cancel -> {
+                    press.snapTo(1f)
+                    press.animateTo(0f, spec)
+                }
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -207,14 +237,29 @@ private fun NumpadButton(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        // Scaled while drawing, so a growing key does not move its neighbours
+        // Scaled and faded while drawing, so a growing key does not move
+        // its neighbours and a frame costs no recomposition
         Box(
             modifier = Modifier.graphicsLayer {
+                val scale = 1f + (pressedScale - 1f) * press.value
                 scaleX = scale
                 scaleY = scale
-            }
+            },
+            contentAlignment = Alignment.Center,
         ) {
-            content()
+            val fades = pressedContent != null
+            Box(Modifier.graphicsLayer { alpha = if (fades) 1f - press.value else 1f }) { content() }
+            if (pressedContent != null) {
+                // The same key drawn a second time: kept out of semantics, or
+                // a screen reader would announce the digit twice
+                Box(
+                    Modifier
+                        .graphicsLayer { alpha = press.value }
+                        .clearAndSetSemantics { }
+                ) {
+                    pressedContent()
+                }
+            }
         }
     }
 }
