@@ -56,11 +56,23 @@ import io.horizontalsystems.dapp.core.HSDAppEvent
 fun Nav3(entryPage: HSPage) {
     val mainActivityViewModel = viewModel<MainActivityViewModel>(factory = Factory())
     val isLocked by App.pinComponent.isLockedFlow.collectAsState()
+    val activity = LocalActivity.current
+
+    // Must run before showUnlockFlow is read below. LockGate keeps the keypad away until the
+    // main screen reports its tab, which otherwise happens only once MainScreen is composed:
+    // the keypad would start hidden and fade in over a wallet tab that is already drawn.
+    // Creating the view model here reports the launch tab first, so on a locked start the
+    // keypad is there from the first frame. A market deeplink is left to the old order: its
+    // tab is switched to Market right after, and the keypad must not show in between.
+    remember {
+        if (App.pinComponent.isLocked && marketDeepLinkPage(activity?.intent) == null) {
+            (activity as? ComponentActivity)?.let { MainModule.viewModel(it) }
+        }
+    }
+
     // The keypad covers only screens that need the wallet; the Market tab and its read-only
     // pages stay browsable while locked (see LockGate).
     val showUnlock by App.lockGate.showUnlockFlow.collectAsState()
-
-    val activity = LocalActivity.current
 
     // Kept by the view model across rotation; a new process starts a new stack (see there).
     val backStack = remember {
