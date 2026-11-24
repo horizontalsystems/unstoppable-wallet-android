@@ -461,7 +461,6 @@
     <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
     <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
     <string name="FeeSettings_FeeRate">Tarifa de tarifa (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Este es el valor recomendado para golpear los siguientes 2 bloques</string>
     <string name="FeeSettings_FeeRate_Info">Al enviar una transacción, debe pagar una cuota de red. Cuanto más buscada sea la red, más alta será la comisión.
         \n\nMonedero imparable sugiere una tarifa óptima para ayudar a que su transacción confirme en un tiempo razonable. Puedes aumentar o disminuir este valor.
         \n\nEstablecer la comisión demasiado baja puede causar que tu transacción permanezca pendiente durante mucho tiempo o incluso sea rechazada. Para una confirmación más rápida, utilice una tarifa más alta.</string>

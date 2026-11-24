@@ -461,7 +461,6 @@
     <string name="FeeSettings_Overpricing_Title">Gebühr zu hoch</string>
     <string name="FeeSettings_Overpricing">Die festgelegte Transaktionsgebühr ist jetzt höher als für die Verarbeitung dieser Transaktion erforderlich.</string>
     <string name="FeeSettings_FeeRate">Gebühr (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Hier ist der empfohlene Wert, um die nächsten 2 Blöcke zu treffen</string>
     <string name="FeeSettings_FeeRate_Info">Wenn Sie eine Transaktion versenden, zahlen Sie eine Netzwerkgebühr. Je stärker das Netzwerk ist, desto höher die Gebühr.
         \n\nUnstoppable Wallet schlägt eine optimale Gebühr vor, um Ihre Transaktion in einer angemessenen Zeit zu bestätigen. Sie können diesen Wert erhöhen oder verringern.
         \n\nSetzen der Gebühr zu niedrig kann dazu führen, dass Ihre Transaktion lange ausbleibt oder sogar abgelehnt wird. Benutzen Sie für eine schnellere Bestätigung eine höhere Gebühr.</string>

@@ -461,7 +461,6 @@
     <string name="FeeSettings_Overpricing_Title">Frais trop élevés</string>
     <string name="FeeSettings_Overpricing">Les frais de transaction fixés sont plus élevés que nécessaire pour traiter cette transaction maintenant.</string>
     <string name="FeeSettings_FeeRate">Taux de frais (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Voici la valeur recommandée pour appuyer sur les 2 prochains blocs</string>
     <string name="FeeSettings_FeeRate_Info">Lorsque vous envoyez une transaction, vous devez payer des frais de réseau. Plus le réseau est occupé, plus les frais sont élevés.
         \n\nLe portefeuille Unstoppable suggère des frais optimaux pour aider à confirmer votre transaction dans un délai raisonnable. Vous pouvez augmenter ou diminuer cette valeur.
         \n\nDéfinir les frais trop bas peut faire en sorte que votre transaction reste en attente pendant une longue période ou même être rejetée. Pour une confirmation plus rapide, utilisez des frais plus élevés.</string>

@@ -460,7 +460,6 @@
     <string name="FeeSettings_Overpricing_Title">费用太高</string>
     <string name="FeeSettings_Overpricing">当前设置的交易费用高于处理此交易所需的费用。</string>
     <string name="FeeSettings_FeeRate">费率(SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">这是击中下2个区块的推荐值</string>
     <string name="FeeSettings_FeeRate_Info">当发送交易时，您必须支付网络费用。网络变得更加繁忙，收费越高。
         \n\n不可阻挡的钱包建议提供最佳费用以帮助您在合理的时间内确认交易。 您可以增加或减少这个值。
         \n\n设置收费太低可能会导致您的交易被长期搁置，甚至被拒绝。 为了更快的确认，请使用更高的费用。</string>

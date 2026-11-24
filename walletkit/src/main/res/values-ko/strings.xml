@@ -423,7 +423,6 @@
     <string name="FeeSettings_Overpricing_Title">수수료가 너무 높음</string>
     <string name="FeeSettings_Overpricing">설정된 거래 수수료가 지금 이 거래를 처리하는 데 필요한 것보다 높습니다.</string>
     <string name="FeeSettings_FeeRate">수수료율 (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">다음 2 블록 타격에 대한 권장 값은 다음과 같습니다.</string>
     <string name="FeeSettings_FeeRate_Info">블록체인은 사용자가 거래를 보낼 때 네트워크 수수료를 지불하도록 요구합니다. 네트워크에서 많은 거래가 이루어질 때 수수료가 더 높아집니다.\n\n%@ 지갑은 현재 블록체인 활동을 기반으로 수수료를 추정하고 거래가 합리적인 시간 내에 처리되도록 최적의 값을 권장합니다.\n\n권장 수수료율은 사용자가 거래의 단일 바이트에 대해 지불해야 하는 사토시(satoshi) 금액으로 표시됩니다. 따라서 총 수수료는 바이트 단위로 측정되는 거래의 총 크기에 따라 달라집니다.\n\n사용자는 제공된 컨트롤을 사용하여 수수료율을 높이거나 낮출 수 있습니다. 수수료율의 변경은 사용자가 지불할 거래의 총 수수료에 영향을 줍니다.\n\n권장 값보다 낮은 수수료율을 설정하면 거래가 몇 시간 동안 보류 상태로 유지되거나 거부될 수 있습니다. 값이 낮을수록 거래 확인까지 걸리는 시간이 더 길어집니다. 우선 순위가 중요한 거래의 경우 더 높은 수수료율을 설정하는 것이 좋습니다.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>

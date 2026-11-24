@@ -1174,7 +1174,6 @@
     <string name="FeeSettings_RiskOfGettingStuckLegacy">تراکنش ممکن است مدتی در انتظار بماند یا به‌کلی ناموفق شود.</string>
     <string name="FeeSettings_RiskOfGettingStuck">برای اطمینان از اجرای سریع تراکنش، حداکثر نرخ کارمزد (منهای حداکثر انعام ماینر) باید بالاتر از نرخ کارمزد پایه فعلی باشد. در غیر این صورت تراکنش ممکن است تا برقراری این شرط در انتظار بماند.</string>
     <string name="FeeSettings_FeeRate">نرخ کارمزد (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">این مقدار پیشنهادی برای قرار گرفتن در 2 بلاک بعدی است</string>
     <string name="FeeSettings_FeeRate_Info">هنگام ارسال تراکنش باید کارمزد شبکه بپردازید. هرچه شبکه شلوغ‌تر باشد، کارمزد بالاتر است. \n\nUnstoppable Wallet کارمزد بهینه‌ای پیشنهاد می‌کند تا تراکنش شما در زمان معقولی تأیید شود. می‌توانید این مقدار را افزایش یا کاهش دهید. \n\nتنظیم کارمزد بسیار پایین ممکن است باعث شود تراکنش شما مدت زیادی در انتظار بماند یا حتی رد شود. برای تأیید سریع‌تر، کارمزد بالاتری تعیین کنید.</string>
     <string name="FeeInfo_TronFee_Description">هزینه تخمینی ارسال این تراکنش در شبکه. (بدون کسر انرژی، پهنای باند و کارمزد فعال‌سازی)</string>
     <string name="FeeInfo_TronActivationFee_Title">کارمزد فعال‌سازی</string>
