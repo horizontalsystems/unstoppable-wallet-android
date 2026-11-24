@@ -169,7 +169,7 @@ class Eip1559GasPriceService(
         val recommendedPriorityFee = max(recommendedPriorityFee(feeHistory, feePriority), minPriorityFee ?: 0)
         currentPriorityFee = recommendedPriorityFee
 
-        val newRecommendGasPrice = GasPrice.Eip1559((recommendedBaseFee + recommendedPriorityFee) * 125 / 100, recommendedPriorityFee)
+        val newRecommendGasPrice = recommendedGasPrice(recommendedBaseFee, recommendedPriorityFee)
 
         recommendedGasPrice = newRecommendGasPrice
 
@@ -192,6 +192,16 @@ class Eip1559GasPriceService(
     companion object {
         private const val STANDARD_REWARD_PERCENTILE = 50
         private const val PRIORITY_REWARD_PERCENTILE = 75
+        private const val BASE_FEE_SURCHARGE_PERCENT = 125
+
+        /**
+         * The max fee leaves room for the base fee to rise before the transaction is included.
+         * The tip does not change between blocks, so it is added as it is.
+         */
+        fun recommendedGasPrice(baseFee: Long, priorityFee: Long) = GasPrice.Eip1559(
+            maxFeePerGas = baseFee * BASE_FEE_SURCHARGE_PERCENT / 100 + priorityFee,
+            maxPriorityFeePerGas = priorityFee,
+        )
 
         fun rewardPercentiles(feePriority: FeePriority): List<Int> = when (feePriority) {
             FeePriority.Standard -> listOf(STANDARD_REWARD_PERCENTILE)

@@ -104,6 +104,25 @@ class PriorityFeeTest {
     }
 
     @Test
+    fun maxFee_surchargesTheBaseFeeOnly() {
+        val gasPrice = Eip1559GasPriceService.recommendedGasPrice(baseFee = 200, priorityFee = 10)
+
+        assertEquals(260, gasPrice.maxFeePerGas)
+        assertEquals(10, gasPrice.maxPriorityFeePerGas)
+    }
+
+    @Test
+    fun maxFee_headroomIsTheSameForBothPriorities() {
+        val standard = Eip1559GasPriceService.recommendedGasPrice(baseFee = 1200, priorityFee = 20)
+        val priority = Eip1559GasPriceService.recommendedGasPrice(baseFee = 1200, priorityFee = 40)
+
+        assertEquals(
+            standard.maxFeePerGas - standard.maxPriorityFeePerGas,
+            priority.maxFeePerGas - priority.maxPriorityFeePerGas
+        )
+    }
+
+    @Test
     fun legacyGasPrice_isRaisedOnlyForPriority() {
         assertEquals(100, LegacyGasPriceService.prioritized(100, FeePriority.Standard))
         assertEquals(120, LegacyGasPriceService.prioritized(100, FeePriority.Priority))
