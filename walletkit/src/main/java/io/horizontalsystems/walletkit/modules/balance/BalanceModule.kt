@@ -67,11 +67,11 @@ object BalanceModule {
         get() = when (this) {
             BalanceWarning.TronInactiveAccountWarning -> WarningText(
                 text = TranslatableString.ResString(R.string.Tron_TokenPage_TransactionWillAppearAfterActivation),
-                icon = R.drawable.outgoingraw__24
+                icon = R.drawable.outgoingraw_24
             )
             BalanceWarning.XrpInactiveAccountWarning -> WarningText(
                 text = TranslatableString.ResString(R.string.Xrp_TokenPage_AccountNotActivated),
-                icon = R.drawable.outgoingraw__24
+                icon = R.drawable.outgoingraw_24
             )
         }
 }
