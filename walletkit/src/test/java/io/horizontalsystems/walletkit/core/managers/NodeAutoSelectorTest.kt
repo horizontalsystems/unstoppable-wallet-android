@@ -267,6 +267,31 @@ class NodeAutoSelectorTest {
         assertEquals("c", selector.switchAway())
     }
 
+    // The current node counts when deciding who is behind: leaving it for a node far behind
+    // it would stall the wallet
+    @Test
+    fun switchAwayStaysWhenTheOnlyOtherNodeIsBehindTheCurrentOne() = runBlocking {
+        probes = { listOf(up("a", 50.0, height = 1000), up("b", 10.0, height = 900)) }
+
+        assertEquals(null, selector.switchAway())
+        assertTrue(switches.isEmpty())
+    }
+
+    @Test
+    fun switchAwayTakesANodeAFewBlocksBehindTheCurrentOne() = runBlocking {
+        probes = { listOf(up("a", 50.0, height = 1000), up("b", 10.0, height = 998)) }
+
+        assertEquals("b", selector.switchAway())
+    }
+
+    // A dead current node has no height to compare with
+    @Test
+    fun switchAwayFromADeadNodeTakesTheBestOfTheOthers() = runBlocking {
+        probes = { listOf(down("a"), up("b", 10.0, height = 900), up("c", 800.0, height = 1000)) }
+
+        assertEquals("c", selector.switchAway())
+    }
+
     @Test
     fun switchAwayStaysWhenNoOtherNodeAnswers() = runBlocking {
         probes = { listOf(up("a", 50.0), down("b")) }

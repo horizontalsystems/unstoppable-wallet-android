@@ -44,6 +44,14 @@ object SourceRepick {
     fun <T> fastest(probes: List<SourceProbe<T>>, lagThreshold: Long): T? =
         fresh(probes, lagThreshold).minByOrNull { it.responseTimeMs!! }?.source
 
+    /**
+     * The fastest source other than [current] that answered and is not behind. The best height
+     * is taken from every source that answered, so leaving [current] never lands on a source
+     * that is behind it.
+     */
+    fun <T> fastestOther(current: T, probes: List<SourceProbe<T>>, lagThreshold: Long): T? =
+        fresh(probes, lagThreshold).filter { it.source != current }.minByOrNull { it.responseTimeMs!! }?.source
+
     private fun <T> fresh(probes: List<SourceProbe<T>>, lagThreshold: Long): List<SourceProbe<T>> {
         val healthy = probes.filter { it.isHealthy }
         if (healthy.isEmpty()) return emptyList()

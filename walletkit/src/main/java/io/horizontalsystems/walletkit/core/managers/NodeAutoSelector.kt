@@ -71,9 +71,10 @@ class NodeAutoSelector<T>(
 
     /**
      * Moves to the fastest other node that answers, for a node that failed a request (a send)
-     * although it may still answer probes.
+     * although it may still answer probes. A node that is behind is not moved to, and what
+     * counts as behind is measured against every node that answered, the current one included.
      *
-     * @return the node moved to, or null when Auto-Select is off or no other node answers.
+     * @return the node moved to, or null when Auto-Select is off or no other node will do.
      */
     suspend fun switchAway(): T? {
         if (!isEnabled()) return null
@@ -82,7 +83,7 @@ class NodeAutoSelector<T>(
         return try {
             val before = current()
             val probes = withTimeoutOrNull(timeout) { probe() } ?: return null
-            val winner = SourceRepick.fastest(probes.filter { it.source != before }, lagThreshold) ?: return null
+            val winner = SourceRepick.fastestOther(before, probes, lagThreshold) ?: return null
             winner.takeIf { switchIfUnchanged(before, it) }
         } finally {
             reselectMutex.unlock()
