@@ -27,6 +27,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,11 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
@@ -218,27 +215,9 @@ fun BalanceItems(
         }
     }
 
-    // The list's own consumption decides the direction, so a pull-to-refresh
-    // drag at the top of the list does not count as scrolling up.
-    var scrolledDown by rememberSaveable(accountViewItem.id) { mutableStateOf(false) }
-    val scrollDirectionConnection = remember(accountViewItem.id) {
-        object : NestedScrollConnection {
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                if (consumed.y < 0) {
-                    scrolledDown = true
-                } else if (consumed.y > 0) {
-                    scrolledDown = false
-                }
-                return Offset.Zero
-            }
-        }
+    val addButtonVisible by remember(listState) {
+        derivedStateOf { listState.showsAddButton() }
     }
-    // At the top no upward scroll is left to bring the button back.
-    val atTop = !listState.canScrollBackward
 
     Box(modifier = Modifier.fillMaxSize()) {
         HSSwipeRefresh(
@@ -248,8 +227,7 @@ fun BalanceItems(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .nestedScroll(scrollDirectionConnection),
+                    .background(ComposeAppTheme.colors.lawrence),
                 state = listState,
                 contentPadding = PaddingValues(bottom = ListBottomPadding)
             ) {
@@ -447,7 +425,7 @@ fun BalanceItems(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = BottomNavigationHeight + 24.dp),
-            visible = balanceViewItems.isNotEmpty() && (!scrolledDown || atTop),
+            visible = balanceViewItems.isNotEmpty() && addButtonVisible,
             enter = slideInVertically { it } + fadeIn(),
             exit = slideOutVertically { it } + fadeOut(),
         ) {
@@ -608,6 +586,14 @@ private val BottomNavigationHeight = 56.dp
 
 // Lets the last row scroll clear of the floating Add button.
 private val ListBottomPadding = BottomNavigationHeight + 80.dp
+
+// Shown once the list has left its top, and always when the list cannot
+// scroll at all. The bottom content padding counts as scrollable content on
+// purpose: a last row inside it would sit under the button. Before the first
+// layout pass the list reports no scroll in either direction, so that pass is
+// excluded to keep the button from flashing above a long list.
+private fun LazyListState.showsAddButton(): Boolean =
+    layoutInfo.totalItemsCount > 0 && (canScrollBackward || !canScrollForward)
 
 @Composable
 fun TotalBalanceRow(
