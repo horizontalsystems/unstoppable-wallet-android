@@ -109,6 +109,12 @@ class ZanoKitManager(
             wallet = wallet,
             walletId = account.id,
             daemonAddress = node.host,
+            // With Auto-Select on, a transfer whose broadcast the node did not answer is handed
+            // to the other built-in nodes. A node the user picked stays the only one their
+            // transfers are sent to. Read at the time of the send: the switch can change.
+            fallbackDaemonAddresses = {
+                if (zanoNodeManager.autoSelectEnabled) zanoNodeManager.defaultNodes.map { it.host } else emptyList()
+            },
         )
         return ZanoKitWrapper(kit)
     }
