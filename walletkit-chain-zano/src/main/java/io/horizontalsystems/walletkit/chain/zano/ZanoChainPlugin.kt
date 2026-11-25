@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.chain.NodeError
 import io.horizontalsystems.walletkit.core.chain.switchNodeForSend
+import io.horizontalsystems.walletkit.core.managers.NodeAutoSelector
 import io.horizontalsystems.zanokit.BroadcastUnconfirmedException
 import io.horizontalsystems.zanokit.NodeUnreachableException
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -170,9 +171,11 @@ class ZanoChainPlugin(
                 // The watcher has just asked; foreground and refresh have to ask themselves.
                 if (!knownStalled && !isSyncStalled()) return@launch
 
-                val switched = nodeManager.reselectNode()
+                val reselection = nodeManager.reselectNode()
                 // Restarting helps a kit that gave up connecting, not one whose node is down.
-                if (!switched && retryIfNoSwitch && hasUnsyncedWallet()) {
+                // Not after a reselection that was skipped: another one is at work, or the
+                // user has taken over, and a restart would cut across that.
+                if (reselection == NodeAutoSelector.Reselection.Stayed && retryIfNoSwitch && hasUnsyncedWallet()) {
                     nodeManager.retryCurrentNode()
                 }
             } catch (e: CancellationException) {

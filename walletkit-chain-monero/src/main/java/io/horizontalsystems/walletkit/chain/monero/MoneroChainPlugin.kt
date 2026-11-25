@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import io.horizontalsystems.walletkit.core.managers.NodeAutoSelector
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -144,8 +145,10 @@ class MoneroChainPlugin(
         // walletReloadTrigger. The manager guards with a mutex, so overlapping calls collapse.
         reselectScope.launch {
             try {
-                val switched = moneroNodeManager().reselectFastestNode()
-                if (!switched && retryIfNoSwitch && hasUnsyncedWallet()) {
+                val reselection = moneroNodeManager().reselectFastestNode()
+                // Not after a reselection that was skipped: another one is at work, or the
+                // user has taken over, and a restart would cut across that.
+                if (reselection == NodeAutoSelector.Reselection.Stayed && retryIfNoSwitch && hasUnsyncedWallet()) {
                     moneroNodeManager().retryCurrentNode()
                 }
             } catch (e: CancellationException) {

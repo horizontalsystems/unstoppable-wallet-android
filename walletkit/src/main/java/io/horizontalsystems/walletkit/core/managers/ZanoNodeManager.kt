@@ -101,10 +101,8 @@ class ZanoNodeManager(
     /**
      * For a node that died while the app was running: moves to the fastest built-in node
      * that answers.
-     *
-     * @return true when the node actually changed.
      */
-    suspend fun reselectNode(): Boolean = autoSelector.reselect()
+    suspend fun reselectNode(): NodeAutoSelector.Reselection = autoSelector.reselect()
 
     /**
      * Leaves the current node for the fastest other built-in one that answers, for a node that

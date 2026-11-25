@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import io.horizontalsystems.walletkit.core.managers.NodeAutoSelector.Reselection
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -127,7 +128,7 @@ class NodeAutoSelectorTest {
             listOf(down("a"), up("b", 100.0))
         }
 
-        assertFalse(selector.reselect())
+        assertEquals(Reselection.Skipped, selector.reselect())
         assertTrue(switches.isEmpty())
     }
 
@@ -138,7 +139,7 @@ class NodeAutoSelectorTest {
         enabled = false
         probes = { listOf(down("a"), up("b", 100.0)) }
 
-        assertFalse(selector.reselect())
+        assertEquals(Reselection.Skipped, selector.reselect())
         assertEquals(0, probeCount)
     }
 
@@ -146,7 +147,7 @@ class NodeAutoSelectorTest {
     fun reselectMovesToTheFastestNodeThatAnswers() = runBlocking {
         probes = { listOf(down("a"), up("b", 900.0), up("c", 300.0)) }
 
-        assertTrue(selector.reselect())
+        assertEquals(Reselection.Switched, selector.reselect())
         assertEquals(listOf("c"), switches)
     }
 
@@ -154,7 +155,7 @@ class NodeAutoSelectorTest {
     fun reselectNeverPicksANodeThatIsBehind() = runBlocking {
         probes = { listOf(down("a"), up("b", 10.0, height = 900), up("c", 800.0, height = 1000)) }
 
-        assertTrue(selector.reselect())
+        assertEquals(Reselection.Switched, selector.reselect())
         assertEquals(listOf("c"), switches)
     }
 
@@ -162,7 +163,7 @@ class NodeAutoSelectorTest {
     fun reselectReportsNoSwitchWhenTheCurrentNodeIsTheFastest() = runBlocking {
         probes = { listOf(up("a", 100.0), up("b", 500.0)) }
 
-        assertFalse(selector.reselect())
+        assertEquals(Reselection.Stayed, selector.reselect())
         assertTrue(switches.isEmpty())
     }
 
@@ -171,7 +172,7 @@ class NodeAutoSelectorTest {
     fun reselectKeepsTheNodeWhenNothingAnswers() = runBlocking {
         probes = { listOf(down("a"), down("b")) }
 
-        assertFalse(selector.reselect())
+        assertEquals(Reselection.Stayed, selector.reselect())
         assertTrue(switches.isEmpty())
     }
 
@@ -182,12 +183,12 @@ class NodeAutoSelectorTest {
             listOf(down("a"), up("b", 100.0))
         }
 
-        assertFalse(selector.reselect())
+        assertEquals(Reselection.Stayed, selector.reselect())
         assertTrue(switches.isEmpty())
 
         // and the next attempt is not blocked by the one that timed out
         probes = { listOf(down("a"), up("b", 100.0)) }
-        assertTrue(selector.reselect())
+        assertEquals(Reselection.Switched, selector.reselect())
     }
 
     @Test
@@ -210,10 +211,24 @@ class NodeAutoSelectorTest {
         val first = async { slow.reselect() }
         started.await()
 
-        assertFalse(slow.reselect())
+        assertEquals(Reselection.Skipped, slow.reselect())
         release.complete(Unit)
-        assertTrue(first.await())
+        assertEquals(Reselection.Switched, first.await())
         assertEquals(listOf("b"), switches)
+    }
+
+    // The caller restarts the kit after a reselection that stayed; not after one where the
+    // user changed the node meanwhile
+    @Test
+    fun reselectIsSkippedWhenTheUserPicksANodeDuringTheProbe() = runBlocking {
+        probes = {
+            current = "c"
+            listOf(down("a"), up("b", 100.0))
+        }
+
+        assertEquals(Reselection.Skipped, selector.reselect())
+        assertTrue(switches.isEmpty())
+        assertEquals("c", current)
     }
 
     // Asking the current node directly, for a kit that does not notice its node dying

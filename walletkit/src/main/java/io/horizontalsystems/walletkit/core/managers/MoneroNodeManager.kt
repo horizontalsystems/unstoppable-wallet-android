@@ -119,10 +119,8 @@ class MoneroNodeManager(
      * Re-runs the ping and switches to the fastest reachable node, for when the current one has
      * died while the app was running. Unlike the startup path this emits, so the adapter is
      * rebuilt on the new node.
-     *
-     * @return true when the node actually changed.
      */
-    suspend fun reselectFastestNode(): Boolean = autoSelector.reselect()
+    suspend fun reselectFastestNode(): NodeAutoSelector.Reselection = autoSelector.reselect()
 
     /**
      * Leaves the current node for the fastest other one that answers, for a node that failed

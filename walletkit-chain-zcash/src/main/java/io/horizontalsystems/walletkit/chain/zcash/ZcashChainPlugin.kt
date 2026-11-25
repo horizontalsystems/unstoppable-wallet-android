@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.chain.zcash
 import android.content.Context
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import io.horizontalsystems.walletkit.core.managers.NodeAutoSelector
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -171,8 +172,10 @@ class ZcashChainPlugin(
         // walletReloadTrigger. The manager guards with a mutex, so overlapping calls collapse.
         reselectScope.launch {
             try {
-                val switched = endpointManager().reselectFastestEndpoint()
-                if (!switched && retryIfNoSwitch && hasUnsyncedWallet()) {
+                val reselection = endpointManager().reselectFastestEndpoint()
+                // Not after a reselection that was skipped: another one is at work, or the
+                // user has taken over, and a restart would cut across that.
+                if (reselection == NodeAutoSelector.Reselection.Stayed && retryIfNoSwitch && hasUnsyncedWallet()) {
                     endpointManager().retryCurrentEndpoint()
                 }
             } catch (e: CancellationException) {

@@ -47,23 +47,44 @@ class NodeAutoSelector<T>(
         }
     }
 
+    /** What [reselect] did. */
+    enum class Reselection {
+        /** The chain was moved to another node. */
+        Switched,
+
+        /** The probe ran and found nothing better: the current node stays. */
+        Stayed,
+
+        /**
+         * Nothing was decided here: Auto-Select is off, another probe is running, or the node
+         * was changed while this one ran. Recovery belongs to whoever did that.
+         */
+        Skipped,
+    }
+
     /**
      * Moves to the fastest node that answers, for when the current one has died while the app
      * was running.
-     *
-     * @return true when the node actually changed.
      */
-    suspend fun reselect(): Boolean {
-        if (!isEnabled()) return false
-        if (!reselectMutex.tryLock()) return false // a probe is already in flight
+    suspend fun reselect(): Reselection {
+        if (!isEnabled()) return Reselection.Skipped
+        if (!reselectMutex.tryLock()) return Reselection.Skipped // a probe is already in flight
 
         return try {
             val before = current()
             // Capped like the startup probe: one that never returned would hold the mutex
             // forever and block every later recovery. Every node failing means the device has
             // no usable network, not that the current node is bad, so nothing is switched.
-            val fastest = withTimeoutOrNull(timeout) { SourceRepick.fastest(probe(), lagThreshold) } ?: return false
-            switchIfUnchanged(before, fastest)
+            val fastest = withTimeoutOrNull(timeout) { SourceRepick.fastest(probe(), lagThreshold) }
+            when {
+                // The user may have picked a node or turned Auto-Select off while the probe ran
+                !isEnabled() || current() != before -> Reselection.Skipped
+                fastest == null || fastest == before -> Reselection.Stayed
+                else -> {
+                    switchTo(fastest)
+                    Reselection.Switched
+                }
+            }
         } finally {
             reselectMutex.unlock()
         }

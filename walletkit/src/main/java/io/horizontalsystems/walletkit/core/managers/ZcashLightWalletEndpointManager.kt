@@ -137,10 +137,8 @@ class ZcashLightWalletEndpointManager(
      * Re-runs the probe and switches to the fastest reachable endpoint, for when the current one
      * has died while the app was running. Unlike the startup path this emits, so the adapter is
      * rebuilt on the new endpoint.
-     *
-     * @return true when the endpoint actually changed.
      */
-    suspend fun reselectFastestEndpoint(): Boolean = autoSelector.reselect()
+    suspend fun reselectFastestEndpoint(): NodeAutoSelector.Reselection = autoSelector.reselect()
 
     /**
      * Leaves the current endpoint for the fastest other one that answers, for an endpoint
