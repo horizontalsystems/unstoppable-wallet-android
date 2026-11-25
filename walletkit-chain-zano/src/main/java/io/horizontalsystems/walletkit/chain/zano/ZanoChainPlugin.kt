@@ -3,11 +3,9 @@ package io.horizontalsystems.walletkit.chain.zano
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
+import io.horizontalsystems.walletkit.core.adapters.ZanoSendUnknownException
 import io.horizontalsystems.walletkit.core.chain.NodeError
-import io.horizontalsystems.walletkit.core.chain.switchNodeForSend
 import io.horizontalsystems.walletkit.core.managers.NodeAutoSelector
-import io.horizontalsystems.zanokit.BroadcastUnconfirmedException
-import io.horizontalsystems.zanokit.NodeUnreachableException
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
@@ -109,8 +107,12 @@ class ZanoChainPlugin(
     // addresses, not keys. Needs a clear() in zano-kit; see #9452.
     override fun clearAccountData(accountId: String) = Unit
 
+    // Only a restart of the kit on its node: a node change keeps the wallet and its adapter
     override val walletReloadTrigger: Flow<*>
         get() = zanoNodeManager().currentNodeUpdatedFlow
+
+    override val settingsRefreshTrigger: Flow<*>
+        get() = zanoNodeManager().nodesUpdatedFlow
 
     private val reselectScope = CoroutineScope(Dispatchers.Default)
 
@@ -186,16 +188,17 @@ class ZanoChainPlugin(
         }
     }
 
-    // The kit tells a daemon call that failed while the transfer was being built, before anything
-    // was relayed, from a broadcast that got no answer, where the daemon may have the transaction.
+    // The kit deals with a node that fails a send itself: before the broadcast it moves to
+    // another node and builds the transfer again, after it it settles the same transaction
+    // with the other nodes. What is left for the screen is a transfer no node confirmed.
     override fun classifyNodeError(error: Throwable): NodeError? = when (error) {
-        is NodeUnreachableException -> NodeError(preBroadcast = true)
-        is BroadcastUnconfirmedException -> NodeError(preBroadcast = false)
+        is ZanoSendUnknownException -> NodeError(preBroadcast = false)
         else -> null
     }
 
+    // The node changes with the wallet open, so the adapter stays and there is nothing to wait for
     override suspend fun failoverForSend(token: Token): String? =
-        switchNodeForSend(token) { zanoNodeManager().switchAwayFromNode()?.name }
+        zanoNodeManager().switchAwayFromNode()?.name
 
     override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 

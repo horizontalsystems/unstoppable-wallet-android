@@ -17,6 +17,14 @@ class ZanoNodeManager(
     private val _currentNodeUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val currentNodeUpdatedFlow = _currentNodeUpdatedFlow.asSharedFlow()
 
+    private val _nodeChangedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    /**
+     * The host of the node the wallet was moved to. The kit changes its daemon in place, with
+     * the wallet open; [currentNodeUpdatedFlow] is for a restart of the kit on the same node.
+     */
+    val nodeChangedFlow = _nodeChangedFlow.asSharedFlow()
+
     private val _nodesUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val nodesUpdatedFlow = _nodesUpdatedFlow.asSharedFlow()
 
@@ -142,7 +150,16 @@ class ZanoNodeManager(
 
     private fun select(node: ZanoNode) {
         blockchainSettingsStorage.saveZanoNode(node.host)
-        _currentNodeUpdatedFlow.tryEmit(node.host)
+        _nodeChangedFlow.tryEmit(node.host)
+    }
+
+    /**
+     * The kit moved the wallet to this node itself, for a send its node failed. Stored so the
+     * settings show where the wallet is; Auto-Select stays as it was.
+     */
+    fun adoptNode(host: String) {
+        if (host == currentNode.host) return
+        allNodes.firstOrNull { it.host == host }?.let(::saveAutoSelected)
     }
 
     fun addZanoNode(url: String) {

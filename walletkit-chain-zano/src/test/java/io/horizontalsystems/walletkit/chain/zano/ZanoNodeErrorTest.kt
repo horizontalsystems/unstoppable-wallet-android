@@ -1,10 +1,9 @@
 package io.horizontalsystems.walletkit.chain.zano
 
+import io.horizontalsystems.walletkit.core.adapters.ZanoNotSentException
+import io.horizontalsystems.walletkit.core.adapters.ZanoSendUnknownException
 import io.horizontalsystems.walletkit.core.chain.NodeError
-import io.horizontalsystems.zanokit.BroadcastUnconfirmedException
-import io.horizontalsystems.zanokit.InsufficientFundsException
-import io.horizontalsystems.zanokit.NodeUnreachableException
-import io.horizontalsystems.zanokit.SendFailedException
+import io.horizontalsystems.zanokit.SendResult
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
@@ -16,24 +15,20 @@ class ZanoNodeErrorTest {
         { error("BackgroundManager is not needed to classify an error") },
     )
 
-    // The kit raises it for a daemon call that failed while the transfer was being built
+    // No node the kit could ask confirmed the transfer, so sending again could pay twice
     @Test
-    fun unreachableNodeIsBeforeTheBroadcast() {
-        assertEquals(NodeError(preBroadcast = true), plugin.classifyNodeError(NodeUnreachableException("no connection to daemon")))
-    }
-
-    // The daemon may have taken the transaction, so sending again could pay twice
-    @Test
-    fun broadcastWithoutAnAnswerMayHaveBeenSent() {
+    fun transferNoNodeConfirmedMayHaveBeenSent() {
         assertEquals(
             NodeError(preBroadcast = false),
-            plugin.classifyNodeError(BroadcastUnconfirmedException("no connection to daemon, request = sendrawtransaction")),
+            plugin.classifyNodeError(ZanoSendUnknownException("c7475d1c", "no answer to the broadcast")),
         )
     }
 
+    // The kit has already tried another node where it may; the screen must not move the chain again
     @Test
-    fun otherSendErrorsAreNotNodeFailures() {
-        assertNull(plugin.classifyNodeError(InsufficientFundsException("NOT_ENOUGH_MONEY")))
-        assertNull(plugin.classifyNodeError(SendFailedException("transfer failed")))
+    fun transferThatWasNotSentIsNotANodeFailureForTheScreen() {
+        SendResult.Reason.values().forEach {
+            assertNull(it.name, plugin.classifyNodeError(ZanoNotSentException(it, "not sent")))
+        }
     }
 }
