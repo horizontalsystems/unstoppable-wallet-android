@@ -279,6 +279,16 @@ class SwapConfirmViewModel(
         return serviceOnNewNode(outcome)
     }
 
+    /**
+     * Takes up a node change that finished after the screen stopped waiting for it. Until
+     * then the send service holds the adapter that was stopped. Returns what to tell the
+     * user, or null when there was no such change.
+     */
+    private fun adoptLateNodeSwitch(): String? {
+        val outcome = nodeFailover.lateSwitch() ?: return null
+        return serviceOnNewNode(outcome)
+    }
+
     private fun serviceOnNewNode(outcome: SendNodeFailover.Outcome.Switched): String? {
         return try {
             replaceSendTransactionService()
@@ -386,6 +396,9 @@ class SwapConfirmViewModel(
         fetchFinalQuoteJob = viewModelScope.launch(Dispatchers.Default) {
             try {
                 error = null
+
+                // The new send service asks for a fresh quote as soon as it is collected
+                if (adoptLateNodeSwitch() != null) return@launch
 
                 if (App.accountManager.activeAccount?.isWatchAccount != false) {
                     throw WatchAccountException()
@@ -516,6 +529,13 @@ class SwapConfirmViewModel(
                 activeAccount.id != confirmingAccountId
             ) {
                 throw WatchAccountException()
+            }
+
+            // Before an order exists: the quote was estimated through a send service that
+            // holds a stopped adapter, so the swap is quoted again on the new node.
+            adoptLateNodeSwitch()?.let { nodeSwitched ->
+                requote()
+                throw SwapCommitFailedException(SwapCommitFailure.Failed, DepositNotSendableException(nodeSwitched))
             }
 
             // The only step with side effects. On failure the quote is spent either way, so a

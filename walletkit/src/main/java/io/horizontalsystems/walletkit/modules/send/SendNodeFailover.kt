@@ -2,8 +2,10 @@ package io.horizontalsystems.walletkit.modules.send
 
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.NodeError
+import io.horizontalsystems.walletkit.core.chain.NodeSwitchUnfinishedException
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
@@ -41,6 +43,8 @@ class SendNodeFailover(
     private val lookupIntervalMs: Long = LOOKUP_INTERVAL_MS,
     private val now: () -> Long = System::currentTimeMillis,
     private val wait: suspend (Long) -> Unit = { delay(it) },
+    // The adapter the chain runs on now; a node change replaces it
+    private val currentAdapter: () -> Any? = { null },
 ) {
     sealed class Outcome {
         /** Not a node failure, or no other node to move to: the error stands as it is. */
@@ -80,6 +84,13 @@ class SendNodeFailover(
 
     private val switched = AtomicBoolean(false)
 
+    // A node change whose new adapter was not there in time: the node moved to, and the
+    // adapter that was in use, which the screen's send service still holds
+    private class UnfinishedSwitch(val nodeName: String, val staleAdapter: Any?)
+
+    @Volatile
+    private var unfinishedSwitch: UnfinishedSwitch? = null
+
     suspend fun handle(error: Throwable): Outcome {
         val nodeError = classify(error) ?: return Outcome.Unhandled
 
@@ -87,6 +98,20 @@ class SendNodeFailover(
 
         if (!switched.compareAndSet(false, true)) return Outcome.Unhandled
         return switchQuietly()?.let { Outcome.Switched(it) } ?: Outcome.Unhandled
+    }
+
+    /**
+     * A node change that [handle] reported as [Outcome.Unhandled] because the chain's new
+     * adapter was not there in time, once that adapter is there. Until the screen acts on it,
+     * its send service holds the adapter that was stopped. Given once.
+     */
+    fun lateSwitch(): Outcome.Switched? {
+        val unfinished = unfinishedSwitch ?: return null
+        val adapter = currentAdapter()
+        if (adapter == null || adapter === unfinished.staleAdapter) return null
+
+        unfinishedSwitch = null
+        return Outcome.Switched(unfinished.nodeName)
     }
 
     /**
@@ -133,7 +158,13 @@ class SendNodeFailover(
     }
 
     private suspend fun switchQuietly(): String? = try {
-        switchNode(token)
+        val adapterBefore = currentAdapter()
+        try {
+            switchNode(token)
+        } catch (e: NodeSwitchUnfinishedException) {
+            unfinishedSwitch = UnfinishedSwitch(e.nodeName, adapterBefore)
+            null
+        }
     } catch (e: CancellationException) {
         throw e
     } catch (e: Throwable) {
@@ -162,6 +193,7 @@ class SendNodeFailover(
                 switchNode = { plugin?.failoverForSend(it) },
                 backgroundScope = backgroundScope,
                 sentTransfers = { sentTransfers(token) },
+                currentAdapter = { App.adapterManager.getAdapterForToken<IAdapter>(token) },
             )
         }
 

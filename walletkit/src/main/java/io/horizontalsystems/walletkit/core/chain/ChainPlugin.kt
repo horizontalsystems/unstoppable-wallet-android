@@ -51,6 +51,9 @@ data class NodeError(val preBroadcast: Boolean)
  * For [ChainPlugin.failoverForSend]: runs [switchNode] and waits until [token] has a new
  * adapter that has synced on the new node, so a send right after has a wallet that is ready.
  * Gives the node's name back as soon as the adapter exists if syncing takes longer than that.
+ *
+ * @throws NodeSwitchUnfinishedException when the node was changed and the new adapter did not
+ * appear in time. It will appear later, and whatever holds the old one must then let go of it.
  */
 suspend fun switchNodeForSend(token: Token, switchNode: suspend () -> String?): String? {
     val previous = App.adapterManager.getAdapterForToken<IAdapter>(token)
@@ -60,7 +63,7 @@ suspend fun switchNodeForSend(token: Token, switchNode: suspend () -> String?): 
         while (App.adapterManager.getAdapterForToken<IAdapter>(token).let { it == null || it === previous }) {
             delay(ADAPTER_POLL_INTERVAL)
         }
-    } ?: return null
+    } ?: throw NodeSwitchUnfinishedException(nodeName)
 
     withTimeoutOrNull(ADAPTER_SYNC_TIMEOUT) {
         while (App.adapterManager.getAdapterForToken<IBalanceAdapter>(token)?.balanceState !is AdapterState.Synced) {
@@ -69,6 +72,9 @@ suspend fun switchNodeForSend(token: Token, switchNode: suspend () -> String?): 
     }
     return nodeName
 }
+
+/** The chain was moved to [nodeName], and its adapter on that node was not there in time. */
+class NodeSwitchUnfinishedException(val nodeName: String) : Exception("The adapter on $nodeName was not rebuilt in time")
 
 private val ADAPTER_REBUILD_TIMEOUT = 15.seconds
 private val ADAPTER_SYNC_TIMEOUT = 30.seconds
@@ -261,6 +267,9 @@ interface ChainPlugin {
      * no other node answers: the send error then stands as it is.
      *
      * The adapter is rebuilt, so a send service created before the call must be replaced.
+     *
+     * @throws NodeSwitchUnfinishedException when the node was changed and the adapter was not
+     * rebuilt in time; the send service must still be replaced once it is.
      */
     suspend fun failoverForSend(token: Token): String? = null
 

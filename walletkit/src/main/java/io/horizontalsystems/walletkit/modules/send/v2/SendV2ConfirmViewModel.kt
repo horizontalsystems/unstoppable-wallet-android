@@ -193,6 +193,7 @@ class SendV2ConfirmViewModel(
                 error = null
                 emitState()
             }
+            adoptLateNodeSwitch()
             var failure = estimate(value)
             if (failure != null && switchNodeAfter(failure) is SendNodeFailover.Outcome.Switched) {
                 // The node failed the estimate, so nothing was sent: estimate on the new one.
@@ -232,18 +233,46 @@ class SendV2ConfirmViewModel(
         val outcome = nodeFailover.handle(failure)
         if (outcome !is SendNodeFailover.Outcome.Switched) return outcome
 
+        return if (serviceOnNewNode(outcome)) outcome else SendNodeFailover.Outcome.Unhandled
+    }
+
+    /**
+     * Takes up a node change that finished after the screen stopped waiting for it. Until
+     * then the send service holds the adapter that was stopped, and nothing can be estimated
+     * or sent through it.
+     */
+    private fun adoptLateNodeSwitch(): Boolean {
+        val outcome = nodeFailover.lateSwitch() ?: return false
+        return serviceOnNewNode(outcome)
+    }
+
+    // The chain's adapter was rebuilt on another node: a new send service takes the place of
+    // the one that holds the old adapter, and the screen says so.
+    private fun serviceOnNewNode(outcome: SendNodeFailover.Outcome.Switched): Boolean {
         try {
             replaceSendTransactionService()
         } catch (e: Throwable) {
             Log.w("SendV2ConfirmViewModel", "send service not replaced after a node switch", e)
-            return SendNodeFailover.Outcome.Unhandled
+            return false
         }
         nodeSwitchedCaution = CautionViewItem(
             title = Translator.getString(R.string.Send_NodeSwitched_Title),
             text = Translator.getString(R.string.Send_NodeSwitched_Description, outcome.nodeName),
             type = CautionViewItem.Type.Warning,
         )
-        return outcome
+        return true
+    }
+
+    // Nothing was sent. The transfer is estimated on the new node, and the user sends again
+    // after a look at it: the fee may differ.
+    private suspend fun reviewOnNewNode(): SendResult.Failed {
+        error = estimate(submittedAmount ?: amount)
+        emitState()
+        return SendResult.Failed(
+            HSCaution(TranslatableString.PlainString(nodeSwitchedCaution?.text.orEmpty())),
+            expected = true,
+            shownOnScreen = true,
+        )
     }
 
     // Runs on every service update while sending the maximum. The service's own cautions
@@ -360,6 +389,11 @@ class SendV2ConfirmViewModel(
 
     private suspend fun broadcast() {
         sendResult = SendResult.Sending
+        // The service has changed under a transfer the user reviewed on the old one
+        if (adoptLateNodeSwitch()) {
+            sendResult = reviewOnNewNode()
+            return
+        }
         val startedAt = System.currentTimeMillis()
         // Read before the send: a node change rebuilds the adapter
         val toSelf = try {
@@ -371,17 +405,7 @@ class SendV2ConfirmViewModel(
             sendTransactionService.sendTransaction()
         } catch (e: Throwable) {
             sendResult = when (switchNodeAfter(e)) {
-                // Nothing was sent. The transfer is estimated on the new node, and the user
-                // sends again after a look at it: the fee may differ.
-                is SendNodeFailover.Outcome.Switched -> {
-                    error = estimate(submittedAmount ?: amount)
-                    emitState()
-                    SendResult.Failed(
-                        HSCaution(TranslatableString.PlainString(nodeSwitchedCaution?.text.orEmpty())),
-                        expected = true,
-                        shownOnScreen = true,
-                    )
-                }
+                is SendNodeFailover.Outcome.Switched -> reviewOnNewNode()
 
                 // The screen says what is being done while the chain is moved to another node
                 // and the transfer is looked for there. The button stays in its sending state.

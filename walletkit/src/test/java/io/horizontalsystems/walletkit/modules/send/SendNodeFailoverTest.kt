@@ -6,6 +6,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.core.chain.NodeError
+import io.horizontalsystems.walletkit.core.chain.NodeSwitchUnfinishedException
 import io.horizontalsystems.walletkit.modules.send.SendNodeFailover.Delivery
 import io.horizontalsystems.walletkit.modules.send.SendNodeFailover.Outcome
 import io.horizontalsystems.walletkit.modules.send.SendNodeFailover.SentTransfer
@@ -39,6 +40,9 @@ class SendNodeFailoverTest {
     private var listFails = false
     private var time = sendStartedAt
 
+    // The adapter the chain runs on; a node change replaces it
+    private var adapter: Any? = "adapter on node-a"
+
     // The switch runs right away, so a test sees it
     private val failover = SendNodeFailover(
         token = monero,
@@ -63,6 +67,7 @@ class SendNodeFailoverTest {
         lookupIntervalMs = 1_000,
         now = { time },
         wait = { time += it },
+        currentAdapter = { adapter },
     )
 
     @Test
@@ -82,6 +87,41 @@ class SendNodeFailoverTest {
         otherNode = null
 
         assertEquals(Outcome.Unhandled, failover.handle(BeforeBroadcast()))
+    }
+
+    // The node is changed, and the adapter on the new one is not there when the wait ends.
+    // The screen's send service holds the old adapter until the new one has come.
+    @Test
+    fun switchThatFinishesLateIsHandedOverOnceTheAdapterIsThere() = runBlocking {
+        onSwitch = { throw NodeSwitchUnfinishedException("node-b") }
+
+        assertEquals(Outcome.Unhandled, failover.handle(BeforeBroadcast()))
+        assertEquals(null, failover.lateSwitch())
+
+        adapter = null // the old one is stopped, the new one is still being built
+        assertEquals(null, failover.lateSwitch())
+
+        adapter = "adapter on node-b"
+        assertEquals(Outcome.Switched("node-b"), failover.lateSwitch())
+        // given once
+        assertEquals(null, failover.lateSwitch())
+    }
+
+    @Test
+    fun noLateSwitchAfterOneThatFinishedInTime() = runBlocking {
+        onSwitch = { adapter = "adapter on node-b" }
+
+        assertEquals(Outcome.Switched("node-b"), failover.handle(BeforeBroadcast()))
+        assertEquals(null, failover.lateSwitch())
+    }
+
+    @Test
+    fun noLateSwitchWhenThereWasNoOtherNode() = runBlocking {
+        otherNode = null
+        failover.handle(BeforeBroadcast())
+
+        adapter = "an adapter rebuilt for another reason"
+        assertEquals(null, failover.lateSwitch())
     }
 
     // A second node failing too is the user's to see, not a reason to keep hopping
