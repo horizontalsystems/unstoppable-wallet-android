@@ -277,7 +277,7 @@ private fun SecurityCenterScreen(
                                         variant = ButtonVariant.Secondary,
                                         style = ButtonStyle.Solid,
                                         size = ButtonSize.Small,
-                                        icon = painterResource(R.drawable.ic_edit_24),
+                                        icon = painterResource(R.drawable.pen_24),
                                         contentDescription = stringResource(R.string.EditDuressPin_Title),
                                         onClick = onClick
                                     )

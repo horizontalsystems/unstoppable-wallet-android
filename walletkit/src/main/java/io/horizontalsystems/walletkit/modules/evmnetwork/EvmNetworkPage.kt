@@ -269,7 +269,7 @@ private fun AddButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_plus),
+                    painter = painterResource(R.drawable.plus_24),
                     modifier = Modifier.size(24.dp),
                     tint = ComposeAppTheme.colors.grey,
                     contentDescription = null

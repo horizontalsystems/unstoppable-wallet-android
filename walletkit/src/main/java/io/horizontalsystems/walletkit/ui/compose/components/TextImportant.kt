@@ -118,7 +118,7 @@ fun TextAttention(
         modifier = modifier,
         text = text,
         title = stringResource(R.string.Attention_Title),
-        icon = R.drawable.ic_warning_filled_20
+        icon = R.drawable.warning_filled_24
     )
 }
 

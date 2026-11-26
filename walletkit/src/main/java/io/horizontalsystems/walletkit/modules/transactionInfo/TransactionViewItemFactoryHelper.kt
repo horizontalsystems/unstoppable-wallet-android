@@ -69,7 +69,7 @@ object TransactionViewItemFactoryHelper {
 
     private fun getLockStateItem(lockState: TransactionLockState?): TransactionInfoViewItem? {
         return lockState?.let {
-            val leftIcon = if (it.locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20
+            val leftIcon = if (it.locked) R.drawable.lock_24 else R.drawable.unlock_24
             val date = DateHelper.getFullDate(it.date)
             val title = Translator.getString(
                 if (it.locked) R.string.TransactionInfo_LockedUntil else R.string.TransactionInfo_UnlockedAt,

@@ -131,7 +131,7 @@ private fun ManageWalletsScreen(
             listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
-                    icon = R.drawable.ic_add_24,
+                    icon = R.drawable.plus_24,
                     onClick = {
                         navigation.slideFromRight(AddTokenPage)
 

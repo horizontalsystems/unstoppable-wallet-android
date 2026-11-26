@@ -120,7 +120,7 @@ fun CoinListSlidable(
                     onFullSwipe = toggleFavorite,
                     actions = {
                         HSCellButton(
-                            icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                            icon = painterResource(if (item.favorited) R.drawable.heart_off_24 else R.drawable.heart_24),
                             contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                             iconTint = ComposeAppTheme.colors.blade,
                             backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.orange
@@ -228,7 +228,7 @@ fun CoinList(
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_heart_filled_20),
+                                painter = painterResource(id = R.drawable.heart_filled_24),
                                 contentDescription = "heart icon button",
                                 tint = ComposeAppTheme.colors.orange
                             )
@@ -244,7 +244,7 @@ fun CoinList(
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_heart_20),
+                                painter = painterResource(id = R.drawable.heart_24),
                                 contentDescription = "heart icon button",
                                 tint = ComposeAppTheme.colors.grey
                             )

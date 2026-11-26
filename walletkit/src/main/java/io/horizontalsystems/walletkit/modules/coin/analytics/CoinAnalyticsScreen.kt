@@ -74,7 +74,7 @@ fun CoinAnalyticsScreen(
                         AnalyticsViewItem.NoData -> {
                             ListEmptyView(
                                 text = stringResource(R.string.CoinAnalytics_ProjectNoAnalyticData),
-                                icon = R.drawable.ic_not_available
+                                icon = R.drawable.stop_24
                             )
                         }
 

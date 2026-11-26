@@ -153,7 +153,7 @@ private fun BottomSheetHeader(
 @Preview
 @Composable
 private fun BottomSheetHeader_Preview() {
-    val iconPainter = painterResource(R.drawable.icon_24_lock)
+    val iconPainter = painterResource(R.drawable.lock_24)
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = iconPainter,

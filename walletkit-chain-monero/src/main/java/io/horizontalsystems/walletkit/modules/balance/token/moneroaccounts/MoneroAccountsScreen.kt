@@ -100,7 +100,8 @@ fun MoneroAccountsScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Monero_NewAccount),
-                icon = R.drawable.ic_plus,
+                icon = R.drawable.plus_24,
+                tint = ComposeAppTheme.colors.jacob,
                 onClick = { sheetMode = AccountNameSheetMode.Create }
             ),
         ),
@@ -227,7 +228,7 @@ private fun AccountCell(
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_edit_20),
+            icon = painterResource(R.drawable.pen_24),
             onClick = onClickEdit
         )
     }

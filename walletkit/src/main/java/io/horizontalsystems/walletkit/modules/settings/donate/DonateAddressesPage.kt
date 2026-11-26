@@ -124,7 +124,7 @@ private fun DonateAddress(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.ic_copy_20),
+                icon = painterResource(R.drawable.copy_24),
                 contentDescription = stringResource(R.string.Button_Copy),
                 onClick = {
                     TextHelper.copyText(address)

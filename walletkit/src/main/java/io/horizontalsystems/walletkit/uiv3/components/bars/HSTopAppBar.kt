@@ -257,7 +257,7 @@ fun Preview_HSTopAppBar() {
             title = "Wallet",
             menuItems = listOf(
                 MenuItem(
-                    icon = R.drawable.ic_balance_chart_24,
+                    icon = R.drawable.chart_24,
                     title = TranslatableString.ResString(R.string.Coin_Info),
                     onClick = {},
                     showAlertDot = true

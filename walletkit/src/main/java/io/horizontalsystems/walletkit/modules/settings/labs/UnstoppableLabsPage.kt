@@ -51,7 +51,7 @@ private fun UnstoppableLabsScreen(onBack: () -> Unit) {
         LabsProduct(
             R.string.UnstoppableLabs_SimplexSwapBot,
             R.string.UnstoppableLabs_SimplexSwapBot_Description,
-            R.drawable.lightning_24,
+            R.drawable.flash_24,
             config.labsSimplexSwapBotLink,
         ),
         LabsProduct(

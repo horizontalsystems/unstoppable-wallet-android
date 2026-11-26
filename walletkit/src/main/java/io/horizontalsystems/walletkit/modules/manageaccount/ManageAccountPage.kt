@@ -184,7 +184,7 @@ fun ManageAccountScreen(navigation: HSNavigation, accountId: String) {
                     listOf {
                         RedActionItem(
                             title = stringResource(id = R.string.ManageAccount_Unlink),
-                            icon = painterResource(id = R.drawable.ic_delete_20),
+                            icon = painterResource(id = R.drawable.trash_24),
                             modifier = Modifier.testTag(TestTags.ACCOUNT_UNLINK),
                         ) {
                             navigation.slideFromBottom(
@@ -219,7 +219,7 @@ private fun BackupActions(
                     BackupActionItem(
                         title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
                         modifier = Modifier.testTag(TestTags.ACCOUNT_MANUAL_BACKUP),
-                        icon = painterResource(id = R.drawable.ic_edit_24),
+                        icon = painterResource(id = R.drawable.pen_24),
                         attention = action.showAttention,
                         completed = action.completed,
                         onClick = navigation.authorizedAction {
@@ -305,7 +305,7 @@ private fun KeyActions(
                 actionItems.add {
                     AccountActionItem(
                         title = stringResource(id = R.string.PrivateKeys_Title),
-                        icon = painterResource(id = R.drawable.ic_key_20)
+                        icon = painterResource(id = R.drawable.key_24)
                     ) {
                         navigation.slideFromRight(
                             PrivateKeysPage(viewModel.account)
@@ -323,7 +323,7 @@ private fun KeyActions(
                 actionItems.add {
                     AccountActionItem(
                         title = stringResource(id = R.string.PublicKeys_Title),
-                        icon = painterResource(id = R.drawable.icon_binocule_20)
+                        icon = painterResource(id = R.drawable.binocular_24)
                     ) {
                         navigation.slideFromRight(
                             PublicKeysPage(viewModel.account)

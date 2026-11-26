@@ -115,7 +115,7 @@ fun HSStepSlider(
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            painter = painterResource(R.drawable.ic_minus_20),
+                            painter = painterResource(R.drawable.minus_24),
                             tint = ComposeAppTheme.colors.lawrence,
                             contentDescription = null,
                         )

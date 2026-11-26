@@ -419,7 +419,7 @@ private fun SettingSections(
             cell {
                 SettingsCell(
                     title = R.string.Settings_Donate,
-                    icon = R.drawable.ic_heart_24,
+                    icon = R.drawable.heart_24,
                     testTag = TestTags.SETTINGS_DONATE,
                     onClick = {
                         navigation.slideFromRight(DonateTokenSelectPage)

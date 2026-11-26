@@ -92,7 +92,7 @@ fun WCPairingsScreen(navigation: HSNavigation) {
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_delete_20),
+                            painter = painterResource(id = R.drawable.trash_24),
                             contentDescription = null,
                             tint = ComposeAppTheme.colors.lucian
                         )
@@ -147,7 +147,7 @@ fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
             modifier = Modifier.padding(start = 16.dp),
-            icon = painterResource(R.drawable.ic_delete_20),
+            icon = painterResource(R.drawable.trash_24),
             iconTint = ComposeAppTheme.colors.lucian,
             onClick = onDelete
         )

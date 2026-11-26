@@ -86,7 +86,7 @@ fun HeaderText(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                     ),
-                painter = painterResource(R.drawable.ic_info_filled_20),
+                painter = painterResource(R.drawable.info_filled_24),
                 tint = ComposeAppTheme.colors.grey,
                 contentDescription = stringResource(R.string.Info_Title),
             )

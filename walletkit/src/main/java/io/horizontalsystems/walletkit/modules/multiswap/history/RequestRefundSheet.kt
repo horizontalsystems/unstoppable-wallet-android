@@ -218,10 +218,10 @@ object RequestRefundDataLoader {
         val contacts = swapProviderInfoManager.getInfo(SwapProviderIds.serverId(record.providerId))?.contacts
         val contactLinks = buildList {
             contacts?.telegram?.takeIf { it.isNotBlank() }?.let {
-                add(ContactLink(ContactType.Telegram, "Telegram", it, it, R.drawable.ic_telegram_24))
+                add(ContactLink(ContactType.Telegram, "Telegram", it, it, R.drawable.telegram_logo_24))
             }
             contacts?.twitter?.takeIf { it.isNotBlank() }?.let {
-                add(ContactLink(ContactType.Twitter, "Twitter", it, it, R.drawable.ic_twitter_24))
+                add(ContactLink(ContactType.Twitter, "Twitter", it, it, R.drawable.twitter_logo_24))
             }
             contacts?.email?.takeIf { it.isNotBlank() }?.let {
                 add(ContactLink(ContactType.Email, "Email", it, it, R.drawable.mail_24))

@@ -283,7 +283,7 @@ private fun TvlMenu(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20),
+                icon = painterResource(if (tvlDiffType == TvlDiffType.Percent) R.drawable.percent_24 else R.drawable.usd_24),
                 onClick = { onToggleTvlDiffType() }
             )
         }

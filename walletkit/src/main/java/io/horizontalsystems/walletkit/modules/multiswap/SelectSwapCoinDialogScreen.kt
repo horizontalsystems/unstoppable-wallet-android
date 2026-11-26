@@ -82,7 +82,7 @@ fun SelectSwapCoinDialogScreen(
                     .fillMaxSize()
                     .background(ComposeAppTheme.colors.lawrence),
                 text = stringResource(R.string.EmptyResults),
-                icon = R.drawable.ic_not_available
+                icon = R.drawable.stop_24
             )
         } else {
             LazyColumn(

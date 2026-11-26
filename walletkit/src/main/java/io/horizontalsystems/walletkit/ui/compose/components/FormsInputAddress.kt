@@ -61,7 +61,7 @@ fun FormsInputAddress(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.ic_delete_20),
+                icon = painterResource(R.drawable.trash_24),
                 onClick = {
                     val text = textPreprocessor.process("")
                     onValueChange.invoke(text)
@@ -81,7 +81,7 @@ fun FormsInputAddress(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.ic_qr_scan_20),
+                icon = painterResource(R.drawable.scan_24),
                 onClick = {
                     qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
                 }

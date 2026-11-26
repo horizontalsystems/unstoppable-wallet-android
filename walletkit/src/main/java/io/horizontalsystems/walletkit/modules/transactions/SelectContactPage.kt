@@ -60,7 +60,7 @@ fun SelectContactScreen(navigation: HSNavigation, input: SelectContactPage.Input
             Column {
                 InfoText(text = stringResource(id = R.string.Transactions_Filter_ChooseContact_Hint))
                 InfoErrorMessageDefault(
-                    painter = painterResource(id = R.drawable.ic_user_24),
+                    painter = painterResource(id = R.drawable.user_24),
                     text = stringResource(R.string.Transactions_Filter_ChooseContact_NoSuitableContact)
                 )
             }
@@ -96,7 +96,7 @@ private fun CellContact(
             painter = if (contact == null) {
                 painterResource(id = R.drawable.icon_paper_contract_24)
             } else {
-                painterResource(id = R.drawable.ic_user_24)
+                painterResource(id = R.drawable.user_24)
             },
             contentDescription = "",
             tint = ComposeAppTheme.colors.grey

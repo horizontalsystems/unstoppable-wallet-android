@@ -147,7 +147,7 @@ fun TokenBalanceScreen(
             if (uiState.balanceViewItem?.isWatchAccount == true) {
                 add(
                     MenuItem(
-                        icon = R.drawable.ic_balance_chart_24,
+                        icon = R.drawable.chart_24,
                         title = TranslatableString.ResString(R.string.Coin_Info),
                         onClick = {
                             val coinUid = uiState.balanceViewItem.wallet.coin.uid
@@ -706,7 +706,7 @@ fun ZcashLockedBalanceBottomSheet(
         sheetState = sheetState
     ) {
         BottomSheetHeaderV3(
-            image72 = painterResource(R.drawable.ic_shield_off_24),
+            image72 = painterResource(R.drawable.shield_off_24),
             title = title
         )
         TextBlock(
@@ -850,7 +850,7 @@ private fun ButtonsRow(
         if (chartButtonEnabled) {
             BalanceActionButton(
                 variant = ButtonVariant.Primary,
-                icon = R.drawable.ic_balance_chart_24,
+                icon = R.drawable.chart_24,
                 title = stringResource(R.string.Coin_Chart),
                 modifier = Modifier.testTag(TestTags.TOKEN_CHART),
                 enabled = !viewItem.wallet.token.isCustom,
@@ -888,7 +888,7 @@ private fun ButtonsRow(
         if (viewItem.swapVisible) {
             BalanceActionButton(
                 variant = ButtonVariant.Secondary,
-                icon = R.drawable.ic_swap_circle_24,
+                icon = R.drawable.swap_e_24,
                 title = stringResource(R.string.Swap),
                 modifier = Modifier.testTag(TestTags.TOKEN_SWAP),
                 onClick = {

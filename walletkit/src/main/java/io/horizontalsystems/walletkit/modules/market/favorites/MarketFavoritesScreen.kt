@@ -82,7 +82,7 @@ fun MarketFavoritesScreen(
                     if (uiState.viewItems.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.Market_Tab_Watchlist_EmptyList),
-                            icon = R.drawable.ic_heart_24
+                            icon = R.drawable.heart_24
                         )
                     } else {
                         CoinListOrderable(
@@ -135,7 +135,7 @@ fun MarketFavoritesScreen(
                                             HSIconButton(
                                                 variant = ButtonVariant.Secondary,
                                                 size = ButtonSize.Small,
-                                                icon = painterResource(R.drawable.ic_edit_20),
+                                                icon = painterResource(R.drawable.pen_24),
                                                 onClick = {
                                                     manualOrderEnabled = !manualOrderEnabled
                                                 }

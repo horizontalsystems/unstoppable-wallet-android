@@ -195,7 +195,7 @@ private fun KeysInvalidatedDialog(onClick: () -> Unit) {
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             BottomSheetsElementsHeader(
-                icon = painterResource(R.drawable.icon_key_24),
+                icon = painterResource(R.drawable.key_24),
                 title = stringResource(R.string.Alert_KeysInvalidatedTitle),
                 subtitle = stringResource(R.string.Error),
                 onClickClose = onClick

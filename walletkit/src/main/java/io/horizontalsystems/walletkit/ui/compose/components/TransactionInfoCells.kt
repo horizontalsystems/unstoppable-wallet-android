@@ -230,7 +230,7 @@ fun TitleAndValueCell(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.ic_copy_20),
+                icon = painterResource(R.drawable.copy_24),
                 onClick = {
                     TextHelper.copyText(value)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -309,7 +309,7 @@ fun TransactionInfoAddressCell(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.icon_20_user_plus),
+                icon = painterResource(R.drawable.user_add_24),
                 onClick = { showSaveAddressDialog = true }
             )
         }
@@ -318,7 +318,7 @@ fun TransactionInfoAddressCell(
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_copy_20),
+            icon = painterResource(R.drawable.copy_24),
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -408,7 +408,7 @@ fun TransactionInfoStatusCell(
         ) {
             Image(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.ic_info_20),
+                painter = painterResource(R.drawable.info_24),
                 contentDescription = null
             )
         }
@@ -498,7 +498,7 @@ fun TransactionInfoCancelCell(
         }
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_outgoingraw_24),
+            painter = painterResource(R.drawable.outgoingraw_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.redL
         )
@@ -576,7 +576,7 @@ fun TransactionInfoExplorerCell(
     ) {
         Image(
             modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_language),
+            painter = painterResource(id = R.drawable.globe_24),
             contentDescription = null,
         )
         body_leah(
@@ -615,7 +615,7 @@ fun TransactionInfoSecretKeyCell(secretKey: String) {
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_copy_20),
+            icon = painterResource(R.drawable.copy_24),
             onClick = {
                 TextHelper.copySecret(secretKey)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -643,7 +643,7 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_copy_20),
+            icon = painterResource(R.drawable.copy_24),
             onClick = {
                 rawTransaction()?.let {
                     TextHelper.copyText(it)
@@ -694,7 +694,7 @@ fun TransactionInfoBtcLockCell(
             ) {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_info_20),
+                    painter = painterResource(R.drawable.info_24),
                     tint = ComposeAppTheme.colors.grey,
                     contentDescription = null,
                 )
@@ -714,7 +714,7 @@ fun TransactionInfoDoubleSpendCell(
     ) {
         Icon(
             modifier = Modifier.padding(end = 16.dp).size(20.dp),
-            painter = painterResource(R.drawable.ic_double_spend_20),
+            painter = painterResource(R.drawable.doublesend_24),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
         )
@@ -740,7 +740,7 @@ fun TransactionInfoDoubleSpendCell(
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.ic_info_20),
+                painter = painterResource(R.drawable.info_24),
                 tint = ComposeAppTheme.colors.grey,
                 contentDescription = null,
             )

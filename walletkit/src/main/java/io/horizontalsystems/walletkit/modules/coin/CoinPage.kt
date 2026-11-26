@@ -72,7 +72,7 @@ fun CoinContent(
                     add(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
-                            icon = R.drawable.ic_heart_filled_24,
+                            icon = R.drawable.heart_filled_24,
                             tint = ComposeAppTheme.colors.orange,
                             onClick = {
                                 viewModel.onUnfavoriteClick()
@@ -88,7 +88,7 @@ fun CoinContent(
                     add(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.CoinPage_Favorite),
-                            icon = R.drawable.ic_heart_24,
+                            icon = R.drawable.heart_24,
                             tint = ComposeAppTheme.colors.grey,
                             onClick = {
                                 viewModel.onFavoriteClick()
@@ -129,7 +129,7 @@ fun CoinNotFound(coinUid: String, navigation: HSNavigation) {
     ) {
         ListEmptyView(
             text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),
-            icon = R.drawable.ic_not_available
+            icon = R.drawable.stop_24
         )
     }
 }

@@ -193,7 +193,7 @@ private fun BSContent(
         MarketCap -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_MarketCap,
-                headerIcon = R.drawable.ic_usd_24,
+                headerIcon = R.drawable.usd_24,
                 items = viewModel.marketCapViewItemOptions,
                 selectedItem = uiState.marketCap,
                 onSelect = {
@@ -245,7 +245,7 @@ private fun BSContent(
         TradingSignals -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_TradingSignals,
-                headerIcon = R.drawable.ic_ring_24,
+                headerIcon = R.drawable.bell_24,
                 items = viewModel.tradingSignals,
                 selectedItem = uiState.filterTradingSignal,
                 onSelect = {

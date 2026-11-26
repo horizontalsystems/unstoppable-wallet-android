@@ -97,7 +97,7 @@ private fun SelectBlockchainsScreen(
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_AddressAdded,
-                icon = R.drawable.icon_binocule_24,
+                icon = R.drawable.binocular_24,
                 iconTint = R.color.white
             )
             delay(300)

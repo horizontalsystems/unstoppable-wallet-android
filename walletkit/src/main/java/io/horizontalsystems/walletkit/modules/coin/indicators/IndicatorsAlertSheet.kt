@@ -31,7 +31,7 @@ data object IndicatorsAlertSheet : HSBottomSheet() {
 @Composable
 private fun IndicatorsAlertScreen(navigation: HSNavigation) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.icon_24_lock),
+        iconPainter = painterResource(R.drawable.lock_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
         title = stringResource(R.string.CoinPage_Indicators),
         onCloseClick = {

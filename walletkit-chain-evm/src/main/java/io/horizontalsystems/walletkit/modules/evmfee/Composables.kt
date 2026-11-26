@@ -217,7 +217,7 @@ private fun FeeField(
         middle = {
             CellMiddleInfoTextIcon(
                 text = title.hs(color = ComposeAppTheme.colors.grey),
-                icon = painterResource(R.drawable.ic_info_filled_20),
+                icon = painterResource(R.drawable.info_filled_24),
                 iconTint = ComposeAppTheme.colors.grey,
                 onIconClick = {
                     navigation.slideFromBottom(

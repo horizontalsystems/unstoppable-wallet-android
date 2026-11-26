@@ -140,7 +140,7 @@ fun ReceiveActivatableTokenScreen(
                             ) {
                                 Image(
                                     modifier = Modifier.size(20.dp),
-                                    painter = painterResource(R.drawable.ic_info_20),
+                                    painter = painterResource(R.drawable.info_24),
                                     contentDescription = null
                                 )
                             }

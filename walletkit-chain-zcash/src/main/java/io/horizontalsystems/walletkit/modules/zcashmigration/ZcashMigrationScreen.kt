@@ -121,7 +121,7 @@ fun ZcashMigrationScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.Zcash_Migration_PubliclyVisible_Title),
                 text = stringResource(R.string.Zcash_Migration_PubliclyVisible_Description),
-                icon = R.drawable.ic_warning_filled_20
+                icon = R.drawable.warning_filled_24
             )
 
             uiState.error?.let {

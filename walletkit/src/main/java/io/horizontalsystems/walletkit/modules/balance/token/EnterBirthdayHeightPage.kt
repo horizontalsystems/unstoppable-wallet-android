@@ -239,7 +239,7 @@ internal fun BirthdayHeightInputField(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(id = R.drawable.ic_delete_20),
+                icon = painterResource(id = R.drawable.trash_24),
                 onClick = {
                     onDeleteClick()
                     focusRequester.requestFocus()

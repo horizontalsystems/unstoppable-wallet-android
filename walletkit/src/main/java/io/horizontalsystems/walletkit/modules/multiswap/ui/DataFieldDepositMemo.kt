@@ -30,7 +30,7 @@ data class DataFieldDepositMemo(val memo: String) : DataField {
             middle = {
                 CellMiddleInfoTextIcon(
                     text = infoTitle.hs(color = ComposeAppTheme.colors.grey),
-                    icon = painterResource(R.drawable.ic_info_filled_20),
+                    icon = painterResource(R.drawable.info_filled_24),
                     iconTint = ComposeAppTheme.colors.grey,
                     onIconClick = {
                         navigation.slideFromBottom(SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText)))

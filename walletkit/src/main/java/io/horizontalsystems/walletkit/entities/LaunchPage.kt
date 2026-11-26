@@ -12,11 +12,11 @@ enum class LaunchPage(@StringRes val titleRes: Int, @DrawableRes val iconRes: In
     @SerializedName("auto")
     Auto(R.string.SettingsLaunchScreen_Auto, R.drawable.ic_settings_20),
     @SerializedName("balance")
-    Balance(R.string.SettingsLaunchScreen_Balance, R.drawable.ic_wallet_20),
+    Balance(R.string.SettingsLaunchScreen_Balance, R.drawable.wallet_24),
     @SerializedName("market")
     Market(R.string.SettingsLaunchScreen_MarketOverview, R.drawable.ic_market_20),
     @SerializedName("watchlist")
-    Watchlist(R.string.SettingsLaunchScreen_Watchlist, R.drawable.ic_star_20);
+    Watchlist(R.string.SettingsLaunchScreen_Watchlist, R.drawable.star_24);
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleRes)

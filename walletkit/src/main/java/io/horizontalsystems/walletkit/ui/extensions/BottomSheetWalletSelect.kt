@@ -34,7 +34,7 @@ fun WalletSwitchBottomSheet(
     val comparator = compareBy<Account> { it.name.lowercase() }
 
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.icon_24_lock),
+        iconPainter = painterResource(R.drawable.lock_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
         title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
         onCloseClick = onCancelClick,
@@ -98,7 +98,7 @@ private fun Section(
             if (item.isWatchAccount) {
                 Icon(
                     modifier = Modifier.padding(start = 16.dp).size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_eye_20),
+                    painter = painterResource(id = R.drawable.eye_on_24),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )

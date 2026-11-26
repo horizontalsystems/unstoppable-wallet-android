@@ -162,7 +162,7 @@ fun TransactionsScreen(
                                         .background(ComposeAppTheme.colors.lawrence)
                                         .testTag(if (pagedList) TestTags.TX_EMPTY else TestTags.ACTIVITY_EMPTY),
                                     text = stringResource(uiState.tab.emptyText),
-                                    icon = R.drawable.ic_outgoingraw
+                                    icon = R.drawable.outgoingraw_24
                                 )
                             }
                         } else {
@@ -334,14 +334,14 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         if (item.doubleSpend) {
                             Image(
                                 modifier = Modifier.padding(start = 6.dp).size(20.dp),
-                                painter = painterResource(R.drawable.ic_double_spend_20),
+                                painter = painterResource(R.drawable.doublesend_24),
                                 contentDescription = null
                             )
                         }
                         item.locked?.let { locked ->
                             Image(
                                 modifier = Modifier.padding(start = 6.dp).size(20.dp),
-                                painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
+                                painter = painterResource(if (locked) R.drawable.lock_24 else R.drawable.unlock_24),
                                 contentDescription = null
                             )
                         }

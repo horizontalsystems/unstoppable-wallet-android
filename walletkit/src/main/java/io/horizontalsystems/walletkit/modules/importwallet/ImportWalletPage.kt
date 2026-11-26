@@ -321,7 +321,7 @@ internal fun ImportWalletWays(
                 onClick = actions.passkey,
             )
             Way(
-                icon = R.drawable.ic_edit_24,
+                icon = R.drawable.pen_24,
                 title = R.string.ImportWallet_RecoveryPhrase,
                 subtitle = R.string.ImportWallet_RecoveryPhrase_Description,
                 tag = TestTags.IMPORT_RECOVERY_PHRASE,

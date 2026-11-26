@@ -126,7 +126,7 @@ fun TokenVariants(
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Small,
                         modifier = Modifier.padding(start = 16.dp),
-                        icon = painterResource(R.drawable.ic_globe_20),
+                        icon = painterResource(R.drawable.globe_24),
                         contentDescription = stringResource(R.string.Button_Browser),
                         onClick = {
                             onClickExplorer.invoke(explorerUrl)

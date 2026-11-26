@@ -85,13 +85,13 @@ fun NumberInputWithButtons(
         ),
     ) {
         HSIconButton(
-            icon = painterResource(id = R.drawable.ic_minus_20),
+            icon = painterResource(id = R.drawable.minus_24),
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
             onClick = onClickDecrement
         )
         HSIconButton(
-            icon = painterResource(id = R.drawable.ic_plus_20),
+            icon = painterResource(id = R.drawable.plus_24),
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
             onClick = onClickIncrement

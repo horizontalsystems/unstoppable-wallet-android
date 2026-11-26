@@ -95,7 +95,7 @@ fun WhyDonateView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    icon = painterResource(R.drawable.ic_heart_filled_24),
+                    icon = painterResource(R.drawable.heart_filled_24),
                     title = stringResource(R.string.SettingsBanner_SupportTheProject),
                     onClick = onClick
                 )
@@ -226,7 +226,7 @@ fun WhyDonateView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    icon = painterResource(R.drawable.ic_heart_filled_24),
+                    icon = painterResource(R.drawable.heart_filled_24),
                     title = stringResource(R.string.SettingsBanner_SupportTheProject),
                     onClick = onClick
                 )

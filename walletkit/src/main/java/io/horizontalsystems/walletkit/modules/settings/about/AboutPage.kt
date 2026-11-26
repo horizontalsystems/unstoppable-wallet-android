@@ -96,7 +96,7 @@ private fun SettingSections(
         listOf {
             HsSettingCell(
                 title = R.string.SettingsAboutApp_AppVersion,
-                icon = R.drawable.ic_info_20,
+                icon = R.drawable.info_24,
                 value = viewModel.appVersion,
                 onClick = {
                     navigation.add(ReleaseNotesPage)

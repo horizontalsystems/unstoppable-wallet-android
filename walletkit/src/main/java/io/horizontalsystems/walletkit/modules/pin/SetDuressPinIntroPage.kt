@@ -72,7 +72,7 @@ fun SetDuressPinIntroScreen(navigation: HSNavigation) {
             ) {
                 if (viewModel.biometricAuthSupported) {
                     NotesCell(
-                        icon = painterResource(id = R.drawable.icon_touch_id_24),
+                        icon = painterResource(id = R.drawable.touchid_24),
                         title = stringResource(id = R.string.DuressPin_Notes_Biometrics_Title),
                         description = stringResource(id = R.string.DuressPin_Notes_Biometrics_Description)
                     )
@@ -85,7 +85,7 @@ fun SetDuressPinIntroScreen(navigation: HSNavigation) {
                     borderTop = true
                 )
                 NotesCell(
-                    icon = painterResource(id = R.drawable.ic_edit_24),
+                    icon = painterResource(id = R.drawable.pen_24),
                     title = stringResource(id = R.string.DuressPin_Notes_PasscodeChange_Title),
                     description = stringResource(id = R.string.DuressPin_Notes_PasscodeChange_Description),
                     borderTop = true

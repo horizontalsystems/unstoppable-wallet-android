@@ -296,7 +296,7 @@ fun BalanceItems(
                                 if (viewModel.isSwapEnabled) {
                                     BalanceActionButton(
                                         variant = ButtonVariant.Secondary,
-                                        icon = R.drawable.ic_swap_circle_24,
+                                        icon = R.drawable.swap_e_24,
                                         title = stringResource(R.string.Swap),
                                         modifier = Modifier.testTag(TestTags.BALANCE_SWAP),
                                         onClick = {
@@ -434,7 +434,7 @@ fun BalanceItems(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
                 title = stringResource(R.string.Button_Add),
-                icon = painterResource(R.drawable.ic_plus_20),
+                icon = painterResource(R.drawable.plus_24),
                 onClick = openCoinManager
             )
         }
@@ -575,7 +575,7 @@ private fun NoCoinsBlock(onAddClick: () -> Unit) {
             style = ButtonStyle.Transparent,
             size = ButtonSize.Small,
             title = stringResource(R.string.Button_Add),
-            icon = painterResource(R.drawable.ic_plus_20),
+            icon = painterResource(R.drawable.plus_24),
             onClick = onAddClick
         )
     }

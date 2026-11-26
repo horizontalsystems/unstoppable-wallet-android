@@ -36,7 +36,7 @@ data object ConfirmDeleteAllPairingsSheet : HSBottomSheet() {
 fun ConfirmDeleteAllScreen(navigation: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_delete_20),
+        iconPainter = painterResource(R.drawable.trash_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
         title = stringResource(R.string.WalletConnect_DeleteAllPairs),
         onCloseClick = {

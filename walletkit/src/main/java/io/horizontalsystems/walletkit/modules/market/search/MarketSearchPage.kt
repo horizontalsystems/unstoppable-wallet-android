@@ -293,7 +293,7 @@ private fun MarketCoin(
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(if (favourited) R.drawable.ic_heart_filled_20 else R.drawable.ic_heart_20),
+                painter = painterResource(if (favourited) R.drawable.heart_filled_24 else R.drawable.heart_24),
                 contentDescription = "heart icon button",
                 tint = if (favourited) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
             )

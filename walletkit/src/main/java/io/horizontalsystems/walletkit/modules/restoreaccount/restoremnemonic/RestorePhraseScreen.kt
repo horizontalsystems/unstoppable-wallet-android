@@ -233,7 +233,7 @@ fun RestorePhrase(
                         HSIconButton(
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_delete_20),
+                            icon = painterResource(R.drawable.trash_24),
                             onClick = {
                                 textState =
                                     textState.copy(text = "", selection = TextRange(0))
@@ -249,7 +249,7 @@ fun RestorePhrase(
                         HSIconButton(
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_qr_scan_20),
+                            icon = painterResource(R.drawable.scan_24),
                             onClick = {
                                 qrScannerLauncher.launch(
                                     QRScannerActivity.getScanQrIntent(context)
@@ -466,7 +466,7 @@ fun SuggestionsBar(
             } else {
                 Icon(
                     modifier = Modifier.align(Alignment.Center),
-                    painter = painterResource(R.drawable.ic_more_24),
+                    painter = painterResource(R.drawable.threedots_24),
                     tint = ComposeAppTheme.colors.grey,
                     contentDescription = null
                 )

@@ -92,7 +92,7 @@ fun PriceCloseToBottomSheetContent(
     onClose: (() -> Unit),
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_usd_24),
+        iconPainter = painterResource(R.drawable.usd_24),
         title = stringResource(R.string.Market_Filter_PriceCloseTo),
         onCloseClick = onClose,
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange)

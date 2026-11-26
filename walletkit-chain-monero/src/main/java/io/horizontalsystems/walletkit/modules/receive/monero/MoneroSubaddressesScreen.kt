@@ -118,7 +118,7 @@ fun TransactionInfoAddressCell(
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_copy_20),
+            icon = painterResource(R.drawable.copy_24),
             onClick = {
                 TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)

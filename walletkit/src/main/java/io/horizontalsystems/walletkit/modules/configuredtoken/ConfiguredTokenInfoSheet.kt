@@ -133,7 +133,7 @@ private fun ContractInfo(tokenInfoType: ConfiguredTokenInfoType.Contract) {
                 HSIconButton(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Small,
-                    icon = painterResource(R.drawable.ic_globe_20),
+                    icon = painterResource(R.drawable.globe_24),
                     contentDescription = stringResource(R.string.Button_Browser),
                     onClick = {
                         LinkHelper.openLinkInAppBrowser(context, it)

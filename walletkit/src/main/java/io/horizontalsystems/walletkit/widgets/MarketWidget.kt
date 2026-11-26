@@ -116,7 +116,7 @@ class MarketWidget : GlanceAppWidget() {
                             } else {
                                 Image(
                                     modifier = GlanceModifier.size(20.dp),
-                                    provider = ImageProvider(R.drawable.ic_refresh),
+                                    provider = ImageProvider(R.drawable.reset_24),
                                     contentDescription = null
                                 )
                             }
@@ -125,7 +125,7 @@ class MarketWidget : GlanceAppWidget() {
 
                     if (!state.loading && state.type == MarketWidgetType.Watchlist && state.items.isEmpty()) {
                         FullScreenMessage(
-                            icon = R.drawable.ic_rate_24,
+                            icon = R.drawable.star_24,
                             text = context.getString(R.string.Market_Tab_Watchlist_EmptyList),
                         )
                     } else if (state.error != null) {

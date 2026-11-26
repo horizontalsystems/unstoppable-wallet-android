@@ -85,7 +85,7 @@ fun WalletNameInput(
                 modifier = clearModifier,
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.ic_delete_20),
+                icon = painterResource(R.drawable.trash_24),
                 onClick = {
                     setText("")
                     focusRequester.requestFocus()

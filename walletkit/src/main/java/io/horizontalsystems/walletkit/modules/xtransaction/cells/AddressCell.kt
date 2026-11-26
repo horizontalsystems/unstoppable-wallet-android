@@ -62,7 +62,7 @@ fun AddressCell(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(R.drawable.icon_20_user_plus),
+                icon = painterResource(R.drawable.user_add_24),
                 onClick = { showSaveAddressDialog = true }
             )
         }
@@ -71,7 +71,7 @@ fun AddressCell(
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_copy_20),
+            icon = painterResource(R.drawable.copy_24),
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)

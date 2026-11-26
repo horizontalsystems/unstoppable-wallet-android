@@ -50,7 +50,7 @@ fun BiometricDisabledDialog(onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.icon_touch_id_24),
+                        painter = painterResource(id = R.drawable.touchid_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.lucian
                     )

@@ -359,7 +359,7 @@ private fun ActionButtonsRow(
     ) {
         if (!watchAccount) {
             ReceiveActionButton(
-                icon = R.drawable.ic_edit_24px,
+                icon = R.drawable.pen_24,
                 buttonText = stringResource(R.string.Button_SetAmount),
                 modifier = Modifier.testTag(TestTags.RECEIVE_SET_AMOUNT),
                 onClick = {
@@ -388,7 +388,7 @@ private fun ActionButtonsRow(
         }
 
         ReceiveActionButton(
-            icon = R.drawable.ic_copy_24px,
+            icon = R.drawable.copy_24,
             buttonText = stringResource(R.string.Button_Copy),
             modifier = Modifier.testTag(TestTags.RECEIVE_COPY),
             onClick = {
@@ -436,7 +436,7 @@ private fun AdditionalDataSection(
                     ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            painter = painterResource(R.drawable.ic_trash_filled_20),
+                            painter = painterResource(R.drawable.trash_filled_24),
                             contentDescription = null,
                             tint = ComposeAppTheme.colors.leah,
                         )
@@ -459,7 +459,7 @@ private fun AdditionalDataSection(
                         size = ButtonSize.Small,
                         modifier = Modifier
                             .padding(end = 16.dp),
-                        icon = painterResource(R.drawable.ic_copy_20),
+                        icon = painterResource(R.drawable.copy_24),
                         onClick = {
                             TextHelper.copyText(item.value)
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)

@@ -223,7 +223,7 @@ fun CoinOverviewScreen(
                                                 HSIconButton(
                                                     variant = ButtonVariant.Secondary,
                                                     size = ButtonSize.Small,
-                                                    icon = painterResource(R.drawable.ic_setting_20)
+                                                    icon = painterResource(R.drawable.gear_24)
                                                 ) {
                                                     navigation.slideFromRight(IndicatorsPage)
 

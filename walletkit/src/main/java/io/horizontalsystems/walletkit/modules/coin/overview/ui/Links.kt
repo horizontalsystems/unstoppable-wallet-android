@@ -29,25 +29,25 @@ fun LinksPreview() {
                 "http://q.com",
                 LinkType.Guide,
                 "@twitter",
-                R.drawable.ic_academy_20
+                R.drawable.book_24
             ),
             CoinLink(
                 "http://q.com",
                 LinkType.Guide,
                 "@twitter",
-                R.drawable.ic_globe_20
+                R.drawable.globe_24
             ),
             CoinLink(
                 "http://q.com",
                 LinkType.Twitter,
                 "@twitter",
-                R.drawable.ic_twitter_20
+                R.drawable.twitter_logo_24
             ),
             CoinLink(
                 "http://q.com",
                 LinkType.Telegram,
                 "Telegram",
-                R.drawable.ic_telegram_20
+                R.drawable.telegram_logo_24
             ),
         )
         Links(links = links, onCoinLinkClick = {})

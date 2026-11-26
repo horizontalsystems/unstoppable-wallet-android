@@ -144,7 +144,7 @@ fun ContactsScreen(
                 add(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Contacts_NewContact),
-                        icon = R.drawable.icon_user_plus,
+                        icon = R.drawable.user_add_24,
                         onClick = onNavigateToCreateContact
                     )
                 )
@@ -224,7 +224,7 @@ fun ContactsScreen(
                 } else {
                     ScreenMessageWithAction(
                         text = stringResource(R.string.Contacts_NoContacts),
-                        icon = R.drawable.icon_user_plus
+                        icon = R.drawable.user_add_24
                     ) {
                         HSButton(
                             modifier = Modifier

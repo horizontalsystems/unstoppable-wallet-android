@@ -231,11 +231,11 @@ class CoinViewFactory(
 
     private fun getIcon(linkType: LinkType): Int {
         return when (linkType) {
-            LinkType.Guide -> R.drawable.ic_academy_20
-            LinkType.Website -> R.drawable.ic_globe_20
+            LinkType.Guide -> R.drawable.book_24
+            LinkType.Website -> R.drawable.globe_24
             LinkType.Whitepaper -> R.drawable.ic_clipboard_20
-            LinkType.Twitter -> R.drawable.ic_twitter_20
-            LinkType.Telegram -> R.drawable.ic_telegram_20
+            LinkType.Twitter -> R.drawable.twitter_logo_24
+            LinkType.Telegram -> R.drawable.telegram_logo_24
             LinkType.Reddit -> R.drawable.ic_reddit_20
             LinkType.Github -> R.drawable.ic_github_20
         }

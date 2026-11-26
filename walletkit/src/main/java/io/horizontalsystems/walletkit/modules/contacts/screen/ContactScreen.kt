@@ -170,7 +170,7 @@ fun ContactScreen(
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Contacts_DeleteContact),
                             text = stringResource(R.string.Contacts_DeleteContact_Warning),
-                            iconPainter = painterResource(R.drawable.ic_delete_20),
+                            iconPainter = painterResource(R.drawable.trash_24),
                             iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
                             confirmText = stringResource(R.string.Button_Delete),
                             cautionType = Caution.Type.Error,
@@ -316,7 +316,7 @@ private fun DeleteContactButton(onClick: () -> Unit) {
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
-            painter = painterResource(R.drawable.ic_delete_20),
+            painter = painterResource(R.drawable.trash_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.lucian
         )
@@ -333,7 +333,7 @@ private fun AddAddressButton(onClick: () -> Unit) {
     ) {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
-            painter = painterResource(R.drawable.ic_plus),
+            painter = painterResource(R.drawable.plus_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
@@ -383,7 +383,7 @@ private fun ContactAddress(
         Spacer(Modifier.width(9.dp))
         Icon(
             modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_edit_20),
+            painter = painterResource(id = R.drawable.pen_24),
             contentDescription = null,
             tint = if (addressViewItem.edited) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
         )

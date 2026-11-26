@@ -72,7 +72,7 @@ fun AnalyticsBlockHeader(
             ) {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_info_20),
+                    painter = painterResource(id = R.drawable.info_24),
                     contentDescription = "info button",
                     tint = ComposeAppTheme.colors.grey
                 )
@@ -217,7 +217,7 @@ private fun BoxItemCell(
             ) {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_info_20),
+                    painter = painterResource(id = R.drawable.info_24),
                     contentDescription = "info button",
                     tint = ComposeAppTheme.colors.grey,
                 )

@@ -87,7 +87,7 @@ fun HSHodler(
     RowUniversal {
         Icon(
             modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
-            painter = painterResource(id = R.drawable.ic_lock_20),
+            painter = painterResource(id = R.drawable.lock_24),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = "lock icon",
         )

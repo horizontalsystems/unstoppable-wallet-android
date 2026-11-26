@@ -216,7 +216,7 @@ fun ManageWalletsScreen(
                                 ) {
                                     Icon(
                                         modifier = Modifier.size(20.dp),
-                                        painter = painterResource(R.drawable.ic_edit_20),
+                                        painter = painterResource(R.drawable.pen_24),
                                         contentDescription = null,
                                         tint = ComposeAppTheme.colors.grey
                                     )
