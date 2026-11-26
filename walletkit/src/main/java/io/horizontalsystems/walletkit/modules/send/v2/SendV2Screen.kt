@@ -437,7 +437,7 @@ private fun SendTab.tabItem() = when (this) {
     SendTab.Standard -> TabFolderItem(stringResource(R.string.Send_Tab_Standard))
     SendTab.Private -> TabFolderItem(
         title = stringResource(R.string.Send_Tab_Private),
-        icon = R.drawable.ic_incognito_24,
+        icon = R.drawable.fraud_24,
     )
 
     SendTab.CrossPay -> TabFolderItem(stringResource(R.string.Send_Tab_CrossPay))
@@ -535,7 +535,7 @@ internal fun AddressRow(
             HSpacer(8.dp)
             Icon(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.arrow_s_down_20),
+                painter = painterResource(R.drawable.arrow_s_down_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.leah,
             )

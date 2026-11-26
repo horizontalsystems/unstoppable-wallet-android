@@ -873,7 +873,7 @@ private fun ButtonsRow(
         )
         BalanceActionButton(
             variant = ButtonVariant.Secondary,
-            icon = R.drawable.ic_arrow_up_24,
+            icon = R.drawable.arrow_m_up_24,
             title = stringResource(R.string.Balance_Send),
             modifier = Modifier.testTag(TestTags.TOKEN_SEND),
             onClick = {

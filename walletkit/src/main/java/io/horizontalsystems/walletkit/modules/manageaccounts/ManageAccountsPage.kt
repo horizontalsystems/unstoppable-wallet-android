@@ -227,7 +227,7 @@ fun AccountCell(
     val icon: Int
     val iconTint: Color
     if (accountViewItem.showAlertIcon) {
-        icon = R.drawable.warning_outline_24
+        icon = R.drawable.warning_24
         iconTint = ComposeAppTheme.colors.lucian
     } else {
         icon = R.drawable.threedots_24

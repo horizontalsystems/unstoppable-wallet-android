@@ -162,7 +162,7 @@ fun SwapScreen(
             TabsFolder(
                 tabs = listOf(
                     TabFolderItem(stringResource(R.string.Swap_Tab_Standard)),
-                    TabFolderItem(stringResource(R.string.Swap_Tab_Private), R.drawable.prem_fraud_24),
+                    TabFolderItem(stringResource(R.string.Swap_Tab_Private), R.drawable.fraud_24),
                 ),
                 selectedIndex = selectedTab.ordinal,
                 onSelect = {

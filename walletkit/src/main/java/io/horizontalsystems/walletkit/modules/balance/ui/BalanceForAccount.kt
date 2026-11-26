@@ -141,7 +141,7 @@ fun BalanceForAccount(
                 add(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
-                        icon = R.drawable.ic_scan_24,
+                        icon = R.drawable.scan_24,
                         onClick = {
                             onScanClick(qrScannerLauncher, context)
                         }

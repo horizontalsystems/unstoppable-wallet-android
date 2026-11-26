@@ -259,7 +259,7 @@ private fun QRScannerScreen(
                         modifier = Modifier.weight(1f),
                         variant = ButtonVariant.Secondary,
                         title = stringResource(R.string.ScanQr_Photos),
-                        icon = painterResource(R.drawable.ic_gallery_24),
+                        icon = painterResource(R.drawable.gallery_24),
                         onClick = {
                             galleryLauncher.launch(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -269,7 +269,7 @@ private fun QRScannerScreen(
                     HSButton(
                         modifier = Modifier.weight(1f),
                         title = stringResource(R.string.Send_Button_Paste),
-                        icon = painterResource(R.drawable.ic_copy_24),
+                        icon = painterResource(R.drawable.copy_24),
                         onClick = { onScan(TextHelper.getCopiedText() ?: "") }
                     )
                 }
@@ -278,7 +278,7 @@ private fun QRScannerScreen(
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     title = stringResource(R.string.ScanQr_Photos),
-                    icon = painterResource(R.drawable.ic_gallery_24),
+                    icon = painterResource(R.drawable.gallery_24),
                     onClick = {
                         galleryLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)

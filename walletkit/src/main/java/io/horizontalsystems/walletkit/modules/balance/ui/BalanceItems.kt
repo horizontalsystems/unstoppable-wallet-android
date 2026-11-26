@@ -259,7 +259,7 @@ fun BalanceItems(
                             BalanceButtonsGroup {
                                 BalanceActionButton(
                                     variant = ButtonVariant.Primary,
-                                    icon = R.drawable.ic_scan_24,
+                                    icon = R.drawable.scan_24,
                                     title = stringResource(R.string.Button_ScanQr),
                                     modifier = Modifier.testTag(TestTags.BALANCE_SCAN),
                                     onClick = onScanClick
@@ -281,7 +281,7 @@ fun BalanceItems(
                                 )
                                 BalanceActionButton(
                                     variant = ButtonVariant.Secondary,
-                                    icon = R.drawable.ic_arrow_up_24,
+                                    icon = R.drawable.arrow_m_up_24,
                                     title = stringResource(R.string.Balance_Send),
                                     modifier = Modifier.testTag(TestTags.BALANCE_SEND),
                                     onClick = {

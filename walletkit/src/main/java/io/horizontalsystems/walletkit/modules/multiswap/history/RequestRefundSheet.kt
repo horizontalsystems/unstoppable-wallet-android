@@ -224,10 +224,10 @@ object RequestRefundDataLoader {
                 add(ContactLink(ContactType.Twitter, "Twitter", it, it, R.drawable.ic_twitter_24))
             }
             contacts?.email?.takeIf { it.isNotBlank() }?.let {
-                add(ContactLink(ContactType.Email, "Email", it, it, R.drawable.ic_mail_24))
+                add(ContactLink(ContactType.Email, "Email", it, it, R.drawable.mail_24))
             }
             contacts?.website?.takeIf { it.isNotBlank() }?.let {
-                add(ContactLink(ContactType.Website, "Website", it, it, R.drawable.ic_globe))
+                add(ContactLink(ContactType.Website, "Website", it, it, R.drawable.globe_24))
             }
         }
 

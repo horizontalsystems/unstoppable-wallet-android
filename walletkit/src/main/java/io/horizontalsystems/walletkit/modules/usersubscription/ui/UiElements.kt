@@ -100,7 +100,8 @@ fun PremiumPage(
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.polistar_54),
+                        modifier = Modifier.size(54.dp),
+                        painter = painterResource(R.drawable.polistar_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.orange,
                     )
