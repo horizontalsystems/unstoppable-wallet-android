@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 
 @Composable
 fun CellUniversal(
+    modifier: Modifier = Modifier,
     borderTop: Boolean = true,
     paddingVertical: Dp = 12.dp,
     paddingHorizontal: Dp = 16.dp,
@@ -34,17 +35,17 @@ fun CellUniversal(
     color: Color? = null,
     content: @Composable() (RowScope.() -> Unit),
 ) {
-    var modifier: Modifier = Modifier.fillMaxWidth()
+    var boxModifier: Modifier = modifier.fillMaxWidth()
 
     onClick?.let {
-        modifier = modifier.clickable(onClick = onClick)
+        boxModifier = boxModifier.clickable(onClick = onClick)
     }
 
     color?.let {
-        modifier = modifier.background(it)
+        boxModifier = boxModifier.background(it)
     }
 
-    Box(modifier = modifier) {
+    Box(modifier = boxModifier) {
         if (borderTop) {
             HsDivider(modifier = Modifier.align(Alignment.TopCenter))
         }

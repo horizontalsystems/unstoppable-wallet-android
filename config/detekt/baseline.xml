@@ -783,7 +783,6 @@
     <ID>ModifierMissing:CellRightInfoTextIcon.kt:@Composable fun CellRightInfoTextIcon</ID>
     <ID>ModifierMissing:CellRightNavigation.kt:@Composable fun CellRightNavigation</ID>
     <ID>ModifierMissing:CellRightSelectors.kt:@Composable fun CellRightSelectors</ID>
-    <ID>ModifierMissing:CellUniversal.kt:@Composable fun CellUniversal</ID>
     <ID>ModifierMissing:CellUniversal.kt:@Composable fun CellUniversalFixedHeight</ID>
     <ID>ModifierMissing:Chart.kt:@Composable fun HsChartLineHeader</ID>
     <ID>ModifierMissing:Chart.kt:@Composable fun PriceVolChart</ID>

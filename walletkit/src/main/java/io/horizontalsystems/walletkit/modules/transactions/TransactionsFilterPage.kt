@@ -9,19 +9,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.badge
@@ -36,6 +36,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
@@ -103,7 +104,7 @@ fun FilterScreen(
                             title = stringResource(R.string.Transactions_Filter_Blockchain),
                             value = filterBlockchain?.name
                                 ?: stringResource(id = R.string.Transactions_Filter_AllBlockchains),
-                            valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                            testTag = TestTags.TX_FILTER_BLOCKCHAIN,
                             onClick = {
                                 navigation.slideFromRight(FilterBlockchainPage)
                             }
@@ -117,7 +118,7 @@ fun FilterScreen(
                             title = stringResource(R.string.Transactions_Filter_Coin),
                             value = selectedCoinFilterTitle
                                 ?: stringResource(id = R.string.Transactions_Filter_AllCoins),
-                            valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                            testTag = TestTags.TX_FILTER_COIN,
                             onClick = {
                                 navigation.slideFromRight(FilterCoinPage)
                             }
@@ -143,7 +144,7 @@ fun FilterScreen(
                             title = stringResource(R.string.Transactions_Filter_Contacts),
                             value = filterContact?.name
                                 ?: stringResource(id = R.string.Transactions_Filter_AllContacts),
-                            valueColor = if (filterContact != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                            testTag = TestTags.TX_FILTER_CONTACT,
                             onClick = forResult
                         )
                     }
@@ -185,11 +186,12 @@ fun FilterScreen(
 private fun FilterDropdownCell(
     title: String,
     value: String,
-    valueColor: Color,
+    testTag: String,
     onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
+            .testTag(testTag)
             .fillMaxHeight()
             .clickable {
                 onClick.invoke()
@@ -203,23 +205,13 @@ private fun FilterDropdownCell(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        Row(
-            Modifier.fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = value,
-                maxLines = 1,
-                style = ComposeAppTheme.typography.body,
-                color = valueColor
-            )
-            Icon(
-                modifier = Modifier.padding(start = 4.dp),
-                painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
+        HSDropdownButton(
+            modifier = Modifier.testTag(TestTags.dropdownValue(testTag)),
+            variant = ButtonVariant.Secondary,
+            style = ButtonStyle.Transparent,
+            title = value,
+            onClick = onClick,
+        )
     }
 }
 

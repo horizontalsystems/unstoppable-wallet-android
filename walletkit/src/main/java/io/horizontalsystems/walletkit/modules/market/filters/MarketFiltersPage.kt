@@ -1,17 +1,12 @@
 package io.horizontalsystems.walletkit.modules.market.filters
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -20,15 +15,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -52,14 +49,12 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.PremiumHeader
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
-import io.horizontalsystems.walletkit.ui.compose.components.body_remus
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
@@ -278,16 +273,19 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_ChooseSet,
             value = stringResource(uiState.coinListSet.titleResId),
             borderTop = false,
+            testTag = TestTags.MARKET_FILTERS_SET,
             onDropdownClick = { showBottomSheet(CoinSet) }
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Volume24h,
             value = uiState.volume.title,
+            testTag = TestTags.MARKET_FILTERS_VOLUME,
             onDropdownClick = { showBottomSheet(TradingVolume) }
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Blockchains,
             value = uiState.selectedBlockchainsValue,
+            testTag = TestTags.MARKET_FILTERS_BLOCKCHAINS,
             onDropdownClick = onFilterByBlockchainsClick
         )
     }
@@ -300,6 +298,7 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Sectors,
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
+            testTag = TestTags.MARKET_FILTERS_SECTORS,
             onDropdownClick = {
                 navigation.paidAction(AdvancedSearch) {
                     navigation.slideFromBottom(SectorsSelectorPage)
@@ -318,7 +317,7 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PriceChange,
             value = uiState.priceChange.title,
-            valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
+            testTag = TestTags.MARKET_FILTERS_PRICE_CHANGE,
             onDropdownClick = {
                 navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceChange)
@@ -332,6 +331,7 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PricePeriod,
             value = uiState.period.title,
+            testTag = TestTags.MARKET_FILTERS_PRICE_PERIOD,
             onDropdownClick = {
                 navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(PricePeriod)
@@ -346,6 +346,7 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_TradingSignals,
             value = uiState.filterTradingSignal.title,
+            testTag = TestTags.MARKET_FILTERS_TRADING_SIGNALS,
             onDropdownClick = {
                 navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(TradingSignals)
@@ -359,6 +360,7 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PriceCloseTo,
             value = uiState.priceCloseTo?.titleResId?.let { stringResource(it) },
+            testTag = TestTags.MARKET_FILTERS_PRICE_CLOSE_TO,
             onDropdownClick = {
                 navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceCloseTo)
@@ -508,23 +510,28 @@ fun AdvancedSearchContent(
 private fun AdvancedSearchDropdown(
     @StringRes title: Int,
     value: String?,
-    valueColor: TextColor = TextColor.Leah,
+    testTag: String,
     borderTop: Boolean = true,
     onDropdownClick: () -> Unit,
 ) {
     CellUniversal(
+        modifier = Modifier.testTag(testTag),
         borderTop = borderTop,
         onClick = onDropdownClick
     ) {
         body_leah(
+            modifier = Modifier.weight(1f),
             text = stringResource(title),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        Spacer(Modifier.weight(1f))
-        FilterMenu(value, valueColor) {
-            onDropdownClick()
-        }
+        HSDropdownButton(
+            modifier = Modifier.testTag(TestTags.dropdownValue(testTag)),
+            variant = ButtonVariant.Secondary,
+            style = ButtonStyle.Transparent,
+            title = value ?: stringResource(R.string.Any),
+            onClick = onDropdownClick,
+        )
     }
 }
 
@@ -559,54 +566,6 @@ private fun AdvancedSearchSwitch(
         HsSwitch(
             checked = enabled,
             onCheckedChange = onChecked,
-        )
-    }
-}
-
-@Composable
-private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Unit) {
-    val valueText = title ?: stringResource(R.string.Any)
-    val textColor = if (title != null) valueColor else TextColor.Grey
-    Row(
-        Modifier
-            .fillMaxHeight()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick,
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        when (textColor) {
-            TextColor.Grey -> body_grey(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-
-            TextColor.Remus -> body_remus(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-
-            TextColor.Lucian -> body_lucian(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-
-            TextColor.Leah -> body_leah(
-                text = valueText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-        }
-        Icon(
-            modifier = Modifier.padding(start = 4.dp),
-            painter = painterResource(id = R.drawable.ic_down_arrow_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
         )
     }
 }

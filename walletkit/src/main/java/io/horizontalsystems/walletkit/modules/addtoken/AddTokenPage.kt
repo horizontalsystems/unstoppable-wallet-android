@@ -6,15 +6,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
@@ -34,7 +37,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
@@ -104,13 +107,15 @@ private fun AddTokenScreen(
 
             CellUniversalLawrenceSection(
                 listOf {
+                    val selectBlockchain = navigation.slideFromRightForResult<Blockchain>({ BlockchainSelectorPage }) {
+                        viewModel.onBlockchainSelect(it)
+                    }
                     RowUniversal(
                         modifier = Modifier
+                            .testTag(TestTags.ADD_TOKEN_BLOCKCHAIN)
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClick = navigation.slideFromRightForResult<Blockchain>({ BlockchainSelectorPage }) {
-                            viewModel.onBlockchainSelect(it)
-                        }
+                        onClick = selectBlockchain
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_blocks_24),
@@ -121,14 +126,12 @@ private fun AddTokenScreen(
                             text = stringResource(R.string.AddToken_Blockchain),
                             modifier = Modifier.weight(1f)
                         )
-                        subhead1_grey(
-                            text = viewModel.selectedBlockchain.name,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey
+                        HSDropdownButton(
+                            modifier = Modifier.testTag(TestTags.dropdownValue(TestTags.ADD_TOKEN_BLOCKCHAIN)),
+                            variant = ButtonVariant.Secondary,
+                            style = ButtonStyle.Transparent,
+                            title = viewModel.selectedBlockchain.name,
+                            onClick = selectBlockchain,
                         )
                     }
                 }

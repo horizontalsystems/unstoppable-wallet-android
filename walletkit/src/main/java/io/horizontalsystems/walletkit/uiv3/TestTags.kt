@@ -267,6 +267,25 @@ object TestTags {
 
     fun selectorSwitch(index: Int) = "selector_switch_$index"
     const val SELECTOR_DONE = "selector_done"
+
+    // The dropdown button inside a row; it opens the same list as the row
+    fun dropdownValue(rowTag: String) = "${rowTag}_value"
+
+    const val MARKET_FILTERS_SET = "market_filters_set"
+    const val MARKET_FILTERS_VOLUME = "market_filters_volume"
+    const val MARKET_FILTERS_BLOCKCHAINS = "market_filters_blockchains"
+    const val MARKET_FILTERS_SECTORS = "market_filters_sectors"
+    const val MARKET_FILTERS_PRICE_CHANGE = "market_filters_price_change"
+    const val MARKET_FILTERS_PRICE_PERIOD = "market_filters_price_period"
+    const val MARKET_FILTERS_TRADING_SIGNALS = "market_filters_trading_signals"
+    const val MARKET_FILTERS_PRICE_CLOSE_TO = "market_filters_price_close_to"
+
+    const val TX_FILTER_BLOCKCHAIN = "tx_filter_blockchain"
+    const val TX_FILTER_COIN = "tx_filter_coin"
+    const val TX_FILTER_CONTACT = "tx_filter_contact"
+
+    const val ADD_TOKEN_BLOCKCHAIN = "add_token_blockchain"
+    const val CONTACT_ADDRESS_BLOCKCHAIN = "contact_address_blockchain"
 }
 
 // Read once; previews have no App, so they get false
