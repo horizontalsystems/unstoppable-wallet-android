@@ -210,9 +210,10 @@ fun EtfByChain(
                                 VSpacer(height = 8.dp)
                                 ChartTab(
                                     tabItems = uiState.chartTabs,
-                                ) { tab ->
-                                    viewModel.onSelectChartInterval(tab)
-                                }
+                                    onSelect = { tab ->
+                                        viewModel.onSelectChartInterval(tab)
+                                    }
+                                )
                             }
                         }
                         stickyHeader {

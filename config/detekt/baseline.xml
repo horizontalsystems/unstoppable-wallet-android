@@ -146,7 +146,6 @@
     <ID>ComposableParamOrder:CellLeft.kt:@Composable fun CellLeftImage</ID>
     <ID>ComposableParamOrder:CellRightControlsIconButton.kt:@Composable fun CellRightControlsIconButton</ID>
     <ID>ComposableParamOrder:CellUniversal.kt:@Composable fun CellUniversalFixedHeight</ID>
-    <ID>ComposableParamOrder:Chart.kt:@Composable fun &lt;T&gt; ChartTab</ID>
     <ID>ComposableParamOrder:ChartBars.kt:@Composable fun GraphicBars</ID>
     <ID>ComposableParamOrder:ChartBars.kt:@Composable fun GraphicBarsWithNegative</ID>
     <ID>ComposableParamOrder:CoinListComponents.kt:@Composable fun CoinList</ID>
@@ -209,7 +208,6 @@
     <ID>ComposableParamOrder:SwapPage.kt:@Composable fun AmountInput</ID>
     <ID>ComposableParamOrder:SwapPage.kt:@Composable private fun SwapScreenInner</ID>
     <ID>ComposableParamOrder:SwapPage.kt:@Composable private fun SwapTime</ID>
-    <ID>ComposableParamOrder:TabButton.kt:@OptIn(ExperimentalMaterialApi::class) @Composable fun TabBox</ID>
     <ID>ComposableParamOrder:TextImportant.kt:@Composable fun TextAttention</ID>
     <ID>ComposableParamOrder:TextImportant.kt:@Composable fun TextImportant</ID>
     <ID>ComposableParamOrder:TextImportant.kt:@Composable fun TextImportantError</ID>
@@ -235,7 +233,6 @@
     <ID>ContentSlotReused:CrossSlide.kt:content: @Composable (T) -&gt; Unit</ID>
     <ID>ContentSlotReused:ImportWalletPage.kt:group: @Composable (rows: @Composable () -&gt; Unit) -&gt; Unit</ID>
     <ID>ContentSlotReused:TokenSelectScreen.kt:header: @Composable (() -&gt; Unit)? = null</ID>
-    <ID>ContentTrailingLambda:TabButton.kt:content: @Composable RowScope.() -&gt; Unit</ID>
     <ID>CyclomaticComplexMethod:AccountsStorage.kt:AccountsStorage$override fun allAccounts: List&lt;Account&gt;</ID>
     <ID>CyclomaticComplexMethod:AccountsStorage.kt:AccountsStorage$private fun getAccountRecord: AccountRecord</ID>
     <ID>CyclomaticComplexMethod:ActivateTokenPage.kt:@Composable fun ActivateTokenScreen</ID>
@@ -400,7 +397,6 @@
     <ID>LambdaParameterEventTrailing:BalanceNoAccount.kt:onExistingWalletClick: () -&gt; Unit</ID>
     <ID>LambdaParameterEventTrailing:CellRightControlsIconButton.kt:onClick: () -&gt; Unit</ID>
     <ID>LambdaParameterEventTrailing:CellRightControlsSwitcher.kt:onCheckedChange: (Boolean) -&gt; Unit</ID>
-    <ID>LambdaParameterEventTrailing:Chart.kt:onSelect: (T) -&gt; Unit</ID>
     <ID>LambdaParameterEventTrailing:CoinMarketsScreen.kt:onToggle: (Boolean) -&gt; Unit</ID>
     <ID>LambdaParameterEventTrailing:Components.kt:onActionClick: (CoinAnalyticsModule.ActionType) -&gt; Unit</ID>
     <ID>LambdaParameterEventTrailing:CreateAccountPage.kt:onClick: () -&gt; Unit</ID>
@@ -550,7 +546,6 @@
     <ID>LongMethod:OpenCryptoPayScreen.kt:@Composable fun OpenCryptoPayScreen</ID>
     <ID>LongMethod:OverallScoreInfoPage.kt:private fun getScores: Map&lt;OverallScore, String&gt;</ID>
     <ID>LongMethod:PasscodeBlock.kt:@Composable fun PasscodeBlock</ID>
-    <ID>LongMethod:PinTopBlock.kt:@Composable fun PinTopBlock</ID>
     <ID>LongMethod:PrivateSendConfirmationPage.kt:@Composable private fun PrivateSendConfirmationScreen</ID>
     <ID>LongMethod:PrivateSendManager.kt:PrivateSendManager$suspend fun preview: PrivateSendPreview</ID>
     <ID>LongMethod:ProChartService.kt:ProChartService$override suspend fun getItems: ChartPointsWrapper</ID>
@@ -999,8 +994,6 @@
     <ID>ModifierMissing:SwapPage.kt:@Composable fun FiatAmountInput</ID>
     <ID>ModifierMissing:SwapPage.kt:@Composable fun SwapScreen</ID>
     <ID>ModifierMissing:SwapSettingsSlippagePage.kt:@Composable fun SwapSlippageSettingsScreen</ID>
-    <ID>ModifierMissing:TabButton.kt:@Composable fun TabButtonSecondaryTransparent</ID>
-    <ID>ModifierMissing:TabButton.kt:@OptIn(ExperimentalMaterialApi::class) @Composable fun TabBox</ID>
     <ID>ModifierMissing:TabsSectionButtons.kt:@Composable fun TabsSectionButtons</ID>
     <ID>ModifierMissing:TabsTop.kt:@Composable fun TabsTop</ID>
     <ID>ModifierMissing:TechnicalAdvice.kt:@Composable fun TechnicalAdviceBlock</ID>

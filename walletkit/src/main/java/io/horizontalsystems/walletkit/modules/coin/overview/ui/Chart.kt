@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -53,6 +54,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartVolumeType
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.walletkit.R
@@ -67,7 +72,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.GraphicBarsWithNegat
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsPeriodsScrollableTabRow
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
-import io.horizontalsystems.walletkit.ui.compose.components.TabButtonSecondaryTransparent
 import io.horizontalsystems.walletkit.ui.compose.components.TabPeriod
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.diffColor
@@ -76,6 +80,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.micro_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
 
 private const val MAX_WIDTH = 600
@@ -373,10 +378,11 @@ fun Chart(
         VSpacer(height = 8.dp)
         ChartTab(
             tabItems = uiState.tabItems,
-        ) {
-            chartViewModel.onSelectChartInterval(it)
-            onSelectChartInterval?.invoke(it)
-        }
+            onSelect = {
+                chartViewModel.onSelectChartInterval(it)
+                onSelectChartInterval?.invoke(it)
+            }
+        )
     }
 }
 
@@ -745,7 +751,11 @@ fun PriceVolChart(
 }
 
 @Composable
-fun <T> ChartTab(modifier: Modifier = Modifier, tabItems: List<TabItem<T>>, onSelect: (T) -> Unit) {
+fun ChartTab(
+    tabItems: List<TabItem<HsTimePeriod?>>,
+    onSelect: (HsTimePeriod?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val tabIndex = tabItems.indexOfFirst { it.selected }
 
     TabPeriod(modifier = modifier) {
@@ -766,12 +776,15 @@ fun <T> ChartTab(modifier: Modifier = Modifier, tabItems: List<TabItem<T>>, onSe
                         selected = selected,
                         onClick = { },
                     ) {
-                        TabButtonSecondaryTransparent(
+                        HSButton(
+                            modifier = Modifier.testTag(TestTags.chartPeriod(tabItem.item?.value ?: "all")),
+                            variant = if (selected) ButtonVariant.Primary else ButtonVariant.Secondary,
+                            style = if (selected) ButtonStyle.Solid else ButtonStyle.Transparent,
+                            size = ButtonSize.Small,
                             title = tabItem.title,
-                            onSelect = {
+                            onClick = {
                                 onSelect.invoke(tabItem.item)
-                            },
-                            selected = selected
+                            }
                         )
                     }
                 }

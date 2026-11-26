@@ -86,6 +86,9 @@ object TestTags {
     // The coin icon carries the sync state: synced, syncing or failed
     fun balanceItemSync(coinCode: String, state: String) = "balance_item_${coinCode}_$state"
 
+    // The period is the server's code for it ("1d", "1w", ... "5y"), or "all"
+    fun chartPeriod(period: String) = "chart_period_$period"
+
     const val TOKEN_BALANCE = "token_balance"
     const val TOKEN_CHART = "token_chart"
     const val TOKEN_RECEIVE = "token_receive"
