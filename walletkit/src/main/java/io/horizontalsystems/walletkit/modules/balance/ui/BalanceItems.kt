@@ -266,7 +266,7 @@ fun BalanceItems(
                                 )
                                 BalanceActionButton(
                                     variant = ButtonVariant.Secondary,
-                                    icon = R.drawable.ic_arrow_down_24,
+                                    icon = R.drawable.arrow_m_down_24,
                                     title = stringResource(R.string.Balance_Receive),
                                     modifier = Modifier.testTag(TestTags.BALANCE_RECEIVE),
                                     enabled = true,

@@ -165,7 +165,7 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
         if (hasWebsiteUrl) {
             Image(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(id = R.drawable.ic_arrow_right),
+                painter = painterResource(id = R.drawable.arrow_b_right_24),
                 contentDescription = "arrow icon"
             )
         }

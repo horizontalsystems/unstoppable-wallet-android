@@ -117,7 +117,7 @@ fun ReceiveScreen(
 
                     Icon(
                         modifier = Modifier.padding(end = 16.dp).size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        painter = painterResource(id = R.drawable.arrow_b_right_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey
                     )

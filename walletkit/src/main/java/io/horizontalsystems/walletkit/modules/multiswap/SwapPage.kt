@@ -1066,7 +1066,7 @@ private fun SwapInput(
                     variant = ButtonVariant.Secondary,
                     style = ButtonStyle.Solid,
                     size = ButtonSize.Small,
-                    icon = painterResource(id = R.drawable.ic_arrow_down_24),
+                    icon = painterResource(id = R.drawable.arrow_m_down_24),
                     enabled = switchPairsEnabled,
                     modifier = Modifier.testTag(TestTags.SWAP_SWITCH),
                     onClick = onSwitchPairs

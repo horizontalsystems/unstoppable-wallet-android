@@ -425,7 +425,7 @@ fun BoxScope.SectionArrow() {
             modifier = Modifier
                 .size(20.dp)
                 .align(Alignment.Center),
-            painter = painterResource(R.drawable.ic_arrow_down_24),
+            painter = painterResource(R.drawable.arrow_m_down_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey,
         )

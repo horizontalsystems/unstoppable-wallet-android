@@ -275,7 +275,7 @@ private fun TvlMenu(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
             title = stringResource(R.string.Market_TVL),
-            icon = painterResource(if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20),
+            icon = painterResource(if (sortDescending) R.drawable.arrow_m_down_24 else R.drawable.arrow_m_up_24),
             onClick = onToggleSortType
         )
         tvlDiffType?.let {

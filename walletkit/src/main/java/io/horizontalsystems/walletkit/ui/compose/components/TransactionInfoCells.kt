@@ -271,7 +271,7 @@ fun PriceWithToggleCell(
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.ic_arrow_swap3_20),
+                painter = painterResource(R.drawable.arrow_m_left_right_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
             )
@@ -428,7 +428,7 @@ fun TransactionInfoStatusCell(
             TransactionStatus.Completed -> {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_checkmark_20),
+                    painter = painterResource(id = R.drawable.check_24),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.remus
                 )
@@ -471,7 +471,7 @@ fun TransactionInfoSpeedUpCell(
         }
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_arrow_medium2_up_24),
+            painter = painterResource(R.drawable.arrow_m_up_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.orange
         )
@@ -589,7 +589,7 @@ fun TransactionInfoExplorerCell(
         )
         Image(
             modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
+            painter = painterResource(id = R.drawable.arrow_b_right_24),
             contentDescription = null,
         )
     }
@@ -758,7 +758,7 @@ fun TransactionInfoSentToSelfCell() {
     ) {
         Icon(
             modifier = Modifier.padding(end = 16.dp).size(20.dp),
-            painter = painterResource(R.drawable.ic_arrow_return_20),
+            painter = painterResource(R.drawable.arrow_return_24),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
         )

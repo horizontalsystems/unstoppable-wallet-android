@@ -138,7 +138,7 @@ private fun AnyCell(
             overflow = TextOverflow.Ellipsis,
         )
         Icon(
-            painter = painterResource(R.drawable.ic_checkmark_20),
+            painter = painterResource(R.drawable.check_24),
             tint = ComposeAppTheme.colors.orange,
             contentDescription = null,
             modifier = Modifier.alpha(if (checked) 1f else 0f).size(20.dp)

@@ -506,7 +506,7 @@ internal fun DividerWithArrow() {
                 .requiredSize(20.dp)
                 .background(ComposeAppTheme.colors.lawrence)
                 .size(20.dp),
-            painter = painterResource(R.drawable.ic_arrow_down_20),
+            painter = painterResource(R.drawable.arrow_m_down_24),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
         )

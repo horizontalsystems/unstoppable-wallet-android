@@ -324,7 +324,7 @@ fun RpcCell(
             if (item.selected) {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_checkmark_20),
+                    painter = painterResource(id = R.drawable.check_24),
                     tint = ComposeAppTheme.colors.orange,
                     contentDescription = null
                 )

@@ -154,7 +154,7 @@ private fun NetworkSettingCell(
             if (checked) {
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_checkmark_20),
+                    painter = painterResource(R.drawable.check_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null,
                 )

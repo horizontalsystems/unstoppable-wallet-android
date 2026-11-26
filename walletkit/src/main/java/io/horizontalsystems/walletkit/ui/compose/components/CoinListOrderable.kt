@@ -65,7 +65,7 @@ fun CoinListOrderable(
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_arrow_big_up_20),
+                                painter = painterResource(id = R.drawable.arrow_b_up_24),
                                 tint = ComposeAppTheme.colors.grey,
                                 contentDescription = null
                             )
@@ -75,7 +75,7 @@ fun CoinListOrderable(
                         ) {
                             Icon(
                                 modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_arrow_big_down_20),
+                                painter = painterResource(id = R.drawable.arrow_b_down_24),
                                 tint = ComposeAppTheme.colors.grey,
                                 contentDescription = null
                             )

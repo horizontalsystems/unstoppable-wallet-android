@@ -106,7 +106,7 @@ private fun CellContact(
         if (contact == selected) {
             HFillSpacer(minWidth = 8.dp)
             Icon(
-                painter = painterResource(id = R.drawable.icon_check_1_24),
+                painter = painterResource(id = R.drawable.check_24),
                 contentDescription = "selected",
                 tint = ComposeAppTheme.colors.orange
             )

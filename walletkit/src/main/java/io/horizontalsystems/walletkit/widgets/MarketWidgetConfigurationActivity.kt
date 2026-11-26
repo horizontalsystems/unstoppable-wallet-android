@@ -96,7 +96,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                                 if (selectedType == type) {
                                     Image(
                                         modifier = Modifier.size(20.dp),
-                                        painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                        painter = painterResource(id = R.drawable.check_24),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange)
                                     )

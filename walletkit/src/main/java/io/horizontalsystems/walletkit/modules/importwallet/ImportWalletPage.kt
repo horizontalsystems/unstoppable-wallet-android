@@ -335,7 +335,7 @@ internal fun ImportWalletWays(
                 onClick = actions.privateKey,
             )
             Way(
-                icon = R.drawable.ic_download_24,
+                icon = R.drawable.arrow_in_24,
                 title = R.string.ImportWallet_BackupFile,
                 subtitle = R.string.ImportWallet_BackupFile_Description,
                 tag = TestTags.IMPORT_BACKUP_FILE,

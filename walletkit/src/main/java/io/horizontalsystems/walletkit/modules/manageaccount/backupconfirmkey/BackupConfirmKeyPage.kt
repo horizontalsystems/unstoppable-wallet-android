@@ -65,7 +65,7 @@ fun RecoveryPhraseVerifyScreen(navigation: HSNavigation, account: Account) {
             HudHelper.showSuccessMessage(
                 contenView = contenView,
                 resId = R.string.Hud_Text_Verified,
-                icon = R.drawable.icon_check_1_24,
+                icon = R.drawable.check_24,
                 iconTint = R.color.white
             )
             delay(300)

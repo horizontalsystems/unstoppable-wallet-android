@@ -322,7 +322,7 @@ fun RpcCell(
                 Spacer(Modifier.width(16.dp))
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_checkmark_20),
+                    painter = painterResource(id = R.drawable.check_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
                 )
@@ -383,7 +383,7 @@ private fun MoneroNodeRow(
             Spacer(Modifier.width(16.dp))
             Icon(
                 modifier = Modifier.size(20.dp),
-                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                painter = painterResource(id = R.drawable.check_24),
                 tint = ComposeAppTheme.colors.jacob,
                 contentDescription = null
             )

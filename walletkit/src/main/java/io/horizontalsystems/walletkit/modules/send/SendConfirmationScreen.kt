@@ -303,7 +303,7 @@ fun ConfirmationTopSection(
         }
         if (address != null) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_down_20),
+                painter = painterResource(id = R.drawable.arrow_m_down_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
                 modifier = Modifier

@@ -129,7 +129,7 @@ fun KeyActionItem(
                 )
                 Icon(
                     modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = io.horizontalsystems.walletkit.R.drawable.ic_arrow_right),
+                    painter = painterResource(id = io.horizontalsystems.walletkit.R.drawable.arrow_b_right_24),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )

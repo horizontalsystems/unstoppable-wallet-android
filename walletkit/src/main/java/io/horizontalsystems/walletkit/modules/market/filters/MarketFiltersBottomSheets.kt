@@ -73,7 +73,7 @@ fun <ItemClass> SingleSelectBottomSheetContent(
                 if (itemWrapper == selectedItem) {
                     Image(
                         modifier = Modifier.padding(start = 5.dp).size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_checkmark_20),
+                        painter = painterResource(id = R.drawable.check_24),
                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                         contentDescription = null
                     )
@@ -116,7 +116,7 @@ fun PriceCloseToBottomSheetContent(
                     if (selectedItem == null) {
                         Image(
                             modifier = Modifier.padding(start = 5.dp).size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_checkmark_20),
+                            painter = painterResource(id = R.drawable.check_24),
                             colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                             contentDescription = null
                         )
@@ -140,7 +140,7 @@ fun PriceCloseToBottomSheetContent(
                         if (item == selectedItem) {
                             Image(
                                 modifier = Modifier.padding(start = 5.dp).size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                painter = painterResource(id = R.drawable.check_24),
                                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                                 contentDescription = null
                             )
@@ -189,7 +189,7 @@ fun CoinSetBottomSheetContent(
                 if (item == selectedItem) {
                     Image(
                         modifier = Modifier.padding(start = 5.dp).size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_checkmark_20),
+                        painter = painterResource(id = R.drawable.check_24),
                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                         contentDescription = null
                     )

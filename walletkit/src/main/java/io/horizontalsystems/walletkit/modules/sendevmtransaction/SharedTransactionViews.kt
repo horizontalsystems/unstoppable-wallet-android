@@ -67,7 +67,7 @@ fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: S
         }
         if (viewItems.size == 2) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_down_20),
+                painter = painterResource(id = R.drawable.arrow_m_down_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
                 modifier = Modifier

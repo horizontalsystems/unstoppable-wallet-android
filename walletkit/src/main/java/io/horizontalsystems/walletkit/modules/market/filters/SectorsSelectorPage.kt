@@ -136,7 +136,7 @@ fun SectorsSelectorScreen(
                         if (itemWrapper in selectedItems) {
                             Image(
                                 modifier = Modifier.padding(start = 5.dp).size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                painter = painterResource(id = R.drawable.check_24),
                                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                                 contentDescription = null
                             )
