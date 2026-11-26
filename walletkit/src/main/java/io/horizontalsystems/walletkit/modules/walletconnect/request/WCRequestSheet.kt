@@ -122,7 +122,7 @@ fun WcRequestError(
             VSpacer(16.dp)
             Icon(
                 modifier = Modifier.size(60.dp),
-                painter = painterResource(R.drawable.ic_warning_filled_24),
+                painter = painterResource(R.drawable.warning_filled_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.lucian
             )

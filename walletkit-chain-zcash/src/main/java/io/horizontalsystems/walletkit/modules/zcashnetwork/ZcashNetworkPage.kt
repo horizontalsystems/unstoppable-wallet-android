@@ -173,7 +173,7 @@ private fun LazyListScope.customEndpointListSection(
                     onClick = { onDelete(item.endpoint) },
                     content = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_circle_minus_24),
+                            painter = painterResource(R.drawable.minus_e_24),
                             tint = ComposeAppTheme.colors.grey,
                             contentDescription = "delete",
                         )

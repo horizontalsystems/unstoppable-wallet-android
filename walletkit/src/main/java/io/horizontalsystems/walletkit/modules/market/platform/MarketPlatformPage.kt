@@ -116,7 +116,7 @@ private fun PlatformScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
-                icon = R.drawable.ic_info_24,
+                icon = R.drawable.info_24,
                 onClick = {
                     isInfoBottomSheetVisible = true
                 },
@@ -239,7 +239,7 @@ private fun PlatformScreen(
     }
     if (isInfoBottomSheetVisible) {
         InfoBottomSheet(
-            icon = R.drawable.ic_info_24,
+            icon = R.drawable.info_24,
             title = platform.name,
             description = stringResource(
                 R.string.MarketPlatformCoins_PlatformEcosystemDescription,

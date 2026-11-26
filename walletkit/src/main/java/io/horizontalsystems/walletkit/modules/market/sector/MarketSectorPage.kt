@@ -97,7 +97,7 @@ fun SectorScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
-                icon = R.drawable.ic_info_24,
+                icon = R.drawable.info_24,
                 onClick = {
                     isInfoBottomSheetVisible = true
                 },
@@ -208,7 +208,7 @@ fun SectorScreen(
     }
     if (isInfoBottomSheetVisible) {
         InfoBottomSheet(
-            icon = R.drawable.ic_info_24,
+            icon = R.drawable.info_24,
             title = viewModel.categoryName,
             description = viewModel.categoryDescription,
             bottomSheetState = infoModalBottomSheetState,

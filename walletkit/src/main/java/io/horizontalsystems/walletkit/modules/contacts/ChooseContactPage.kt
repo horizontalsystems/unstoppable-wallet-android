@@ -120,7 +120,7 @@ fun ChooseContactScreen(
                     listOf(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Search),
-                            icon = R.drawable.icon_search,
+                            icon = R.drawable.search_24,
                             onClick = {
                                 searchMode = true
                             }

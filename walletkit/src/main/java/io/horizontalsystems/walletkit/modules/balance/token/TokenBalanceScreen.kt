@@ -415,7 +415,7 @@ private fun AttentionIconButton(caution: Caution, onClick: () -> Unit) {
                 indication = null,
                 onClick = onClick
             ),
-        painter = painterResource(R.drawable.ic_warning_filled_24),
+        painter = painterResource(R.drawable.warning_filled_24),
         contentDescription = caution.text,
         tint = tint,
     )

@@ -69,7 +69,7 @@ fun TokenBalanceErrorView(
     modifier: Modifier = Modifier,
     text: String,
     title: String? = null,
-    @DrawableRes icon: Int = R.drawable.ic_warning_filled_24,
+    @DrawableRes icon: Int = R.drawable.warning_filled_24,
     paddingValues: PaddingValues = PaddingValues(),
     actionsComposable: (@Composable () -> Unit)? = null
 ) {
@@ -120,7 +120,7 @@ fun TokenBalanceErrorViewPreview() {
             modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
             text = stringResource(R.string.Transactions_EmptyList),
             title = stringResource(R.string.Tron_TokenPage_AddressNotActive_Title),
-            icon = R.drawable.ic_warning_filled_24,
+            icon = R.drawable.warning_filled_24,
         ) {
             HsTextButton(
                 onClick = {

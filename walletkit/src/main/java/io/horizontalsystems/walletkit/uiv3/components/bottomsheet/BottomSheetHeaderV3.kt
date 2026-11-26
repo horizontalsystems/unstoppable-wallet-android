@@ -101,7 +101,7 @@ fun BottomSheetHeaderV3(
                     ) {
                         HSIconButton(
                             modifier = Modifier.testTag(TestTags.SHEET_CLOSE),
-                            icon = painterResource(id = R.drawable.ic_close),
+                            icon = painterResource(id = R.drawable.close_24),
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
                             onClick = { onCloseClick?.invoke() }
@@ -125,7 +125,7 @@ fun BottomSheetHeaderV3(
                     .align(Alignment.TopEnd)
                     .padding(top = 16.dp, end = 16.dp)
                     .testTag(TestTags.SHEET_CLOSE),
-                icon = painterResource(id = R.drawable.ic_close),
+                icon = painterResource(id = R.drawable.close_24),
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
                 onClick = { onCloseClick?.invoke() }

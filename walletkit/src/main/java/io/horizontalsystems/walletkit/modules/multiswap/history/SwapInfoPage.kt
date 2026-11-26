@@ -321,11 +321,11 @@ internal fun SwapDetailsCard(
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = infoTitle.hs,
-                        icon = painterResource(R.drawable.ic_info_24),
+                        icon = painterResource(R.drawable.info_24),
                         iconTint = ComposeAppTheme.colors.grey,
                         onIconClick = {
                             navigation.slideFromBottom(
-                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.clock_24))
                             )
                         },
                     )

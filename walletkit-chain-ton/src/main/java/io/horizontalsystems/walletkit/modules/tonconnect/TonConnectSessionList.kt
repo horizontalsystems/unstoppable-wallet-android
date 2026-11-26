@@ -113,7 +113,7 @@ private fun LazyListScope.TCSection(
                     onClick = { onDelete(dapp) },
                     content = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                            painter = painterResource(id = R.drawable.minus_e_24),
                             tint = ComposeAppTheme.colors.grey,
                             contentDescription = "delete",
                         )

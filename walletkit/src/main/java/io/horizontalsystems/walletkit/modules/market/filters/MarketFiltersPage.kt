@@ -232,7 +232,7 @@ private fun BSContent(
         PricePeriod -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_PricePeriod,
-                headerIcon = R.drawable.ic_circle_clock_24,
+                headerIcon = R.drawable.clock_24,
                 items = viewModel.periodViewItemOptions,
                 selectedItem = uiState.period,
                 onSelect = {

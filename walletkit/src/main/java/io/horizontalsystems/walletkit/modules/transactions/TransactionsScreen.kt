@@ -154,7 +154,7 @@ fun TransactionsScreen(
                                         .background(ComposeAppTheme.colors.lawrence)
                                         .testTag(TestTags.TX_WAITING_SYNC),
                                     text = stringResource(R.string.Transactions_WaitForSync),
-                                    icon = R.drawable.ic_clock
+                                    icon = R.drawable.clock_24
                                 )
                             } else {
                                 ListEmptyView(

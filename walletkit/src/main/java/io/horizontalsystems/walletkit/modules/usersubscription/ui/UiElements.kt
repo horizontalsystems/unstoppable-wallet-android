@@ -82,7 +82,7 @@ fun PremiumPage(
                                 indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
                                 onClick = onClose
                             ),
-                        painter = painterResource(R.drawable.ic_close),
+                        painter = painterResource(R.drawable.close_24),
                         contentDescription = stringResource(R.string.Button_Close),
                         tint = ComposeAppTheme.colors.grey,
                     )

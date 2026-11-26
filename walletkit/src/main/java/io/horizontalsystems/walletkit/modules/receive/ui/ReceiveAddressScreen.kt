@@ -120,7 +120,7 @@ fun ReceiveAddressScreen(
         menuItems = if (closeModule == null) emptyList() else listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Done),
-                icon = R.drawable.ic_close,
+                icon = R.drawable.close_24,
                 onClick = closeModule
             )
         )
@@ -131,7 +131,7 @@ fun ReceiveAddressScreen(
                     is ViewState.Error -> {
                         ErrorScreenWithAction(
                             text = stringResource(R.string.SyncError),
-                            icon = R.drawable.ic_warning_64,
+                            icon = R.drawable.warning_filled_24,
                         ) {
                             HsTextButton(
                                 onClick = onErrorClick,

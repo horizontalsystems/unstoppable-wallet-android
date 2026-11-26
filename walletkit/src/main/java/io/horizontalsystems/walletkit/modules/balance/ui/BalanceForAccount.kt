@@ -151,7 +151,7 @@ fun BalanceForAccount(
             add(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Activity_Title),
-                    icon = R.drawable.ic_circle_clock_24,
+                    icon = R.drawable.clock_24,
                     testTag = TestTags.BALANCE_TRANSACTIONS,
                     onClick = {
                         navigation.slideFromRight(TransactionsPage)

@@ -36,7 +36,7 @@ fun SwapAmlErrorBottomSheet(
         },
         content = {
             BottomSheetHeaderV3(
-                image72 = painterResource(R.drawable.ic_warning_64),
+                image72 = painterResource(R.drawable.warning_filled_24),
                 imageTint = ComposeAppTheme.colors.lucian,
                 title = stringResource(R.string.Swap_AmlError_Title),
             )
@@ -68,7 +68,7 @@ fun SwapAmlUnknownBottomSheet(
         },
         content = {
             BottomSheetHeaderV3(
-                image72 = painterResource(R.drawable.ic_warning_64),
+                image72 = painterResource(R.drawable.warning_filled_24),
                 imageTint = ComposeAppTheme.colors.jacob,
                 title = stringResource(R.string.Swap_AmlUnknown_Title),
             )
@@ -100,7 +100,7 @@ fun SwapAmlRiskBottomSheet(
         },
         content = {
             BottomSheetHeaderV3(
-                image72 = painterResource(R.drawable.ic_warning_64),
+                image72 = painterResource(R.drawable.warning_filled_24),
                 imageTint = ComposeAppTheme.colors.lucian,
                 title = stringResource(R.string.Swap_AmlRisk_Title),
             )

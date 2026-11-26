@@ -110,7 +110,7 @@ object MainModule {
         Market(R.drawable.market_filled_24, R.string.Market_Title),
         Balance(R.drawable.wallet_filled_24, R.string.Balance_Title),
         Swap(R.drawable.swap_filled_24, R.string.Swap),
-        Settings(R.drawable.ic_settings_24, R.string.Settings_Title);
+        Settings(R.drawable.settings_filled_24, R.string.Settings_Title);
 
         companion object {
             private val map = values().associateBy(MainNavigation::name)

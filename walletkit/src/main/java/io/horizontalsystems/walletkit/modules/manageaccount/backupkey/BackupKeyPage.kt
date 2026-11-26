@@ -53,14 +53,14 @@ fun RecoveryPhraseScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
-                icon = R.drawable.ic_info_24,
+                icon = R.drawable.info_24,
                 onClick = {
                     FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
                 }
             ),
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
+                icon = R.drawable.close_24,
                 onClick = {
                     navigation.removeLastOrNull()
                 }

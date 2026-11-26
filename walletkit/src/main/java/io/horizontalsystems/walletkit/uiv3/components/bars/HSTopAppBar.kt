@@ -263,7 +263,7 @@ fun Preview_HSTopAppBar() {
                     showAlertDot = true
                 ),
                 MenuItem(
-                    icon = R.drawable.ic_warning_filled_24,
+                    icon = R.drawable.warning_filled_24,
                     title = TranslatableString.ResString(R.string.BalanceSyncError_Title),
                     tint = ComposeAppTheme.colors.lucian,
                     onClick = {

@@ -594,7 +594,7 @@ private fun SwapScreenInner(
                                 },
                                 onClickSwapTimeInfo = { infoTitle, infoText ->
                                     navigation.slideFromBottom(
-                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.clock_24))
                                     )
                                 }
                             )
@@ -857,7 +857,7 @@ private fun ProviderCellInfo(
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
-                        icon = painterResource(R.drawable.ic_info_24),
+                        icon = painterResource(R.drawable.info_24),
                         iconTint = ComposeAppTheme.colors.grey,
                     )
                 },
@@ -874,7 +874,7 @@ private fun ProviderCellInfo(
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = infoTitle.hs,
-                        icon = painterResource(R.drawable.ic_info_24),
+                        icon = painterResource(R.drawable.info_24),
                         iconTint = ComposeAppTheme.colors.grey,
                     )
                 },

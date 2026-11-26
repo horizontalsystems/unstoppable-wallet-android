@@ -78,7 +78,7 @@ fun MarketScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Balance_ReceiveHint_Search),
-                icon = R.drawable.ic_search,
+                icon = R.drawable.search_24,
                 tint = ComposeAppTheme.colors.grey,
                 onClick = {
                     navigation.slideFromBottom(MarketSearchPage)

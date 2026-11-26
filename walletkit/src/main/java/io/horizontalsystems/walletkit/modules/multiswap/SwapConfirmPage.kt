@@ -171,7 +171,7 @@ private fun SwapConfirmError(
             modifier = Modifier
                 .align(Alignment.Center)
                 .padding(horizontal = 64.dp),
-            icon = painterResource(R.drawable.ic_warning_filled_24),
+            icon = painterResource(R.drawable.warning_filled_24),
             iconTint = ComposeAppTheme.colors.grey,
             // A refused quote is not a failure to reach the provider: say which wallet to
             // change, or repeat the server's reason for an address it does not take, and let
@@ -388,7 +388,7 @@ private fun SwapConfirmInternal(
                         value = timeText.hs(if (uiState.splitOutputs != null) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navigation.slideFromBottom(
-                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.clock_24))
                             )
                         }
                     )
