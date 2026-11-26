@@ -1968,11 +1968,10 @@
     <string name="Activity_Empty_CrossPay">대기 중이거나 완료된 CrossPay 결제가 없습니다.</string>
     <string name="Transactions_FromUnknown">알 수 없는 발신자</string>
     <string name="Welcome_Description">원칙으로 지키는 프라이버시. 설계로 지키는 독립성</string>
-    <string name="Welcome_CreateNewWallet">새 지갑 만들기</string>
-    <string name="Welcome_AddExistingWallet">기존 지갑 추가</string>
-    <string name="Welcome_Consent">계속하면 %1$s에 동의하고 %2$s을 수락하게 됩니다</string>
-    <string name="Welcome_TermsOfUse">이용약관</string>
-    <string name="Welcome_PrivacyPolicy">개인정보 처리방침</string>
+    <string name="Welcome_CreateWallet">지갑 만들기</string>
+    <string name="Welcome_ImportWallet">지갑 가져오기</string>
+    <string name="Welcome_Consent">계속하면 %1$s에 동의하게 됩니다.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">이용약관 및 개인정보 처리방침</string>
     <string name="ImportWallet_ViewOnly">조회 전용 지갑</string>
     <string name="ImportWallet_ViewOnly_Description">잔액과 활동만 확인</string>
     <string name="Balance_NoWallets">지갑이 없습니다. 아래에서 추가하세요.</string>

@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,6 +36,7 @@ import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
@@ -52,7 +51,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
@@ -97,10 +95,6 @@ fun WelcomeScreen(navigation: HSNavigation) {
             LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.termsOfUseLink)
             stat(page = StatPage.Welcome, event = StatEvent.Open(StatPage.Terms))
         },
-        onPrivacy = {
-            LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.privacyPolicyLink)
-            stat(page = StatPage.Welcome, event = StatEvent.Open(StatPage.Privacy))
-        },
     )
 }
 
@@ -109,7 +103,6 @@ private fun WelcomeContent(
     onCreate: () -> Unit,
     onImport: () -> Unit,
     onTerms: () -> Unit,
-    onPrivacy: () -> Unit,
 ) {
     // With system animations turned off the screen is shown as it ends up
     val context = LocalContext.current
@@ -165,11 +158,14 @@ private fun WelcomeContent(
         }
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(ComposeAppTheme.colors.tyler)
     ) {
+        val screenHeight = constraints.maxHeight
+        val statusBars = WindowInsets.statusBars
+
         WelcomeGlow(
             animate = !still,
             startAt = if (settled) GLOW_SETTLED else 0f,
@@ -197,24 +193,38 @@ private fun WelcomeContent(
                 .windowInsetsPadding(WindowInsets.statusBars)
                 .windowInsetsPadding(WindowInsets.navigationBars)
         ) {
-            // The text sits low on the screen, and scrolls when the screen is too
-            // short for it at the user's font size
+            // The text takes the logo's place in the middle of the whole screen,
+            // not of the space the bars and the buttons leave. Where that would
+            // run into the buttons it moves up to end at them, and it scrolls
+            // when the screen is too short for it.
             BoxWithConstraints(Modifier.weight(1f)) {
+                val spaceHeight = constraints.maxHeight
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
-                        .heightIn(min = maxHeight)
+                        .layout { measurable, constraints ->
+                            val text = measurable.measure(constraints)
+                            val height = maxOf(spaceHeight, text.height)
+                            // The space starts below the status bar
+                            val centred = screenHeight / 2 - statusBars.getTop(this) - text.height / 2
+                            layout(text.width, height) {
+                                text.placeRelative(0, centred.coerceIn(0, height - text.height))
+                            }
+                        }
                         .padding(horizontal = 32.dp)
                 ) {
-                    Spacer(Modifier.weight(7f))
-                    titleLines.forEachIndexed { index, line ->
-                        Reveal(shown = index < shownLines) {
-                            Text(
-                                text = line,
-                                color = ComposeAppTheme.colors.leah,
-                                // Tighter than the font's own line height, as the design sets it
-                                style = ComposeAppTheme.typography.title2М.copy(lineHeight = 45.sp),
-                            )
+                    Column(
+                        modifier = Modifier.padding(top = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(TitleLineGap),
+                    ) {
+                        titleLines.forEachIndexed { index, line ->
+                            Reveal(shown = index < shownLines) {
+                                Text(
+                                    text = line,
+                                    color = ComposeAppTheme.colors.leah,
+                                    style = ComposeAppTheme.typography.title2М,
+                                )
+                            }
                         }
                     }
                     Reveal(shown = tailShown) {
@@ -233,7 +243,6 @@ private fun WelcomeContent(
                             style = ComposeAppTheme.typography.bodyR,
                         )
                     }
-                    Spacer(Modifier.weight(1f))
                 }
             }
 
@@ -254,7 +263,7 @@ private fun WelcomeContent(
                                     .fillMaxWidth()
                                     .testTag(TestTags.INTRO_CREATE_WALLET),
                                 variant = ButtonVariant.Primary,
-                                title = stringResource(R.string.Welcome_CreateNewWallet),
+                                title = stringResource(R.string.Welcome_CreateWallet),
                                 onClick = onCreate,
                             )
                         }
@@ -264,7 +273,7 @@ private fun WelcomeContent(
                                     .fillMaxWidth()
                                     .testTag(TestTags.INTRO_ADD_EXISTING_WALLET),
                                 variant = ButtonVariant.Secondary,
-                                title = stringResource(R.string.Welcome_AddExistingWallet),
+                                title = stringResource(R.string.Welcome_ImportWallet),
                                 onClick = onImport,
                             )
                         }
@@ -276,7 +285,7 @@ private fun WelcomeContent(
                                 .fillMaxWidth()
                                 .padding(horizontal = 32.dp, vertical = 8.dp)
                                 .testTag(TestTags.INTRO_AGREEMENT),
-                            text = consentText(onTerms, onPrivacy),
+                            text = consentText(onTerms),
                             color = ComposeAppTheme.colors.leah,
                             style = ComposeAppTheme.typography.caption,
                             textAlign = TextAlign.Center,
@@ -341,12 +350,11 @@ private fun Reveal(
     }
 }
 
-/** The consent sentence with the two document names as links. */
+/** The consent sentence with the documents' name as its one link. */
 @Composable
-private fun consentText(onTerms: () -> Unit, onPrivacy: () -> Unit): AnnotatedString {
-    val terms = stringResource(R.string.Welcome_TermsOfUse)
-    val privacy = stringResource(R.string.Welcome_PrivacyPolicy)
-    val sentence = stringResource(R.string.Welcome_Consent, terms, privacy)
+private fun consentText(onTerms: () -> Unit): AnnotatedString {
+    val terms = stringResource(R.string.Welcome_TermsAndPrivacyPolicy)
+    val sentence = stringResource(R.string.Welcome_Consent, terms)
     val linkStyle = TextLinkStyles(
         style = SpanStyle(
             fontWeight = ComposeAppTheme.typography.captionSB.fontWeight,
@@ -354,7 +362,7 @@ private fun consentText(onTerms: () -> Unit, onPrivacy: () -> Unit): AnnotatedSt
         )
     )
 
-    return textWithLinks(sentence, listOf(terms to onTerms, privacy to onPrivacy), linkStyle)
+    return textWithLinks(sentence, listOf(terms to onTerms), linkStyle)
 }
 
 // A fast start with a long soft landing, for what comes in
@@ -376,10 +384,12 @@ private object WelcomeTimeline {
 // The size the splash screen draws its icon at
 private val LogoSize = 288.dp
 
+private val TitleLineGap = 2.dp
+
 @Preview
 @Composable
 private fun Preview_WelcomeScreen() {
     ComposeAppTheme {
-        WelcomeContent(onCreate = {}, onImport = {}, onTerms = {}, onPrivacy = {})
+        WelcomeContent(onCreate = {}, onImport = {}, onTerms = {})
     }
 }

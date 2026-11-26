@@ -1974,11 +1974,10 @@
     <string name="Activity_Empty_CrossPay">Henüz bekleyen veya geçmiş bir CrossPay ödemeniz yok.</string>
     <string name="Transactions_FromUnknown">bilinmeyen gönderenden</string>
     <string name="Welcome_Description">İlke gereği gizli. Tasarım gereği bağımsız</string>
-    <string name="Welcome_CreateNewWallet">Yeni Cüzdan Oluştur</string>
-    <string name="Welcome_AddExistingWallet">Mevcut Cüzdanı Ekle</string>
-    <string name="Welcome_Consent">Devam ederek %1$s ve %2$s metinlerini kabul ediyorum</string>
-    <string name="Welcome_TermsOfUse">Kullanım Koşulları</string>
-    <string name="Welcome_PrivacyPolicy">Gizlilik Politikası</string>
+    <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
+    <string name="Welcome_ImportWallet">Cüzdanı İçe Aktar</string>
+    <string name="Welcome_Consent">Devam ederek %1$s metinlerini kabul ediyorum.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">Koşullar ve Gizlilik Politikası</string>
     <string name="ImportWallet_ViewOnly">Salt Görüntüleme Cüzdanı</string>
     <string name="ImportWallet_ViewOnly_Description">Yalnızca bakiye ve hareketler</string>
     <string name="Balance_NoWallets">Cüzdan yok. Aşağıdan bir tane ekleyin.</string>

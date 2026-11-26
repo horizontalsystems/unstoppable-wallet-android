@@ -1961,11 +1961,10 @@
     <string name="Activity_Empty_CrossPay">هنوز هیچ پرداخت CrossPay در انتظار یا گذشته‌ای ندارید.</string>
     <string name="Transactions_FromUnknown">از ناشناس</string>
     <string name="Welcome_Description">خصوصی بر پایه اصول. مستقل بر پایه طراحی</string>
-    <string name="Welcome_CreateNewWallet">ایجاد کیف پول جدید</string>
-    <string name="Welcome_AddExistingWallet">افزودن کیف پول موجود</string>
-    <string name="Welcome_Consent">با ادامه، با %1$s موافقت می‌کنم و %2$s را می‌پذیرم</string>
-    <string name="Welcome_TermsOfUse">شرایط استفاده</string>
-    <string name="Welcome_PrivacyPolicy">سیاست حفظ حریم خصوصی</string>
+    <string name="Welcome_CreateWallet">ایجاد کیف پول</string>
+    <string name="Welcome_ImportWallet">وارد کردن کیف پول</string>
+    <string name="Welcome_Consent">با ادامه، با %1$s موافقت می‌کنم.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">شرایط و سیاست حفظ حریم خصوصی</string>
     <string name="ImportWallet_ViewOnly">کیف پول فقط مشاهده</string>
     <string name="ImportWallet_ViewOnly_Description">فقط موجودی و فعالیت</string>
     <string name="Balance_NoWallets">کیف پولی وجود ندارد. یکی را در پایین اضافه کنید.</string>

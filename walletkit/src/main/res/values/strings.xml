@@ -2334,11 +2334,10 @@
     <string name="Welcome_Title" translatable="false">Unwatched\nUnrestricted\nUncompromised</string>
     <string name="Welcome_Subtitle" translatable="false">Be Unstoppable!</string>
     <string name="Welcome_Description">Private by principle. Independent by design</string>
-    <string name="Welcome_CreateNewWallet">Create New Wallet</string>
-    <string name="Welcome_AddExistingWallet">Add Existing Wallet</string>
-    <string name="Welcome_Consent">By continuing, I agree to the %1$s and consent to the %2$s</string>
-    <string name="Welcome_TermsOfUse">Terms of Use</string>
-    <string name="Welcome_PrivacyPolicy">Privacy Policy</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_ImportWallet">Import Wallet</string>
+    <string name="Welcome_Consent">By continuing, I agree to the %1$s.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">Terms &amp; Privacy Policy</string>
     <string name="ImportWallet_ViewOnly">View Only Wallet</string>
     <string name="ImportWallet_ViewOnly_Description">Balance and activity only</string>
     <string name="Balance_NoWallets">No wallets. Add one below.</string>

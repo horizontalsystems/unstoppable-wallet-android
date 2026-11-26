@@ -1978,11 +1978,10 @@
     <string name="Activity_Empty_CrossPay">Você ainda não tem pagamentos CrossPay pendentes ou anteriores.</string>
     <string name="Transactions_FromUnknown">de desconhecido</string>
     <string name="Welcome_Description">Privada por princípio. Independente por design</string>
-    <string name="Welcome_CreateNewWallet">Criar nova carteira</string>
-    <string name="Welcome_AddExistingWallet">Adicionar carteira existente</string>
-    <string name="Welcome_Consent">Ao continuar, concordo com os %1$s e aceito a %2$s</string>
-    <string name="Welcome_TermsOfUse">Termos de Uso</string>
-    <string name="Welcome_PrivacyPolicy">Política de Privacidade</string>
+    <string name="Welcome_CreateWallet">Criar carteira</string>
+    <string name="Welcome_ImportWallet">Importar carteira</string>
+    <string name="Welcome_Consent">Ao continuar, concordo com os %1$s.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">Termos e Política de Privacidade</string>
     <string name="ImportWallet_ViewOnly">Carteira somente leitura</string>
     <string name="ImportWallet_ViewOnly_Description">Apenas saldo e atividade</string>
     <string name="Balance_NoWallets">Nenhuma carteira. Adicione uma abaixo.</string>

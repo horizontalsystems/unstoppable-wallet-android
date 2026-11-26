@@ -1973,11 +1973,10 @@
     <string name="Activity_Empty_CrossPay">Aún no tienes pagos CrossPay pendientes o anteriores.</string>
     <string name="Transactions_FromUnknown">de desconocido</string>
     <string name="Welcome_Description">Privada por principio. Independiente por diseño</string>
-    <string name="Welcome_CreateNewWallet">Crear nueva billetera</string>
-    <string name="Welcome_AddExistingWallet">Añadir billetera existente</string>
-    <string name="Welcome_Consent">Al continuar, acepto los %1$s y doy mi consentimiento a la %2$s</string>
-    <string name="Welcome_TermsOfUse">Términos de uso</string>
-    <string name="Welcome_PrivacyPolicy">Política de privacidad</string>
+    <string name="Welcome_CreateWallet">Crear billetera</string>
+    <string name="Welcome_ImportWallet">Importar billetera</string>
+    <string name="Welcome_Consent">Al continuar, acepto los %1$s.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">Términos y Política de privacidad</string>
     <string name="ImportWallet_ViewOnly">Billetera de solo lectura</string>
     <string name="ImportWallet_ViewOnly_Description">Solo saldo y actividad</string>
     <string name="Balance_NoWallets">No hay monederos. Añade uno abajo.</string>

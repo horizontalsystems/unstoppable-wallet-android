@@ -1972,11 +1972,10 @@
     <string name="Activity_Empty_CrossPay">您还没有任何待处理或已完成的 CrossPay 付款记录。</string>
     <string name="Transactions_FromUnknown">发送人未知</string>
     <string name="Welcome_Description">以隐私为原则，以独立为设计</string>
-    <string name="Welcome_CreateNewWallet">创建新钱包</string>
-    <string name="Welcome_AddExistingWallet">添加已有钱包</string>
-    <string name="Welcome_Consent">继续即表示我同意%1$s并接受%2$s</string>
-    <string name="Welcome_TermsOfUse">使用条款</string>
-    <string name="Welcome_PrivacyPolicy">隐私政策</string>
+    <string name="Welcome_CreateWallet">创建钱包</string>
+    <string name="Welcome_ImportWallet">导入钱包</string>
+    <string name="Welcome_Consent">继续即表示我同意%1$s。</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">条款与隐私政策</string>
     <string name="ImportWallet_ViewOnly">仅查看钱包</string>
     <string name="ImportWallet_ViewOnly_Description">仅查看余额和活动</string>
     <string name="Balance_NoWallets">暂无钱包。请在下方添加。</string>

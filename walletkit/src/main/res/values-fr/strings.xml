@@ -1975,11 +1975,10 @@
     <string name="Activity_Empty_CrossPay">Vous n\'avez encore aucun paiement CrossPay en cours ou passé.</string>
     <string name="Transactions_FromUnknown">d\'un expéditeur inconnu</string>
     <string name="Welcome_Description">Privé par principe. Indépendant par conception</string>
-    <string name="Welcome_CreateNewWallet">Créer un nouveau wallet</string>
-    <string name="Welcome_AddExistingWallet">Ajouter un wallet existant</string>
-    <string name="Welcome_Consent">En continuant, j\'accepte les %1$s et je consens à la %2$s</string>
-    <string name="Welcome_TermsOfUse">Conditions d\'utilisation</string>
-    <string name="Welcome_PrivacyPolicy">Politique de confidentialité</string>
+    <string name="Welcome_CreateWallet">Créer un wallet</string>
+    <string name="Welcome_ImportWallet">Importer un wallet</string>
+    <string name="Welcome_Consent">En continuant, j\'accepte les %1$s.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">Conditions et Politique de confidentialité</string>
     <string name="ImportWallet_ViewOnly">Wallet en lecture seule</string>
     <string name="ImportWallet_ViewOnly_Description">Solde et activité uniquement</string>
     <string name="Balance_NoWallets">Aucun portefeuille. Ajoutez-en un ci-dessous.</string>

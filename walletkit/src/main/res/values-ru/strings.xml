@@ -1982,11 +1982,10 @@
     <string name="Activity_Empty_CrossPay">У вас пока нет ожидающих или завершённых платежей CrossPay.</string>
     <string name="Transactions_FromUnknown">от неизвестного</string>
     <string name="Welcome_Description">Приватность как принцип. Независимость по замыслу</string>
-    <string name="Welcome_CreateNewWallet">Создать новый кошелёк</string>
-    <string name="Welcome_AddExistingWallet">Добавить существующий кошелёк</string>
-    <string name="Welcome_Consent">Продолжая, я принимаю %1$s и даю согласие на %2$s</string>
-    <string name="Welcome_TermsOfUse">Условия использования</string>
-    <string name="Welcome_PrivacyPolicy">Политику конфиденциальности</string>
+    <string name="Welcome_CreateWallet">Создать кошелёк</string>
+    <string name="Welcome_ImportWallet">Импортировать кошелёк</string>
+    <string name="Welcome_Consent">Продолжая, я принимаю %1$s.</string>
+    <string name="Welcome_TermsAndPrivacyPolicy">Условия и Политику конфиденциальности</string>
     <string name="ImportWallet_ViewOnly">Кошелёк только для просмотра</string>
     <string name="ImportWallet_ViewOnly_Description">Только баланс и активность</string>
     <string name="Balance_NoWallets">Нет кошельков. Добавьте кошелек ниже.</string>
