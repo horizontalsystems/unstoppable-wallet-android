@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.ui.compose.components
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -62,6 +64,7 @@ fun CoinListOrderable(
                             onClick = { onReorder.invoke(index, index - 1) }
                         ) {
                             Icon(
+                                modifier = Modifier.size(20.dp),
                                 painter = painterResource(id = R.drawable.ic_arrow_big_up_20),
                                 tint = ComposeAppTheme.colors.grey,
                                 contentDescription = null
@@ -71,6 +74,7 @@ fun CoinListOrderable(
                             onClick = { onReorder.invoke(index, index + 1) }
                         ) {
                             Icon(
+                                modifier = Modifier.size(20.dp),
                                 painter = painterResource(id = R.drawable.ic_arrow_big_down_20),
                                 tint = ComposeAppTheme.colors.grey,
                                 contentDescription = null

@@ -227,6 +227,7 @@ fun CoinList(
                             }
                         ) {
                             Icon(
+                                modifier = Modifier.size(20.dp),
                                 painter = painterResource(id = R.drawable.ic_heart_filled_20),
                                 contentDescription = "heart icon button",
                                 tint = ComposeAppTheme.colors.orange
@@ -242,6 +243,7 @@ fun CoinList(
                             }
                         ) {
                             Icon(
+                                modifier = Modifier.size(20.dp),
                                 painter = painterResource(id = R.drawable.ic_heart_20),
                                 contentDescription = "heart icon button",
                                 tint = ComposeAppTheme.colors.grey

@@ -130,6 +130,7 @@ private fun IndicatorCell(
             onClick = onEditClick
         ) {
             Icon(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(R.drawable.ic_edit_20),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey

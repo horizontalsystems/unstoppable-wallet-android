@@ -333,14 +333,14 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         }
                         if (item.doubleSpend) {
                             Image(
-                                modifier = Modifier.padding(start = 6.dp),
+                                modifier = Modifier.padding(start = 6.dp).size(20.dp),
                                 painter = painterResource(R.drawable.ic_double_spend_20),
                                 contentDescription = null
                             )
                         }
                         item.locked?.let { locked ->
                             Image(
-                                modifier = Modifier.padding(start = 6.dp),
+                                modifier = Modifier.padding(start = 6.dp).size(20.dp),
                                 painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
                                 contentDescription = null
                             )

@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.market.earn
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -140,7 +141,7 @@ private fun AnyCell(
             painter = painterResource(R.drawable.ic_checkmark_20),
             tint = ComposeAppTheme.colors.orange,
             contentDescription = null,
-            modifier = Modifier.alpha(if (checked) 1f else 0f)
+            modifier = Modifier.alpha(if (checked) 1f else 0f).size(20.dp)
         )
     }
 }

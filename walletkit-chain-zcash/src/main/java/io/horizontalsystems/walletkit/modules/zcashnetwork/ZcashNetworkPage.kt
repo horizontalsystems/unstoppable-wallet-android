@@ -220,6 +220,7 @@ private fun ZcashEndpointCell(
             if (item.selected) {
                 Spacer(Modifier.width(16.dp))
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_checkmark_20),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
@@ -279,6 +280,7 @@ private fun ZcashEndpointRow(
         if (item.selected) {
             Spacer(Modifier.width(16.dp))
             Icon(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(R.drawable.ic_checkmark_20),
                 tint = ComposeAppTheme.colors.jacob,
                 contentDescription = null

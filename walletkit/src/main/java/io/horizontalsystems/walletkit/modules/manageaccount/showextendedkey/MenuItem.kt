@@ -46,6 +46,7 @@ fun MenuItem(
                 onClick = click
             ) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
                     tint = ComposeAppTheme.colors.grey

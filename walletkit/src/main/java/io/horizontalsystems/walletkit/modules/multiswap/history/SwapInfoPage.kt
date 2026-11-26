@@ -504,7 +504,8 @@ internal fun DividerWithArrow() {
         Icon(
             modifier = Modifier
                 .requiredSize(20.dp)
-                .background(ComposeAppTheme.colors.lawrence),
+                .background(ComposeAppTheme.colors.lawrence)
+                .size(20.dp),
             painter = painterResource(R.drawable.ic_arrow_down_20),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,

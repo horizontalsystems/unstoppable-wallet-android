@@ -58,7 +58,7 @@ fun TechnicalAdviceBlock(
                 modifier = Modifier.weight(1f)
             )
             Icon(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = 8.dp).size(20.dp),
                 painter = painterResource(if (showDetails) R.drawable.ic_arrow_big_up_20 else R.drawable.ic_arrow_big_down_20),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey

@@ -91,6 +91,7 @@ fun WCSessionCell(
                 )
             }
             Image(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null
             )

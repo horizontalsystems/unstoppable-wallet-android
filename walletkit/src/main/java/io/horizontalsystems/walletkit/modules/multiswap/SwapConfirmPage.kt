@@ -341,6 +341,7 @@ private fun SwapConfirmInternal(
                         .align(Alignment.Center)
                         .clip(CircleShape)
                         .background(ComposeAppTheme.colors.lawrence)
+                        .size(20.dp)
                 )
             }
         }

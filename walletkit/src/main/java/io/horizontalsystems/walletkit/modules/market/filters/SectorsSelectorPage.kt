@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -134,7 +135,7 @@ fun SectorsSelectorScreen(
                         Spacer(modifier = Modifier.weight(1f))
                         if (itemWrapper in selectedItems) {
                             Image(
-                                modifier = Modifier.padding(start = 5.dp),
+                                modifier = Modifier.padding(start = 5.dp).size(20.dp),
                                 painter = painterResource(id = R.drawable.ic_checkmark_20),
                                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                                 contentDescription = null

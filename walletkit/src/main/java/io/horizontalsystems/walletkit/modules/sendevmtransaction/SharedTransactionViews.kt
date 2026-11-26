@@ -75,6 +75,7 @@ fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: S
                     .padding(top = 57.dp) //top cell is 67.dp - iconWidth/2(which is equal 10.dp)
                     .clip(CircleShape)
                     .background(ComposeAppTheme.colors.lawrence)
+                    .size(20.dp)
             )
         }
     }

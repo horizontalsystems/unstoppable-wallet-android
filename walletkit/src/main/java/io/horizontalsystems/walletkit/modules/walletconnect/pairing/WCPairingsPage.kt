@@ -91,6 +91,7 @@ fun WCPairingsScreen(navigation: HSNavigation) {
                         }
                     ) {
                         Icon(
+                            modifier = Modifier.size(20.dp),
                             painter = painterResource(id = R.drawable.ic_delete_20),
                             contentDescription = null,
                             tint = ComposeAppTheme.colors.lucian

@@ -134,7 +134,7 @@ fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit
         subhead2_grey(text = auditViewItem.issues.getString())
 
         if (auditViewItem.reportUrl != null) {
-            Image(painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
+            Image(painterResource(id = R.drawable.ic_arrow_right), modifier = Modifier.size(20.dp), contentDescription = "")
         }
     }
 }

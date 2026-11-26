@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.receive
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -115,7 +116,7 @@ fun ReceiveScreen(
                     )
 
                     Icon(
-                        modifier = Modifier.padding(end = 16.dp),
+                        modifier = Modifier.padding(end = 16.dp).size(20.dp),
                         painter = painterResource(id = R.drawable.ic_arrow_right),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -71,7 +72,7 @@ fun <ItemClass> SingleSelectBottomSheetContent(
                 Spacer(modifier = Modifier.weight(1f))
                 if (itemWrapper == selectedItem) {
                     Image(
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier.padding(start = 5.dp).size(20.dp),
                         painter = painterResource(id = R.drawable.ic_checkmark_20),
                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                         contentDescription = null
@@ -114,7 +115,7 @@ fun PriceCloseToBottomSheetContent(
                     )
                     if (selectedItem == null) {
                         Image(
-                            modifier = Modifier.padding(start = 5.dp),
+                            modifier = Modifier.padding(start = 5.dp).size(20.dp),
                             painter = painterResource(id = R.drawable.ic_checkmark_20),
                             colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                             contentDescription = null
@@ -138,7 +139,7 @@ fun PriceCloseToBottomSheetContent(
                         )
                         if (item == selectedItem) {
                             Image(
-                                modifier = Modifier.padding(start = 5.dp),
+                                modifier = Modifier.padding(start = 5.dp).size(20.dp),
                                 painter = painterResource(id = R.drawable.ic_checkmark_20),
                                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                                 contentDescription = null
@@ -187,7 +188,7 @@ fun CoinSetBottomSheetContent(
 
                 if (item == selectedItem) {
                     Image(
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier.padding(start = 5.dp).size(20.dp),
                         painter = painterResource(id = R.drawable.ic_checkmark_20),
                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                         contentDescription = null

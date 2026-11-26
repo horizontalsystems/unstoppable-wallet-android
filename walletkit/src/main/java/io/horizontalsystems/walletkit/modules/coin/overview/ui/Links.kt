@@ -80,6 +80,7 @@ fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
                         .padding(horizontal = 16.dp),
                 )
                 Image(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = ""
                 )

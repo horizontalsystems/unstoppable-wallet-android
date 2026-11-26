@@ -435,6 +435,7 @@ private fun AdditionalDataSection(
                             .size(28.dp)
                     ) {
                         Icon(
+                            modifier = Modifier.size(20.dp),
                             painter = painterResource(R.drawable.ic_trash_filled_20),
                             contentDescription = null,
                             tint = ComposeAppTheme.colors.leah,

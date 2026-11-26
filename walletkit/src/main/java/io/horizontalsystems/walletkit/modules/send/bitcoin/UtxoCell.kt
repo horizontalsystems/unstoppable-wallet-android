@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.send.bitcoin
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ fun UtxoCell(
         when (utxoData.type) {
             UtxoType.Auto -> {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_edit_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
@@ -45,6 +47,7 @@ fun UtxoCell(
 
             UtxoType.Manual -> {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_edit_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.orange
@@ -53,6 +56,7 @@ fun UtxoCell(
 
             null -> {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_arrow_right),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey

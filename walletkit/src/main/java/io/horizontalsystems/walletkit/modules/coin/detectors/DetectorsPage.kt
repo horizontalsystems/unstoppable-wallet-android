@@ -230,7 +230,7 @@ fun DetectorCell(
                     )
                 )
                 Icon(
-                    modifier = Modifier.padding(start = 8.dp),
+                    modifier = Modifier.padding(start = 8.dp).size(20.dp),
                     painter = painter,
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey

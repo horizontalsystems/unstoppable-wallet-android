@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.material3.VerticalDivider
@@ -112,6 +113,7 @@ fun Roi(roi: List<RoiViewItem>, navigation: HSNavigation) {
             subhead2_leah(text = stringResource(R.string.CoinPage_ROI_SelectCoins))
             HFillSpacer(16.dp)
             Image(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = ""
             )

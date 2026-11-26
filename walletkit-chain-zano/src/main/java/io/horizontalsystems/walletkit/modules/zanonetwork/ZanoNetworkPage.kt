@@ -233,6 +233,7 @@ private fun ZanoNodeCell(
             }
             if (item.selected) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_checkmark_20),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
