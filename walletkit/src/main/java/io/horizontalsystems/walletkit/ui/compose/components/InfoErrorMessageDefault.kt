@@ -55,7 +55,7 @@ fun InfoErrorMessageDefault(painter: Painter, text: String) {
 fun InfoErrorMessageDefaultPreview() {
     ComposeAppTheme(darkTheme = true) {
         InfoErrorMessageDefault(
-            painter = painterResource(id = R.drawable.ic_wallet_48),
+            painter = painterResource(id = R.drawable.wallet_24),
             text = "You don't have any wallets"
         )
     }

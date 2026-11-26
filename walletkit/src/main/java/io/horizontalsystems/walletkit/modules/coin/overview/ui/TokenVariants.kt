@@ -101,7 +101,7 @@ fun TokenVariants(
                         HSIconButton(
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_wallet_filled_20),
+                            icon = painterResource(R.drawable.wallet_filled_24),
                             contentDescription = stringResource(R.string.CoinPage_InWallet),
                             iconTint = ComposeAppTheme.colors.orange,
                             onClick = {
@@ -112,7 +112,7 @@ fun TokenVariants(
                         HSIconButton(
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_add_to_wallet_20),
+                            icon = painterResource(R.drawable.wallet_in_24),
                             contentDescription = stringResource(R.string.CoinPage_AddToWallet),
                             onClick = {
                                 onClickAddToWallet.invoke(tokenVariant.token)

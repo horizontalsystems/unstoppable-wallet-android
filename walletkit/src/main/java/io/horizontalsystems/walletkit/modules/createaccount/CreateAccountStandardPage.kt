@@ -87,7 +87,7 @@ private fun CreateAccountIntroScreen(
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_Created,
-                icon = R.drawable.icon_add_to_wallet_24,
+                icon = R.drawable.wallet_add_24,
                 iconTint = R.color.white
             )
             delay(300)

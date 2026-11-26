@@ -166,7 +166,7 @@ fun BalanceForAccount(
             add(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
-                    icon = R.drawable.ic_wallet_switch_24,
+                    icon = R.drawable.wallet_change_24,
                     testTag = TestTags.BALANCE_MANAGE_ACCOUNTS,
                     onClick = {
                         navigation.slideFromRight(

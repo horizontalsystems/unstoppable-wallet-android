@@ -87,9 +87,9 @@ class CoinOverviewViewModel(
         viewModelScope.launch {
             walletManager.activeWalletsUpdatedFlow.collect { wallets ->
                 if (wallets.size > activeWallets.size) {
-                    hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.ic_add_to_wallet_2_24)
+                    hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.wallet_in_24)
                 } else if (wallets.size < activeWallets.size) {
-                    hudMessage = HudMessage(R.string.Hud_Removed_From_Wallet, HudMessageType.Error, R.drawable.ic_empty_wallet_24)
+                    hudMessage = HudMessage(R.string.Hud_Removed_From_Wallet, HudMessageType.Error, R.drawable.wallet_remove_24)
                 }
 
                 activeWallets = wallets
