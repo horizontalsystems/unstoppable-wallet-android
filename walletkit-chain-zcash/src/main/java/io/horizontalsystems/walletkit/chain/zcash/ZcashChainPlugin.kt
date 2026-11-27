@@ -129,6 +129,7 @@ class ZcashChainPlugin(
             restoreSettings,
             localStorage(),
             endpointManager().currentEndpoint.toLightWalletEndpoint(),
+            otherEndpointsThatAnswer = { endpointManager().otherEndpointsThatAnswer() },
         )
 
     override suspend fun onAppStart() {

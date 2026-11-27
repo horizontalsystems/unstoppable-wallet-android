@@ -16,12 +16,12 @@ import cash.z.ecc.android.sdk.model.AccountCreateSetup
 import cash.z.ecc.android.sdk.model.AccountImportSetup
 import cash.z.ecc.android.sdk.model.AccountPurpose
 import cash.z.ecc.android.sdk.model.BlockHeight
+import cash.z.ecc.android.sdk.model.CreatedTransaction
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
 import cash.z.ecc.android.sdk.model.Proposal
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionState
-import cash.z.ecc.android.sdk.model.TransactionSubmitResult
 import cash.z.ecc.android.sdk.model.UnifiedFullViewingKey
 import cash.z.ecc.android.sdk.model.UnifiedAddressRequest
 import cash.z.ecc.android.sdk.model.Zatoshi
@@ -70,7 +70,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.retryWhen
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Instant
 import java.math.BigDecimal
@@ -79,6 +78,7 @@ import java.util.Date
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
 import kotlin.math.min
+import timber.log.Timber
 import io.horizontalsystems.walletkit.entities.Account as WalletAccount
 
 class ZcashAdapter(
@@ -86,7 +86,9 @@ class ZcashAdapter(
     private val wallet: Wallet,
     restoreSettings: RestoreSettings,
     private val localStorage: ILocalStorage,
-    lightWalletEndpoint: LightWalletEndpoint,
+    private val lightWalletEndpoint: LightWalletEndpoint,
+    // The other servers the wallet may send through that answer, best first
+    private val otherEndpointsThatAnswer: suspend () -> List<LightWalletEndpoint> = { emptyList() },
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val accountBirthday: Long?
@@ -516,37 +518,36 @@ class ZcashAdapter(
         val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
 
         try {
-            val results = synchronizer.createProposedTransactions(proposal, spendingKey).toList()
-            val txHashes = mutableListOf<String>()
-            results.forEach { result ->
-                when (result) {
-                    is TransactionSubmitResult.Success -> {
-                        txHashes.add(result.txIdString())
-                    }
-
-                    is TransactionSubmitResult.Failure -> {
-                        val errorMsg = buildString {
-                            append("Transaction submission failed. ")
-                            append("TxId: ${result.txIdString()}, ")
-                            append("gRPC error: ${result.grpcError}, ")
-                            append("Code: ${result.code}, ")
-                            append("Description: ${result.description ?: "None"}")
-                        }
-                        throw ZcashSubmitException(errorMsg, result.grpcError)
-                    }
-
-                    is TransactionSubmitResult.NotAttempted -> {
-                        throw IllegalStateException("Transaction not attempted. TxId: ${result.txIdString()}")
-                    }
-                }
+            val result = ZcashSendFlow(
+                create = { synchronizer.broadcaster.createProposedTransactions(proposal, spendingKey) },
+                hashOf = CreatedTransaction::txIdString,
+                submit = ::submit,
+                ownServer = { lightWalletEndpoint },
+                otherServersThatAnswer = otherEndpointsThatAnswer,
+            ).run()
+            return when (result) {
+                is ZcashSendResult.Sent -> result.transactionHashes
+                is ZcashSendResult.NotSent -> throw ZcashSubmitException(result.message, grpcError = false)
+                is ZcashSendResult.Unknown -> throw ZcashSubmitException(result.message, grpcError = true)
             }
-            return txHashes
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Invalid proposal: ${e.message}", e)
         } catch (e: Exception) {
             throw RuntimeException("Unexpected error while sending Zcash: ${e.message}", e)
         }
     }
+
+    // Hands a transaction the wallet built and stored to one server. A server that cannot be
+    // reached at all gave no answer either.
+    private suspend fun submit(transaction: CreatedTransaction, endpoint: LightWalletEndpoint): Submission =
+        try {
+            synchronizer.broadcaster.submit(transaction, endpoint).toSubmission()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (expected: Exception) {
+            Timber.w(expected, "Zcash submission to %s failed", endpoint.host)
+            Submission.Unanswered("Transaction submission failed. TxId: ${transaction.txIdString()}, ${expected.message}")
+        }
 
     suspend fun createProposal(outputs: List<TransferOutput>): Proposal {
         val paymentUri = createPaymentUri(outputs)
@@ -860,9 +861,10 @@ class ZcashAdapter(
     }
 
     /**
-     * The server did not take a transaction the wallet built. [grpcError]: the call itself
-     * failed, so whether the server received the transaction is not known. Otherwise the
-     * server answered and refused it.
+     * A transaction the wallet built was not taken. [grpcError]: no server the wallet may use
+     * answered, so whether one received it is not known; the wallet keeps the transaction
+     * and submits it again by itself until it expires. Otherwise a server answered and
+     * refused it.
      */
     class ZcashSubmitException(message: String, val grpcError: Boolean) : IllegalStateException(message)
 
