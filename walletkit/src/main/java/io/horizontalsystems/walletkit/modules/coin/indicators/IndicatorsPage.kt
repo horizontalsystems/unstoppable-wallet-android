@@ -69,7 +69,7 @@ fun IndicatorsScreen(navigation: HSNavigation) {
                     checked = indicator.enabled,
                     leftIcon = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_chart_type_2_24),
+                            painter = painterResource(R.drawable.chart_24),
                             tint = Color(indicatorDataMa.color),
                             contentDescription = null,
                         )

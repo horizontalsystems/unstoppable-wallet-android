@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -84,8 +83,7 @@ fun SelectBackupItemsScreen(
                                         },
                                         right = {
                                             CellRightSelectors(
-                                                icon = painterResource(id = if (wallet.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
-                                                iconTint = if (wallet.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
+                                                selected = wallet.selected
                                             )
                                         },
                                         onClick = { viewModel.toggle(wallet) }
@@ -113,8 +111,7 @@ fun SelectBackupItemsScreen(
                                     },
                                     right = {
                                         CellRightSelectors(
-                                            icon = painterResource(id = if (item.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
-                                            iconTint = if (item.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
+                                            selected = item.selected
                                         )
                                     },
                                     onClick = if (item.section != null) {

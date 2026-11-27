@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.uiv3.components.controls
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,10 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
-import io.horizontalsystems.walletkit.R
 
 @Composable
 fun HSSelector(
@@ -44,10 +41,7 @@ fun HSSelector(
         )
 
         if (checked) {
-            Image(
-                painter = painterResource(id = R.drawable.checkbox_selected_24),
-                contentDescription = null
-            )
+            FilledCheckMark(size = 24.dp)
         }
     }
 }

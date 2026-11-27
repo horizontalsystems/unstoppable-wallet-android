@@ -9,23 +9,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.uiv3.components.controls.FilledCheckMark
 
 @Composable
 fun CellLeftSelectors(
     selected: Boolean
 ) {
-    val icon = if (selected) {
-        R.drawable.selector_checked_20
+    if (selected) {
+        FilledCheckMark(size = 24.dp)
     } else {
-        R.drawable.selector_unchecked_20
+        Image(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(R.drawable.selector_unchecked_20),
+            contentDescription = null,
+        )
     }
-
-    Image(
-        modifier = Modifier
-            .size(24.dp),
-        painter = painterResource(icon),
-        contentDescription = null,
-    )
 }
 
 @Preview

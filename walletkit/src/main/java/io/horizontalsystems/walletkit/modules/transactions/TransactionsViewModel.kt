@@ -300,7 +300,7 @@ data class TransactionViewItem(
         CrossPay(R.drawable.double_arrow_24, R.string.Transactions_Status_Swapping, R.string.Transactions_Status_TransferFailed),
         Shield(R.drawable.shield_24, R.string.Transactions_Status_Shielding, R.string.Transactions_Status_ShieldingFailed),
         Unshield(R.drawable.shield_off_24, R.string.Transactions_Status_Unshielding, R.string.Transactions_Status_UnshieldFailed),
-        Migrate(R.drawable.ic_migrate_24, R.string.Transactions_Status_Pending, R.string.Transactions_Status_TransactionFailed),
+        Migrate(R.drawable.arrow_out_24, R.string.Transactions_Status_Pending, R.string.Transactions_Status_TransactionFailed),
         Contract(R.drawable.list_24, R.string.Transactions_Status_Pending, R.string.Transactions_Status_TransactionFailed),
         Unknown(R.drawable.warning_24, R.string.Transactions_Status_Pending, R.string.Transactions_Status_TransactionFailed);
 

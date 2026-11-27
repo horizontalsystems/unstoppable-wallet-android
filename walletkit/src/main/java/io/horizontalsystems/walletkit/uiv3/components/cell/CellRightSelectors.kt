@@ -5,20 +5,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.uiv3.components.controls.FilledCheckMark
 
 @Composable
 fun CellRightSelectors(
@@ -26,8 +23,7 @@ fun CellRightSelectors(
     subtitle: HSString? = null,
     description1: HSString? = null,
     description2: HSString? = null,
-    icon: Painter? = null,
-    iconTint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
+    selected: Boolean? = null,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -73,14 +69,17 @@ fun CellRightSelectors(
                 }
             }
         }
-        icon?.let {
-            Icon(
-                modifier = Modifier
-                    .size(20.dp),
-                painter = icon,
-                contentDescription = null,
-                tint = iconTint
-            )
+        selected?.let {
+            if (it) {
+                FilledCheckMark(size = 20.dp)
+            } else {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.selector_unchecked_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
     }
 }
@@ -93,8 +92,7 @@ fun Prev_CellRightSelectors() {
             title = "Text".hs,
             description1 = "Text".hs,
             description2 = "Text".hs(color = ComposeAppTheme.colors.lucian),
-            icon = painterResource(id = R.drawable.checkbox_selected_24),
-            iconTint = ComposeAppTheme.colors.orange
+            selected = true
         )
     }
 }

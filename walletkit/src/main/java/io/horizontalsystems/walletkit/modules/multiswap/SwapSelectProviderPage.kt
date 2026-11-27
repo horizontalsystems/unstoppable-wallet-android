@@ -44,6 +44,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.HSString
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
+import io.horizontalsystems.walletkit.uiv3.components.controls.FilledCheckMark
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
@@ -140,25 +141,20 @@ private fun SwapSelectProviderScreenInner(
 
                 quotes.forEach { viewItem ->
                     val venue = viewItem.quote.venue
-                    val icon = if (viewItem.quote == currentQuote) {
-                        R.drawable.selector_checked_20
-                    } else {
-                        R.drawable.selector_unchecked_20
-                    }
-                    val iconTint = if (viewItem.quote == currentQuote) {
-                        ComposeAppTheme.colors.orange
-                    } else {
-                        ComposeAppTheme.colors.andy
-                    }
+                    val selected = viewItem.quote == currentQuote
                     BoxBordered(bottom = true) {
                         CellPrimary(
                             left = {
-                                Icon(
-                                    modifier = Modifier.size(20.dp),
-                                    painter = painterResource(icon),
-                                    contentDescription = null,
-                                    tint = iconTint
-                                )
+                                if (selected) {
+                                    FilledCheckMark(size = 20.dp)
+                                } else {
+                                    Icon(
+                                        modifier = Modifier.size(20.dp),
+                                        painter = painterResource(R.drawable.selector_unchecked_20),
+                                        contentDescription = null,
+                                        tint = ComposeAppTheme.colors.andy
+                                    )
+                                }
                             },
                             middle = {
                                 Row(

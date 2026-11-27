@@ -98,7 +98,7 @@ fun BottomSheetsElementsHeader(
             modifier = Modifier
                 .size(24.dp)
                 .clickable(onClick = onClickClose),
-            painter = painterResource(R.drawable.icon_24_close_3),
+            painter = painterResource(R.drawable.close_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )

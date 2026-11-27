@@ -73,6 +73,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfoTextIcon
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
+import io.horizontalsystems.walletkit.uiv3.components.controls.FilledCheckMark
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -778,20 +779,16 @@ private fun StepIndicator(isActive: Boolean, isDone: Boolean, isFailed: Boolean 
                 tint = ComposeAppTheme.colors.blade,
                 contentDescription = null,
             )
+            // The icon keeps padding around its cross: at 18 dp the cross is about 10 dp across
             Icon(
-                modifier = Modifier.size(11.dp),
-                painter = painterResource(R.drawable.ic_failed_cross),
+                modifier = Modifier.size(18.dp),
+                painter = painterResource(R.drawable.close_24),
                 tint = ComposeAppTheme.colors.lucian,
                 contentDescription = null,
             )
         }
 
-        isDone -> Icon(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(R.drawable.ic_check_filled_20_no_padding),
-            tint = ComposeAppTheme.colors.remus,
-            contentDescription = null,
-        )
+        isDone -> FilledCheckMark(size = 20.dp, tint = ComposeAppTheme.colors.remus)
 
         else -> Icon(
             modifier = Modifier.size(20.dp),
