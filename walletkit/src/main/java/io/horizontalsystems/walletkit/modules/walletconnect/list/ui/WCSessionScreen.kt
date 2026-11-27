@@ -138,7 +138,7 @@ fun WCSessionsScreen(
                 if (uiState.sessionViewItems.isEmpty() && uiState.pairingsNumber == 0) {
                     ListEmptyView(
                         text = stringResource(R.string.WalletConnect_NoConnection),
-                        icon = R.drawable.ic_wallet_connet_48
+                        icon = R.drawable.ic_wallet_connect_24
                     )
                 } else {
                     WCSessionList(

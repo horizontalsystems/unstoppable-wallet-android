@@ -162,7 +162,7 @@ fun CoinSetBottomSheetContent(
     onClose: (() -> Unit),
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_circle_coin_24),
+        iconPainter = painterResource(R.drawable.icon_24_circle_coin),
         title = stringResource(R.string.Market_Filter_ChooseSet),
         onCloseClick = onClose,
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange)
