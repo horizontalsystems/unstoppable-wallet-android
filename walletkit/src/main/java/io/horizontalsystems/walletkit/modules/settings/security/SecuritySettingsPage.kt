@@ -159,6 +159,7 @@ private fun SecurityCenterScreen(
                     },
                     right = {
                         CellRightControlsSwitcher(
+                            modifier = Modifier.testTag(TestTags.SECURITY_BALANCE_AUTO_HIDE),
                             checked = uiState.balanceAutoHideEnabled,
                             onCheckedChange = {
                                 securitySettingsViewModel.onSetBalanceAutoHidden(it)
