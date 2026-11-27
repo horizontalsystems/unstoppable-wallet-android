@@ -104,7 +104,7 @@ fun SendEvmTransactionView(
 @Preview
 @Composable
 private fun Preview_Subhead() {
-    val item = ViewItem.Subhead("Title", "Value", R.drawable.ic_arrow_down_left_24)
+    val item = ViewItem.Subhead("Title", "Value", R.drawable.arrow_m_down_24)
     ComposeAppTheme {
         Subhead(item)
     }
