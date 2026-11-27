@@ -257,10 +257,11 @@ check (`AddressCheckType`) is enabled separately.
   [UI work](#ui-work)
 - **Design kit**: The `designkit` module (`io.horizontalsystems.designkit`)
   holds what the Figma design system file defines: colours and typography
-  in `theme`, and in `components` the shared components confirmed against
-  Figma (the button controls and the text input so far). Use those instead
-  of adding a button or a text input elsewhere. It depends on no app code,
-  so nothing from `walletkit` or `app` may be imported there.
+  in `theme`, the icons in `res/drawable`, and in `components` the shared
+  components confirmed against Figma (the button controls and the text
+  input so far). Use those instead of adding a button or a text input
+  elsewhere. It depends on no app code, so nothing from `walletkit` or `app`
+  may be imported there.
 
 ### Preventing Double Clicks in Compose
 
@@ -305,12 +306,16 @@ ButtonPrimaryYellow(
 - New generic components go into `designkit`, never into `walletkit`'s `ui/`
   or `uiv3/`. Screens migrate one pull request each with their logic
   untouched; an old component is deleted with its last usage.
+- Icons live in `designkit`, and only icons confirmed in Figma are added
+  there. The rules, and the icons that stay outside, are in
+  `docs/ui-refactoring.md`.
 
 ### Moving a component into `designkit`
 
 - Name the component, its properties and its values as Figma does, so they
   can be searched there. No renames for code style.
-- Its icons move with it.
+- Its icons follow `docs/ui-refactoring.md`: one that Figma lacks stays
+  outside and is passed in by the caller.
 - Use theme text styles (`ComposeAppTheme.typography.*`), not the
   `body_leah`-style helpers from `walletkit`'s `Text.kt`.
 
