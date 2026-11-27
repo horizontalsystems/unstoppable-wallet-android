@@ -1613,6 +1613,7 @@
     <string name="AddZanoNode_AddNode">Agregar nodo</string>
     <string name="AddZanoNode_NodeUrl">URL del nodo</string>
     <string name="ZanoNodeSettings_Description">Elija el nodo que la aplicación Unstoppable debe usar para sincronizar la(s) billetera(s).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Cambiar a otro nodo cuando el seleccionado falle</string>
     <string name="LocalBackup_ProtectBackup">Proteger copia de seguridad</string>
     <string name="LocalBackup_ProtectBackupDescription">Cree una contraseña para proteger su archivo de copia de seguridad.</string>
     <string name="LocalBackup_BackupName">Nombre de la copia de seguridad</string>
@@ -1872,6 +1873,10 @@
     <string name="Send_DestinationTag_Title">Etiqueta de destino</string>
     <string name="SwapHistory_StatusActionRequired">Se requiere acción</string>
     <string name="Send_Error_MemoTooLong">El memo es demasiado largo</string>
+    <string name="Send_NodeSwitched_Title">Nodo cambiado</string>
+    <string name="Send_NodeSwitched_Description">El nodo dejó de responder, así que la billetera cambió a %s. Revise los datos y envíe de nuevo.</string>
+    <string name="Send_MaybeSent_Title">Es posible que la transacción se haya enviado</string>
+    <string name="Send_MaybeSent_Description">El nodo no confirmó la transacción, por lo que es posible que se haya enviado. Revise el historial de transacciones antes de enviar de nuevo.</string>
     <string name="Transactions_TrustLimit">Límite de Confianza</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">Firmar %d transacción</item>
@@ -1988,4 +1993,7 @@
     <string name="NetworkSettings_NotSynced">No sincronizado</string>
     <string name="WalletName_Default">Cartera %d</string>
     <string name="WalletName_WatchDefault">Cartera de observación %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Cambiar a otro proveedor cuando el seleccionado falle</string>
+    <string name="Send_MaybeSent_Checking">El nodo no confirmó la transacción. La billetera está cambiando a otro nodo para comprobar si se envió.</string>
+    <string name="Send_MaybeSent_NotFound">La billetera cambió a %s y no encontró allí la transacción. Revise el historial de transacciones antes de enviar de nuevo.</string>
 </resources>

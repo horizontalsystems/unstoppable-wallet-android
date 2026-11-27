@@ -5,13 +5,16 @@ import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import io.horizontalsystems.walletkit.core.managers.NodeAutoSelector
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.adapters.MoneroAdapter
+import io.horizontalsystems.walletkit.core.adapters.MoneroSendUnknownException
 import io.horizontalsystems.walletkit.core.adapters.toMoneroSeed
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
+import io.horizontalsystems.walletkit.core.chain.NodeError
 import io.horizontalsystems.walletkit.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -41,6 +44,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -99,7 +103,7 @@ class MoneroChainPlugin(
             context = context(),
             wallet = wallet,
             restoreSettings = restoreSettings,
-            node = moneroNodeManager().currentNode,
+            nodeManager = moneroNodeManager(),
         )
 
     override fun clearAccountData(accountId: String) {
@@ -110,7 +114,7 @@ class MoneroChainPlugin(
         val nodeManager = moneroNodeManager()
         nodeManager.nodePinger = { serialized ->
             MoneroKit.pingNodes(context(), serialized).map {
-                MoneroNodeManager.NodePingResult(it.serialized, it.isValid, it.responseTime)
+                MoneroNodeManager.NodePingResult(it.serialized, it.isValid, it.responseTime, it.height)
             }
         }
         nodeManager.autoSelectFastestNodeOnStartup()
@@ -138,12 +142,15 @@ class MoneroChainPlugin(
 
         // Launched rather than awaited: the probe can take seconds and both callers are latency
         // sensitive — refreshKit() is awaited by the balance pull-to-refresh spinner, and the
-        // foreground hook runs plugins one after another. The switch lands asynchronously through
-        // walletReloadTrigger. The manager guards with a mutex, so overlapping calls collapse.
+        // foreground hook runs plugins one after another. The switch lands asynchronously: the
+        // adapter hands the new node to the kit. The manager guards with a mutex, so
+        // overlapping calls collapse.
         reselectScope.launch {
             try {
-                val switched = moneroNodeManager().reselectFastestNode()
-                if (!switched && retryIfNoSwitch && hasUnsyncedWallet()) {
+                val reselection = moneroNodeManager().reselectFastestNode()
+                // Not after a reselection that was skipped: another one is at work, or the
+                // user has taken over, and a restart would cut across that.
+                if (reselection == NodeAutoSelector.Reselection.Stayed && retryIfNoSwitch && hasUnsyncedWallet()) {
                     moneroNodeManager().retryCurrentNode()
                 }
             } catch (e: CancellationException) {
@@ -153,6 +160,19 @@ class MoneroChainPlugin(
             }
         }
     }
+
+    // The kit deals with a node that fails a fee estimate or a send itself: before the
+    // broadcast it moves to another node and does the work again there, after it it hands the
+    // same signed transaction to the other nodes. What is left for the screen is a transfer
+    // no node confirmed.
+    override fun classifyNodeError(error: Throwable): NodeError? = when (error) {
+        is MoneroSendUnknownException -> NodeError(preBroadcast = false)
+        else -> null
+    }
+
+    // The node changes with the wallet open, so the adapter stays and there is nothing to wait for
+    override suspend fun failoverForSend(token: Token): String? =
+        moneroNodeManager().switchAwayFromNode()?.name
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerMonero())
 
@@ -166,8 +186,12 @@ class MoneroChainPlugin(
 
     override suspend fun estimateBlockHeightFromDate(date: Date): Long = MoneroKit.restoreHeightForDate(date)
 
+    // Only a restart of the kit on its node: a node change keeps the wallet and its adapter
     override val walletReloadTrigger: Flow<*>
         get() = moneroNodeManager().currentNodeUpdatedFlow
+
+    override val settingsRefreshTrigger: Flow<*>
+        get() = moneroNodeManager().let { merge(it.currentNodeUpdatedFlow, it.nodeChangedFlow) }
 
     override fun statusInfo(): Map<String, Any>? {
         val wallet = App.walletManager.activeWallets

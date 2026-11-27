@@ -34,6 +34,9 @@ class EvmSyncSourceManager(
         MutableSharedFlow<BlockchainType>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val syncSourcesUpdatedFlow = _syncSourcesUpdatedFlow.asSharedFlow()
 
+    /** Auto-Select between the built-in sources of a chain. */
+    val autoSelect = EvmSyncSourceAutoSelect(this, blockchainSettingsStorage, evmSyncSourceStorage)
+
     fun defaultSyncSources(blockchainType: BlockchainType): List<EvmSyncSource> {
         return when (blockchainType) {
             BlockchainType.Ethereum -> listOf(
@@ -321,9 +324,25 @@ class EvmSyncSourceManager(
         return syncSources.firstOrNull { it.isHttp }
     }
 
+    /** A source the user picked: they chose where to sync from, so Auto-Select stops for this chain. */
     fun save(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
+        blockchainSettingsStorage.saveEvmAutoSelect(false, blockchainType)
+        saveAutoSelected(syncSource, blockchainType)
+    }
+
+    /** A source Auto-Select picked (startup probe); Auto-Select stays on. */
+    fun saveAutoSelected(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
         blockchainSettingsStorage.save(syncSource.uri.toString(), blockchainType)
+        selectionChanged(blockchainType)
+    }
+
+    /**
+     * The selected source or the Auto-Select setting of a chain changed: its kit is rebuilt
+     * and its source list is drawn again.
+     */
+    internal fun selectionChanged(blockchainType: BlockchainType) {
         _syncSourceFlow.tryEmit(blockchainType)
+        _syncSourcesUpdatedFlow.tryEmit(blockchainType)
     }
 
     fun saveSyncSource(blockchainType: BlockchainType, url: String, auth: String?) {
@@ -353,5 +372,4 @@ class EvmSyncSourceManager(
 
         _syncSourcesUpdatedFlow.tryEmit(blockchainType)
     }
-
 }

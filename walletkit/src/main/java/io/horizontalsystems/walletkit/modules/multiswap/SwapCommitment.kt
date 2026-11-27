@@ -29,6 +29,13 @@ enum class SwapCommitFailure {
 class DepositNotSendableException(message: String) : Exception(message)
 
 /**
+ * The deposit's send failed after the node may have taken the transaction. [message] is written
+ * for the user. Unlike a [SwapCommitFailedException] it is no passing notice: the screen must not
+ * offer the swap again.
+ */
+class DepositMaybeSentException(message: String) : Exception(message)
+
+/**
  * The order could not be created, or the committed deposit could not be built. The screen shows
  * the reason briefly and loads a fresh quote; it must not present its generic error sheet for it.
  * [detail] is a user-facing reason when there is one; otherwise [failure] picks the message.

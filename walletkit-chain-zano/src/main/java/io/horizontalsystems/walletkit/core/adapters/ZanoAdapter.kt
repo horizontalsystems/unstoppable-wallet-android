@@ -15,6 +15,7 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.zanokit.BalanceInfo
 import io.horizontalsystems.zanokit.SendAmount
+import io.horizontalsystems.zanokit.SendResult
 import io.horizontalsystems.zanokit.SyncState
 import io.horizontalsystems.zanokit.ZanoKit
 import kotlinx.coroutines.CoroutineScope
@@ -94,12 +95,17 @@ class ZanoAdapter(
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String?): String {
         val atomicAmount = amount.movePointRight(wallet.token.decimals).toLong()
-        return kit.send(
+        val result = kit.send(
             toAddress = address,
             assetId = assetId,
             amount = SendAmount.Value(atomicAmount),
             memo = memo,
         )
+        return when (result) {
+            is SendResult.Sent -> result.transactionHash
+            is SendResult.NotSent -> throw ZanoNotSentException(result.reason, result.message)
+            is SendResult.Unknown -> throw ZanoSendUnknownException(result.transactionHash, result.message)
+        }
     }
 
     override suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?): BigDecimal =
@@ -158,3 +164,9 @@ fun BalanceInfo.toBalanceData(decimals: Int): BalanceData {
     val pending = (total - unlocked).coerceAtLeast(0).scaledDown(decimals)
     return BalanceData(available, pending = pending)
 }
+
+/** Nothing was sent. The kit has already tried another node where it may. */
+class ZanoNotSentException(val reason: SendResult.Reason, message: String?) : Exception(message)
+
+/** The transfer may be in the network, and no node the kit could ask confirmed it. */
+class ZanoSendUnknownException(val transactionHash: String?, message: String?) : Exception(message)

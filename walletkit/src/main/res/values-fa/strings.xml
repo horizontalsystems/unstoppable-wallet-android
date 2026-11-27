@@ -601,6 +601,7 @@
     <string name="AddZanoNode_AddNode">افزودن گره</string>
     <string name="AddZanoNode_NodeUrl">URL گره</string>
     <string name="ZanoNodeSettings_Description">گره‌ای را انتخاب کنید که برنامه Unstoppable برای همگام‌سازی کیف پول(ها) استفاده کند.</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">هنگام از کار افتادن گره انتخاب‌شده، به گره دیگری جابه‌جا شود</string>
     <string name="LocalBackup_ProtectBackup">حفاظت پشتیبان</string>
     <string name="LocalBackup_ProtectBackupDescription">یک رمز عبور برای حفاظت از فایل پشتیبان خود ایجاد کنید.</string>
     <string name="LocalBackup_BackupName">نام پشتیبان</string>
@@ -854,6 +855,10 @@
     <string name="Send_DestinationTag_Title">برچسب مقصد</string>
     <string name="SwapHistory_StatusActionRequired">نیاز به اقدام</string>
     <string name="Send_Error_MemoTooLong">یادداشت بیش از حد طولانی است</string>
+    <string name="Send_NodeSwitched_Title">گره تغییر کرد</string>
+    <string name="Send_NodeSwitched_Description">گره دیگر پاسخ نمی‌داد، بنابراین کیف پول به %s منتقل شد. جزئیات را بررسی کنید و دوباره ارسال کنید.</string>
+    <string name="Send_MaybeSent_Title">ممکن است تراکنش ارسال شده باشد</string>
+    <string name="Send_MaybeSent_Description">گره تراکنش را تأیید نکرد، بنابراین ممکن است ارسال شده باشد. پیش از ارسال دوباره، تاریخچه تراکنش‌ها را بررسی کنید.</string>
     <string name="Transactions_TrustLimit">حد اعتماد</string>
     <string name="Error_BrowserNotFound">برنامه‌ای برای باز کردن این پیوند پیدا نشد</string>
     <string name="Error_ParameterNotSet">پارامتر تنظیم نشده است</string>
@@ -1976,4 +1981,7 @@
     <string name="NetworkSettings_NotSynced">همگام‌سازی نشده</string>
     <string name="WalletName_Default">کیف پول %d</string>
     <string name="WalletName_WatchDefault">کیف پول نظارتی %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">هنگام از کار افتادن ارائه‌دهنده انتخاب‌شده، به ارائه‌دهنده دیگری تغییر کن</string>
+    <string name="Send_MaybeSent_Checking">گره تراکنش را تأیید نکرد. کیف پول در حال انتقال به گره دیگری است تا بررسی کند که آیا تراکنش ارسال شده است.</string>
+    <string name="Send_MaybeSent_NotFound">کیف پول به %s منتقل شد و تراکنش را در آنجا پیدا نکرد. پیش از ارسال دوباره، تاریخچه تراکنش‌ها را بررسی کنید.</string>
 </resources>

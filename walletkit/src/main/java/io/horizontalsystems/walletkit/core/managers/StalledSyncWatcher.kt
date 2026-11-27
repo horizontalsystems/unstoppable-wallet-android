@@ -11,8 +11,9 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Notices wallets stuck in NotSynced and gives their chain a chance to recover — for Monero and
- * Zcash, re-picking a node when the selected one has died mid-session.
+ * Notices wallets stuck in NotSynced and gives their chain a chance to recover — for Monero,
+ * Zcash and Zano, re-picking a node when the selected one has died mid-session. A chain may
+ * also report a stall its adapters do not show (see ChainPlugin.isSyncStalled).
  *
  * This runs regardless of foreground state, which is the point: both chains keep syncing while
  * backgrounded (neither adapter stops on EnterBackground), so a node dying there would otherwise
@@ -46,7 +47,9 @@ class StalledSyncWatcher(private val scope: CoroutineScope) {
             val type = plugin.blockchainType
 
             val stalled = try {
-                plugin.hasUnsyncedWallet()
+                plugin.isSyncStalled()
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Throwable) {
                 Timber.e(e, "Stalled sync check failed for %s", type.uid)
                 false

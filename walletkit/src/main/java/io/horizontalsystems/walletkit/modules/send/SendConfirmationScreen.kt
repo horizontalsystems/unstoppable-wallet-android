@@ -103,39 +103,12 @@ fun SendConfirmationScreen(
     sendingButtonTitle: String? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
-    val closeUntilDestId = sendEntryPointDestId ?: SendV2Page::class
-    val view = LocalView.current
-    val failureText = (sendResult as? SendResult.Failed)?.let {
-        it.caution.getDescription() ?: it.caution.getString()
-    }
-
-    // Keyed on the result so each outcome is announced once, not on every recomposition.
-    LaunchedEffect(sendResult) {
-        when (sendResult) {
-            is SendResult.Sent -> {
-                HudHelper.showSuccessMessage(view, R.string.Send_Success, SnackbarDuration.LONG)
-                delay(1200)
-                navigation.removeLastUntil(closeUntilDestId, true)
-            }
-
-            is SendResult.Failed -> {
-                if (sendResult.expected) {
-                    HudHelper.showErrorMessage(view, failureText.orEmpty())
-                } else {
-                    navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failureText.orEmpty())))
-                }
-                onFailureShown?.invoke()
-            }
-
-            else -> Unit
-        }
-    }
-
-    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-        if (sendResult is SendResult.Sent) {
-            navigation.removeLastUntil(closeUntilDestId, true)
-        }
-    }
+    SendResultEffects(
+        sendResult = sendResult,
+        navigation = navigation,
+        closeUntilDestId = sendEntryPointDestId ?: SendV2Page::class,
+        onShowFailure = onFailureShown,
+    )
 
     HSScaffold(
         title = title ?: stringResource(R.string.Send_Confirmation_Title),
@@ -193,6 +166,49 @@ fun SendConfirmationScreen(
             if (cautions.isNotEmpty()) {
                 Cautions(cautions)
             }
+        }
+    }
+}
+
+/** Announces how the send ended and leaves the send flow once it went out. */
+@Composable
+private fun SendResultEffects(
+    sendResult: SendResult?,
+    navigation: HSNavigation,
+    closeUntilDestId: KClass<out HSPage>,
+    // Called once the failure is on screen
+    onShowFailure: (() -> Unit)?,
+) {
+    val view = LocalView.current
+    val failureText = (sendResult as? SendResult.Failed)?.let {
+        it.caution.getDescription() ?: it.caution.getString()
+    }
+
+    // Keyed on the result so each outcome is announced once, not on every recomposition.
+    LaunchedEffect(sendResult) {
+        when (sendResult) {
+            is SendResult.Sent -> {
+                HudHelper.showSuccessMessage(view, R.string.Send_Success, SnackbarDuration.LONG)
+                delay(1200)
+                navigation.removeLastUntil(closeUntilDestId, true)
+            }
+
+            is SendResult.Failed -> {
+                when {
+                    sendResult.shownOnScreen -> Unit
+                    sendResult.expected -> HudHelper.showErrorMessage(view, failureText.orEmpty())
+                    else -> navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failureText.orEmpty())))
+                }
+                onShowFailure?.invoke()
+            }
+
+            else -> Unit
+        }
+    }
+
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        if (sendResult is SendResult.Sent) {
+            navigation.removeLastUntil(closeUntilDestId, true)
         }
     }
 }

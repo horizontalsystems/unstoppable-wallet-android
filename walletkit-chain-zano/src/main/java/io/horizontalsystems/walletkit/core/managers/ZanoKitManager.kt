@@ -11,6 +11,7 @@ import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +35,7 @@ class ZanoKitManager(
         }
 
     private var useCount = 0
+    private var daemonJob: Job? = null
     var currentAccount: Account? = null
         private set
 
@@ -41,6 +43,12 @@ class ZanoKitManager(
         scope.launch {
             zanoNodeManager.currentNodeUpdatedFlow.collect {
                 handleNodeUpdate()
+            }
+        }
+        scope.launch {
+            // The wallet stays open and goes on from the height it has; nothing is rebuilt
+            zanoNodeManager.nodeChangedFlow.collect { host ->
+                synchronized(this@ZanoKitManager) { zanoKitWrapper?.kit?.setDaemonAddress(host) }
             }
         }
         val torManager = App.torKitManager
@@ -109,8 +117,23 @@ class ZanoKitManager(
             wallet = wallet,
             walletId = account.id,
             daemonAddress = node.host,
+            // With Auto-Select on, a send the node fails goes on through the other nodes
+            // Auto-Select may pick. A node the user picked stays the only one their transfers
+            // are sent to. Read at the time of the send: the switch and the nodes can change.
+            fallbackDaemonAddresses = {
+                if (zanoNodeManager.autoSelectEnabled) zanoNodeManager.autoSelectNodes.map { it.host } else emptyList()
+            },
         )
+        followKitDaemon(kit)
         return ZanoKitWrapper(kit)
+    }
+
+    // The kit moves to another node itself when a send needs one
+    private fun followKitDaemon(kit: ZanoKit) {
+        daemonJob?.cancel()
+        daemonJob = scope.launch {
+            kit.daemonAddressFlow.collect { zanoNodeManager.adoptNode(it) }
+        }
     }
 
     @Synchronized

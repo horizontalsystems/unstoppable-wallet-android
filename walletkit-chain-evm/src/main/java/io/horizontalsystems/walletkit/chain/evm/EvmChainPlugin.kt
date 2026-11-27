@@ -16,6 +16,7 @@ import io.horizontalsystems.walletkit.core.address.Eip20AddressValidator
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
+import io.horizontalsystems.walletkit.core.managers.EvmSourcePinger
 import io.horizontalsystems.walletkit.core.managers.evmTransactionSource
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -147,6 +148,18 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
     }
 
     override fun statusInfo(): Map<String, Any>? = evmKitManager.statusInfo
+
+    override suspend fun onAppStart() {
+        // Auto-Select: probe only chains in use. The kit already falls over between built-in
+        // sources on its own; this only moves the preferred one when the stored source is
+        // dead, stale or clearly slower.
+        if (!isInUseAtStartup()) return
+        App.evmSyncSourceManager.autoSelect.repickOnStartup(
+            blockchainType,
+            EvmSourcePinger.lagThreshold(blockchainType),
+            EvmSourcePinger::probe,
+        )
+    }
 
     override suspend fun swapDestinationAddress(account: Account): String? =
         account.type.evmAddress(EvmKitManagerRegistry.getChain(blockchainType))?.eip55

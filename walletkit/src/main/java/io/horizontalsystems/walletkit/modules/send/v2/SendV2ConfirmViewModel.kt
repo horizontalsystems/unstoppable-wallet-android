@@ -28,6 +28,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.Abstract
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
+import io.horizontalsystems.walletkit.modules.send.SendNodeFailover
 import io.horizontalsystems.walletkit.modules.send.SendResult
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -37,6 +38,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -83,7 +85,11 @@ class SendV2ConfirmViewModel(
     private val memo: String?,
     private val extraInput: String?,
     private val chainSettings: SendChainSettings?,
-    val sendTransactionService: AbstractSendTransactionService,
+    sendTransactionService: AbstractSendTransactionService,
+    // A new service for the same transfer, for when the chain's adapter was rebuilt on
+    // another node and the current service is bound to the one that was stopped.
+    private val createSendTransactionService: () -> AbstractSendTransactionService,
+    private val nodeFailover: SendNodeFailover,
     private val xRateService: XRateService,
     private val contactsRepository: ContactsRepository,
     private val recentAddressManager: RecentAddressManager,
@@ -93,9 +99,18 @@ class SendV2ConfirmViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
+    @Volatile
+    var sendTransactionService: AbstractSendTransactionService = sendTransactionService
+        private set
+
     private val token = wallet.token
     private val chainPlugin = ChainRegistry[token.blockchainType]
     private var serviceState = sendTransactionService.stateFlow.value
+    private var serviceStateJob: Job? = null
+    // Set once the chain was moved to another node because the first one failed this transfer
+    private var nodeSwitchedCaution: CautionViewItem? = null
+    // A send whose outcome the node never confirmed: sending again from here could pay twice
+    private var maybeSentCaution: CautionViewItem? = null
 
     // Sending everything: the fee has to come out of the amount, since the balance cannot
     // cover both. Detected from the amount alone, so a typed full balance counts as well.
@@ -137,19 +152,36 @@ class SendV2ConfirmViewModel(
                 emitState()
             }
         }
-        viewModelScope.launch {
-            sendTransactionService.stateFlow.collect {
+        collectServiceState()
+
+        refreshFeeCoinRate()
+        sendTransactionService.start(serviceScope)
+
+        viewModelScope.launch { submit(amount) }
+    }
+
+    private fun collectServiceState() {
+        val service = sendTransactionService
+        serviceStateJob = viewModelScope.launch {
+            service.stateFlow.collect {
                 serviceState = it
                 refreshFeeCoinRate()
                 if (sendMax) reconcileMaxSend()
                 emitState()
             }
         }
+    }
 
-        refreshFeeCoinRate()
-        sendTransactionService.start(serviceScope)
-
-        viewModelScope.launch { submit(amount) }
+    // The chain's adapter was rebuilt on another node. The service in use holds the adapter
+    // that was stopped, so a new one takes its place.
+    private fun replaceSendTransactionService() {
+        val replacement = createSendTransactionService()
+        serviceStateJob?.cancel()
+        sendTransactionService.clear()
+        sendTransactionService = replacement
+        serviceState = replacement.stateFlow.value
+        collectServiceState()
+        replacement.start(serviceScope)
     }
 
     // Services may reach the network while taking the transfer (fee estimates, account
@@ -161,24 +193,86 @@ class SendV2ConfirmViewModel(
                 error = null
                 emitState()
             }
-            try {
-                val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, extraInput, chainSettings)
-                    ?: throw UnsupportedOperationException(token.blockchainType.uid)
-                submittedAmount = value
-                // reconcileMaxSend only runs when the service's StateFlow emits, and StateFlow
-                // drops a value equal to the current one. A reduced amount whose estimate
-                // matches the previous one would leave the screen adjusting forever.
-                sendTransactionService.refreshUuid()
-                sendTransactionService.setSendTransactionData(data)
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Throwable) {
-                error = e
+            adoptLateNodeSwitch()
+            var failure = estimate(value)
+            if (failure != null && switchNodeAfter(failure) is SendNodeFailover.Outcome.Switched) {
+                // The node failed the estimate, so nothing was sent: estimate on the new one.
+                failure = estimate(value)
+            }
+            if (failure != null) {
+                error = failure
                 // Nothing will settle the adjustment now; let the screen show the failure.
                 adjusting = false
                 emitState()
             }
         }
+    }
+
+    /** Hands the transfer to the service. Returns what went wrong, or null. */
+    private suspend fun estimate(value: BigDecimal): Throwable? = try {
+        val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, extraInput, chainSettings)
+            ?: throw UnsupportedOperationException(token.blockchainType.uid)
+        submittedAmount = value
+        // reconcileMaxSend only runs when the service's StateFlow emits, and StateFlow
+        // drops a value equal to the current one. A reduced amount whose estimate
+        // matches the previous one would leave the screen adjusting forever.
+        sendTransactionService.refreshUuid()
+        sendTransactionService.setSendTransactionData(data)
+        null
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Throwable) {
+        e
+    }
+
+    /**
+     * Lets the chain move to another node if [failure] was its node's. On a switch the send
+     * service is replaced and the screen says so; the caller estimates again.
+     */
+    private suspend fun switchNodeAfter(failure: Throwable): SendNodeFailover.Outcome {
+        val outcome = nodeFailover.handle(failure)
+        if (outcome !is SendNodeFailover.Outcome.Switched) return outcome
+
+        return if (serviceOnNewNode(outcome)) outcome else SendNodeFailover.Outcome.Unhandled
+    }
+
+    /**
+     * Takes up a node change that finished after the screen stopped waiting for it. Until
+     * then the send service holds the adapter that was stopped, and nothing can be estimated
+     * or sent through it.
+     */
+    private fun adoptLateNodeSwitch(): Boolean {
+        val outcome = nodeFailover.lateSwitch() ?: return false
+        return serviceOnNewNode(outcome)
+    }
+
+    // The chain's adapter was rebuilt on another node: a new send service takes the place of
+    // the one that holds the old adapter, and the screen says so.
+    private fun serviceOnNewNode(outcome: SendNodeFailover.Outcome.Switched): Boolean {
+        try {
+            replaceSendTransactionService()
+        } catch (e: Throwable) {
+            Log.w("SendV2ConfirmViewModel", "send service not replaced after a node switch", e)
+            return false
+        }
+        nodeSwitchedCaution = CautionViewItem(
+            title = Translator.getString(R.string.Send_NodeSwitched_Title),
+            text = Translator.getString(R.string.Send_NodeSwitched_Description, outcome.nodeName),
+            type = CautionViewItem.Type.Warning,
+        )
+        return true
+    }
+
+    // Nothing was sent. The transfer is estimated on the new node, and the user sends again
+    // after a look at it: the fee may differ.
+    private suspend fun reviewOnNewNode(): SendResult.Failed {
+        error = estimate(submittedAmount ?: amount)
+        emitState()
+        return SendResult.Failed(
+            HSCaution(TranslatableString.PlainString(nodeSwitchedCaution?.text.orEmpty())),
+            expected = true,
+            shownOnScreen = true,
+        )
     }
 
     // Runs on every service update while sending the maximum. The service's own cautions
@@ -255,8 +349,9 @@ class SendV2ConfirmViewModel(
         feeCoinDecimals = feeCoinValue()?.decimal ?: token.decimals,
         feeCoinRate = feeCoinRate,
         fields = serviceState.fields,
-        cautions = if (adjusting) listOf() else listOfNotNull(maxSendCaution) + serviceState.cautions,
-        sendable = serviceState.sendable && !adjusting && maxSendCaution == null,
+        cautions = listOfNotNull(maybeSentCaution, nodeSwitchedCaution) +
+            if (adjusting) listOf() else listOfNotNull(maxSendCaution) + serviceState.cautions,
+        sendable = serviceState.sendable && !adjusting && maxSendCaution == null && maybeSentCaution == null,
         loading = serviceState.loading || adjusting,
         hasSettings = sendTransactionService.hasSettings,
         hasNonceSettings = sendTransactionService.hasNonceSettings,
@@ -277,6 +372,15 @@ class SendV2ConfirmViewModel(
         }
     }
 
+    private fun showMaybeSent(text: String) {
+        maybeSentCaution = CautionViewItem(
+            title = Translator.getString(R.string.Send_MaybeSent_Title),
+            text = text,
+            type = CautionViewItem.Type.Error,
+        )
+        emitState()
+    }
+
     // The service's fields are read while broadcasting, so this takes the same confined
     // thread and lock as the submissions that write them.
     private suspend fun send() = withContext(serviceDispatcher) {
@@ -285,18 +389,63 @@ class SendV2ConfirmViewModel(
 
     private suspend fun broadcast() {
         sendResult = SendResult.Sending
+        // The service has changed under a transfer the user reviewed on the old one
+        if (adoptLateNodeSwitch()) {
+            sendResult = reviewOnNewNode()
+            return
+        }
+        val startedAt = System.currentTimeMillis()
+        // Read before the send: a node change rebuilds the adapter
+        val toSelf = try {
+            App.adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress == address.hex
+        } catch (_: Throwable) {
+            // An address that cannot be read is treated as someone else's
+            false
+        }
         val result = try {
             sendTransactionService.sendTransaction()
         } catch (e: Throwable) {
-            sendResult = SendResult.Failed(
-                createCaution(e),
-                expected = e is UnknownHostException || e is LocalizedException,
-            )
+            sendResult = when (switchNodeAfter(e)) {
+                is SendNodeFailover.Outcome.Switched -> reviewOnNewNode()
+
+                // The screen says what is being done while the chain is moved to another node
+                // and the transfer is looked for there. The button stays in its sending state.
+                SendNodeFailover.Outcome.MaybeSent -> {
+                    showMaybeSent(Translator.getString(R.string.Send_MaybeSent_Checking))
+                    when (val delivery = nodeFailover.confirmDelivery(submittedAmount ?: amount, startedAt, toSelf)) {
+                        is SendNodeFailover.Delivery.Found -> {
+                            maybeSentCaution = null
+                            SendResult.Sent(txHash = delivery.transactionHash)
+                        }
+
+                        is SendNodeFailover.Delivery.NotFound -> {
+                            val text = delivery.nodeName
+                                ?.let { Translator.getString(R.string.Send_MaybeSent_NotFound, it) }
+                                ?: Translator.getString(R.string.Send_MaybeSent_Description)
+                            showMaybeSent(text)
+                            SendResult.Failed(
+                                HSCaution(TranslatableString.PlainString(text)),
+                                expected = true,
+                                shownOnScreen = true,
+                            )
+                        }
+                    }
+                }
+
+                SendNodeFailover.Outcome.Unhandled -> SendResult.Failed(
+                    createCaution(e),
+                    expected = e is UnknownHostException || e is LocalizedException,
+                )
+            }
+            if (sendResult is SendResult.Sent) rememberRecipient()
             return
         }
         sendResult = SendResult.Sent(txHash = txHash(result))
+        rememberRecipient()
+    }
 
-        // Bookkeeping after a broadcast transaction; its failure is not the send's.
+    // Bookkeeping after a broadcast transaction; its failure is not the send's.
+    private fun rememberRecipient() {
         try {
             recentAddressManager.setRecentAddress(address, token.blockchainType)
         } catch (e: Throwable) {
@@ -349,6 +498,8 @@ class SendV2ConfirmViewModel(
                 extraInput = input.extraInput,
                 chainSettings = chainSettings,
                 sendTransactionService = SendTransactionServiceFactory.create(input.wallet.token),
+                createSendTransactionService = { SendTransactionServiceFactory.create(input.wallet.token) },
+                nodeFailover = SendNodeFailover.forToken(input.wallet.token),
                 xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 contactsRepository = App.contactsRepository,
                 recentAddressManager = App.recentAddressManager,

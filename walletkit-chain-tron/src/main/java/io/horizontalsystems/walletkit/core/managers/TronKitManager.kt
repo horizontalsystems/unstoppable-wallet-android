@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.net.URL
 
 class TronKitManager(
     private val evmSyncSourceManager: EvmSyncSourceManager,
@@ -69,15 +68,11 @@ class TronKitManager(
         _kitStoppedFlow.tryEmit(Unit)
     }
 
-    private fun tronRpcSource(): RpcSource {
-        val syncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
-        val tronGridUrl = URL("https://api.trongrid.io/")
-        return if (syncSource.uri.toString() == tronGridUrl.toString()) {
-            RpcSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)
-        } else {
-            RpcSource(urls = listOf(URL(syncSource.uri.toString())), auth = syncSource.auth)
-        }
-    }
+    // The selected source first and, with Auto-Select on, the other built-in ones after it:
+    // the kit falls over between them on its own.
+    private fun tronRpcSource(): RpcSource =
+        evmSyncSourceManager.autoSelect.failoverSyncSources(BlockchainType.Tron)
+            .tronRpcSource(network, App.appConfigProvider.trongridApiKeys)
 
     private fun tronTransactionSource(): TransactionSource {
         return TransactionSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)

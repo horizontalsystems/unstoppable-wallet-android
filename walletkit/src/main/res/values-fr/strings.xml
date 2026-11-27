@@ -1615,6 +1615,7 @@
     <string name="AddZanoNode_AddNode">Ajouter un nœud</string>
     <string name="AddZanoNode_NodeUrl">URL du nœud</string>
     <string name="ZanoNodeSettings_Description">Choisissez le nœud que l\'application Unstoppable doit utiliser pour synchroniser le(s) portefeuille(s).</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Passer à un autre nœud si celui sélectionné ne répond plus</string>
     <string name="LocalBackup_ProtectBackup">Protéger la sauvegarde</string>
     <string name="LocalBackup_ProtectBackupDescription">Créez un mot de passe pour protéger votre fichier de sauvegarde.</string>
     <string name="LocalBackup_BackupName">Nom de la sauvegarde</string>
@@ -1874,6 +1875,10 @@
     <string name="Send_DestinationTag_Title">Tag de destination</string>
     <string name="SwapHistory_StatusActionRequired">Action requise</string>
     <string name="Send_Error_MemoTooLong">Le mémo est trop long</string>
+    <string name="Send_NodeSwitched_Title">Nœud changé</string>
+    <string name="Send_NodeSwitched_Description">Le nœud ne répondait plus, le portefeuille est donc passé à %s. Vérifiez les détails et envoyez à nouveau.</string>
+    <string name="Send_MaybeSent_Title">La transaction a peut-être été envoyée</string>
+    <string name="Send_MaybeSent_Description">Le nœud n\'a pas confirmé la transaction, elle a donc peut-être été envoyée. Vérifiez l\'historique des transactions avant d\'envoyer à nouveau.</string>
     <string name="Transactions_TrustLimit">Limite de Confiance</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">Signer %d transaction</item>
@@ -1990,4 +1995,7 @@
     <string name="NetworkSettings_NotSynced">Non synchronisé</string>
     <string name="WalletName_Default">Portefeuille %d</string>
     <string name="WalletName_WatchDefault">Portefeuille d\'observation %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Passer à un autre fournisseur si celui sélectionné ne répond plus</string>
+    <string name="Send_MaybeSent_Checking">Le nœud n\'a pas confirmé la transaction. Le portefeuille passe à un autre nœud pour vérifier si elle a été envoyée.</string>
+    <string name="Send_MaybeSent_NotFound">Le portefeuille est passé à %s et n\'y a pas trouvé la transaction. Vérifiez l\'historique des transactions avant d\'envoyer à nouveau.</string>
 </resources>

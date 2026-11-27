@@ -1618,6 +1618,7 @@
     <string name="AddZanoNode_AddNode">Knoten hinzufügen</string>
     <string name="AddZanoNode_NodeUrl">Knoten-URL</string>
     <string name="ZanoNodeSettings_Description">Wählen Sie den Knoten aus, den die Unstoppable-App zur Synchronisierung der Wallet(s) verwenden soll.</string>
+    <string name="ZanoNodeSettings_AutoSelectDescription">Zu einem anderen Knoten wechseln, wenn der ausgewählte ausfällt</string>
     <string name="LocalBackup_ProtectBackup">Sicherung schützen</string>
     <string name="LocalBackup_ProtectBackupDescription">Erstellen Sie ein Passwort zum Schutz Ihrer Sicherungsdatei.</string>
     <string name="LocalBackup_BackupName">Sicherungsname</string>
@@ -1877,6 +1878,10 @@
     <string name="Send_DestinationTag_Title">Ziel-Tag</string>
     <string name="SwapHistory_StatusActionRequired">Aktion erforderlich</string>
     <string name="Send_Error_MemoTooLong">Memo ist zu lang</string>
+    <string name="Send_NodeSwitched_Title">Knoten gewechselt</string>
+    <string name="Send_NodeSwitched_Description">Der Knoten hat nicht mehr geantwortet, daher hat die Wallet zu %s gewechselt. Prüfen Sie die Angaben und senden Sie erneut.</string>
+    <string name="Send_MaybeSent_Title">Transaktion wurde möglicherweise gesendet</string>
+    <string name="Send_MaybeSent_Description">Der Knoten hat die Transaktion nicht bestätigt, sie wurde also möglicherweise gesendet. Prüfen Sie den Transaktionsverlauf, bevor Sie erneut senden.</string>
     <string name="Transactions_TrustLimit">Vertrauenslimit</string>
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="one">%d Transaktion signieren</item>
@@ -1993,4 +1998,7 @@
     <string name="NetworkSettings_NotSynced">Nicht synchronisiert</string>
     <string name="WalletName_Default">Wallet %d</string>
     <string name="WalletName_WatchDefault">Watch-Wallet %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Zu einem anderen Anbieter wechseln, wenn der ausgewählte ausfällt</string>
+    <string name="Send_MaybeSent_Checking">Der Knoten hat die Transaktion nicht bestätigt. Die Wallet wechselt zu einem anderen Knoten, um zu prüfen, ob sie gesendet wurde.</string>
+    <string name="Send_MaybeSent_NotFound">Die Wallet hat zu %s gewechselt und die Transaktion dort nicht gefunden. Prüfen Sie den Transaktionsverlauf, bevor Sie erneut senden.</string>
 </resources>

@@ -23,6 +23,7 @@ import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.TronAccountManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
+import io.horizontalsystems.walletkit.core.managers.TronSourcePinger
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
@@ -78,6 +79,16 @@ class TronChainPlugin : ChainPlugin {
 
     override suspend fun onAppStart() {
         accountManager.start()
+
+        // Auto-Select: probe only when Tron is in use. The kit already falls over between
+        // built-in sources on its own; this only moves the preferred one when the stored
+        // source is dead, stale or clearly slower.
+        if (!isInUseAtStartup()) return
+        App.evmSyncSourceManager.autoSelect.repickOnStartup(
+            BlockchainType.Tron,
+            TronSourcePinger.LAG_THRESHOLD,
+            TronSourcePinger(App.appConfigProvider.trongridApiKeys)::probe,
+        )
     }
 
     override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter? =

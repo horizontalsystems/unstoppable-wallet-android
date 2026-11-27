@@ -260,7 +260,7 @@ private fun SwapConfirmInternal(
             viewModel.setRecipient(it.address)
         },
         buttonsSlot = {
-            if (!uiState.validQuote) {
+            if (!uiState.validQuote && !uiState.maybeSent) {
                 HSButton(
                     variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
@@ -274,7 +274,7 @@ private fun SwapConfirmInternal(
                 HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(if (swapAction.inProgress) R.string.Swap_Swapping else R.string.Swap),
-                    enabled = !swapAction.inProgress && !uiState.loading,
+                    enabled = !swapAction.inProgress && !uiState.loading && !uiState.maybeSent,
                     onClick = {
                         swapAction.run {
                             try {
@@ -293,6 +293,8 @@ private fun SwapConfirmInternal(
                                 // No deposit was sent; a fresh quote is already loading, so the
                                 // reason is a passing notice rather than an error sheet.
                                 HudHelper.showErrorMessage(view, t.detail ?: Translator.getString(t.failure.messageRes))
+                            } catch (expected: DepositMaybeSentException) {
+                                // The screen says so itself, in a caution that stays
                             } catch (t: Throwable) {
                                 val message = when (t) {
                                     is WatchAccountException ->

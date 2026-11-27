@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalView
@@ -59,7 +60,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
+import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
@@ -147,7 +151,16 @@ private fun EvmNetworkScreen(
                         modifier = Modifier.padding(horizontal = 32.dp),
                         text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
                     )
-                    VSpacer(32.dp)
+                    if (viewModel.viewState.autoSelectSupported) {
+                        VSpacer(24.dp)
+                        AutoSelectCell(
+                            enabled = viewModel.viewState.autoSelect,
+                            onCheckedChange = { viewModel.onToggleAutoSelect(it) }
+                        )
+                        VSpacer(24.dp)
+                    } else {
+                        VSpacer(32.dp)
+                    }
                 }
 
                 item {
@@ -331,4 +344,28 @@ fun RpcCell(
             }
         }
     }
+}
+
+@Composable
+private fun AutoSelectCell(
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    body_leah(text = stringResource(id = R.string.NetworkSettings_AutoSelect))
+                    Spacer(Modifier.height(1.dp))
+                    subhead2_grey(text = stringResource(id = R.string.EvmNetwork_AutoSelectDescription))
+                }
+                Spacer(Modifier.width(12.dp))
+                HsSwitch(
+                    checked = enabled,
+                    onCheckedChange = onCheckedChange,
+                    modifier = Modifier.testTag(TestTags.EVM_NETWORK_AUTO_SELECT),
+                )
+            }
+        }
+    )
 }
