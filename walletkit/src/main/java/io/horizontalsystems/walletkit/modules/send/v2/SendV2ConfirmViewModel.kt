@@ -398,7 +398,8 @@ class SendV2ConfirmViewModel(
         // Read before the send: a node change rebuilds the adapter
         val toSelf = try {
             App.adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress == address.hex
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
+            // An address that cannot be read is treated as someone else's
             false
         }
         val result = try {

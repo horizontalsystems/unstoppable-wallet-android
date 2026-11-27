@@ -48,7 +48,8 @@ class TronSourcePinger(private val tronGridApiKeys: List<String>) {
                     ?: return@withContext failed(source)
                 SourceProbe(source, elapsedMs, height)
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
+            // Whatever the probe fails with, the source did not answer it
             failed(source)
         }
     }

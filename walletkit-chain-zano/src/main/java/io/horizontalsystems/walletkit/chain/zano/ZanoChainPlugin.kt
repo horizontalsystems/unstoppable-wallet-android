@@ -141,10 +141,10 @@ class ZanoChainPlugin(
     // The Zano wallet keeps reporting itself synced after its daemon stops answering: it only
     // reports a daemon it never reached. So with Auto-Select on the current node is asked
     // directly, one small request per check, and only while a Zano wallet is in use.
-    override suspend fun isSyncStalled(): Boolean {
-        if (hasUnsyncedWallet()) return true
-        if (!hasActiveWallet() || !App.connectivityManager.isConnected) return false
-        return zanoNodeManager().isCurrentNodeDown()
+    override suspend fun isSyncStalled(): Boolean = when {
+        hasUnsyncedWallet() -> true
+        !hasActiveWallet() || !App.connectivityManager.isConnected -> false
+        else -> zanoNodeManager().isCurrentNodeDown()
     }
 
     private fun hasActiveWallet() =
@@ -182,8 +182,9 @@ class ZanoChainPlugin(
                 }
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Throwable) {
-                Timber.e(e, "Zano node reselect failed")
+            } catch (expected: Throwable) {
+                // Launched on its own: a failure here must not reach the app
+                Timber.e(expected, "Zano node reselect failed")
             }
         }
     }

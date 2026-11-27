@@ -42,7 +42,7 @@ class NodeAutoSelector<T>(
             }
         } catch (e: CancellationException) {
             throw e
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // keep the stored node
         }
     }
@@ -67,8 +67,8 @@ class NodeAutoSelector<T>(
      * was running.
      */
     suspend fun reselect(): Reselection {
-        if (!isEnabled()) return Reselection.Skipped
-        if (!reselectMutex.tryLock()) return Reselection.Skipped // a probe is already in flight
+        // Not while another probe is in flight
+        if (!isEnabled() || !reselectMutex.tryLock()) return Reselection.Skipped
 
         return try {
             val before = current()
@@ -98,14 +98,14 @@ class NodeAutoSelector<T>(
      * @return the node moved to, or null when Auto-Select is off or no other node will do.
      */
     suspend fun switchAway(): T? {
-        if (!isEnabled()) return null
-        if (!reselectMutex.tryLock()) return null // a probe is already in flight
+        // Not while another probe is in flight
+        if (!isEnabled() || !reselectMutex.tryLock()) return null
 
         return try {
             val before = current()
-            val probes = withTimeoutOrNull(timeout) { probe() } ?: return null
-            val winner = SourceRepick.fastestOther(before, probes, lagThreshold) ?: return null
-            winner.takeIf { switchIfUnchanged(before, it) }
+            withTimeoutOrNull(timeout) { probe() }
+                ?.let { SourceRepick.fastestOther(before, it, lagThreshold) }
+                ?.takeIf { switchIfUnchanged(before, it) }
         } finally {
             reselectMutex.unlock()
         }
@@ -121,8 +121,8 @@ class NodeAutoSelector<T>(
 
         val node = current()
         // A probe that does not return in time is a node that does not answer.
-        val probes = withTimeoutOrNull(timeout) { probeNode(node) } ?: return true
-        return probes.isNotEmpty() && probes.none { it.source == node && it.isHealthy }
+        val probes = withTimeoutOrNull(timeout) { probeNode(node) }
+        return probes == null || (probes.isNotEmpty() && probes.none { it.source == node && it.isHealthy })
     }
 
     // The user may have picked a node or turned Auto-Select off while the probe ran.

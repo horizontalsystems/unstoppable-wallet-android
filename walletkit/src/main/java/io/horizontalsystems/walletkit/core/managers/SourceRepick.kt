@@ -25,19 +25,21 @@ object SourceRepick {
         val fresh = fresh(probes, lagThreshold)
         // Every source failing means the device has no usable network, not that the current
         // source is bad.
-        if (fresh.isEmpty()) return null
-
-        val fastest = fresh.minBy { it.responseTimeMs!! }
-
+        val fastest = fresh.minByOrNull { it.responseTimeMs!! } ?: return null
         val currentProbe = fresh.firstOrNull { it.source == current }
-            ?: return fastest.source.takeIf { it != current }
-        if (!switchForSpeed) return null
 
-        val currentTime = currentProbe.responseTimeMs!!
+        return when {
+            // The current source failed or is behind
+            currentProbe == null -> fastest.source.takeIf { it != current }
+            switchForSpeed && isClearlySlower(currentProbe, fastest) -> fastest.source
+            else -> null
+        }
+    }
+
+    private fun <T> isClearlySlower(current: SourceProbe<T>, fastest: SourceProbe<T>): Boolean {
+        val currentTime = current.responseTimeMs!!
         val fastestTime = fastest.responseTimeMs!!
-        val clearlySlower = currentTime > fastestTime * SLOWER_FACTOR && currentTime - fastestTime > MIN_GAIN_MS
-
-        return if (clearlySlower) fastest.source else null
+        return currentTime > fastestTime * SLOWER_FACTOR && currentTime - fastestTime > MIN_GAIN_MS
     }
 
     /** The fastest source that answered and is not behind, or null when none answered. */

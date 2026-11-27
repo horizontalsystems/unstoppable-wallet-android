@@ -45,6 +45,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.coroutines.cancellation.CancellationException
+import timber.log.Timber
 
 class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
@@ -295,6 +296,7 @@ class SwapConfirmViewModel(
             replaceSendTransactionService()
             Translator.getString(R.string.Send_NodeSwitched_Description, outcome.nodeName)
         } catch (e: Throwable) {
+            Timber.e(e, "No send service for %s on the node moved to", tokenIn.blockchainType.uid)
             null
         }
     }
@@ -405,29 +407,7 @@ class SwapConfirmViewModel(
                     throw WatchAccountException()
                 }
 
-                val finalQuote = if (splitRecipients != null) {
-                    val splitProvider = swapProvider as? ISplitSwapProvider
-                        ?: throw IllegalStateException("${swapProvider.id} cannot split a swap")
-                    splitProvider.fetchSplitFinalQuote(
-                        tokenIn,
-                        tokenOut,
-                        amountIn,
-                        splitRecipients,
-                        sendTransactionSettings,
-                        swapQuote,
-                        slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
-                    )
-                } else {
-                    swapProvider.fetchFinalQuote(
-                        tokenIn,
-                        tokenOut,
-                        amountIn,
-                        sendTransactionSettings,
-                        swapQuote,
-                        recipient,
-                        slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
-                    )
-                }
+                val finalQuote = finalQuoteFromProvider()
 
                 ensureActive()
 
@@ -494,6 +474,33 @@ class SwapConfirmViewModel(
                 emitState()
             }
         }
+    }
+
+    private suspend fun finalQuoteFromProvider(): SwapFinalQuote {
+        val maxSlippage = slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE
+        if (splitRecipients == null) {
+            return swapProvider.fetchFinalQuote(
+                tokenIn,
+                tokenOut,
+                amountIn,
+                sendTransactionSettings,
+                swapQuote,
+                recipient,
+                maxSlippage,
+            )
+        }
+
+        val splitProvider = swapProvider as? ISplitSwapProvider
+            ?: throw IllegalStateException("${swapProvider.id} cannot split a swap")
+        return splitProvider.fetchSplitFinalQuote(
+            tokenIn,
+            tokenOut,
+            amountIn,
+            splitRecipients,
+            sendTransactionSettings,
+            swapQuote,
+            maxSlippage,
+        )
     }
 
     /**
@@ -776,12 +783,15 @@ class SwapConfirmViewModel(
     }
 
     fun setRecipient(recipient: Address?) {
-        // The swap that may have been sent pays the recipient on screen
-        if (maybeSentCaution != null) return
-        // A split's recipients were fixed before this screen.
-        if (isSplit) return
-        // a mandatory external recipient can be changed but never cleared
-        if (recipient == null && recipientRequired) return
+        val fixed = when {
+            // The swap that may have been sent pays the recipient on screen
+            maybeSentCaution != null -> true
+            // A split's recipients were fixed before this screen.
+            isSplit -> true
+            // a mandatory external recipient can be changed but never cleared
+            else -> recipient == null && recipientRequired
+        }
+        if (fixed) return
 
         this.recipient = recipient
 

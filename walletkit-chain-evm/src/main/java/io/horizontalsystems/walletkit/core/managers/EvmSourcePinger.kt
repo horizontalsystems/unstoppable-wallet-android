@@ -51,7 +51,8 @@ object EvmSourcePinger {
                     ?: return@withContext failed(source)
                 SourceProbe(source, elapsedMs, result.removePrefix("0x").toLong(16))
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
+            // Whatever the probe fails with, the source did not answer it
             failed(source)
         }
     }

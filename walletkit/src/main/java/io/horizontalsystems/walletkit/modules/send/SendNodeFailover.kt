@@ -92,12 +92,13 @@ class SendNodeFailover(
     private var unfinishedSwitch: UnfinishedSwitch? = null
 
     suspend fun handle(error: Throwable): Outcome {
-        val nodeError = classify(error) ?: return Outcome.Unhandled
-
-        if (!nodeError.preBroadcast) return Outcome.MaybeSent
-
-        if (!switched.compareAndSet(false, true)) return Outcome.Unhandled
-        return switchQuietly()?.let { Outcome.Switched(it) } ?: Outcome.Unhandled
+        val nodeError = classify(error)
+        return when {
+            nodeError == null -> Outcome.Unhandled
+            !nodeError.preBroadcast -> Outcome.MaybeSent
+            !switched.compareAndSet(false, true) -> Outcome.Unhandled
+            else -> switchQuietly()?.let { Outcome.Switched(it) } ?: Outcome.Unhandled
+        }
     }
 
     /**
@@ -105,14 +106,16 @@ class SendNodeFailover(
      * adapter was not there in time, once that adapter is there. Until the screen acts on it,
      * its send service holds the adapter that was stopped. Given once.
      */
-    fun lateSwitch(): Outcome.Switched? {
-        val unfinished = unfinishedSwitch ?: return null
-        val adapter = currentAdapter()
-        if (adapter == null || adapter === unfinished.staleAdapter) return null
-
-        unfinishedSwitch = null
-        return Outcome.Switched(unfinished.nodeName)
-    }
+    fun lateSwitch(): Outcome.Switched? =
+        unfinishedSwitch
+            ?.takeIf { unfinished ->
+                val adapter = currentAdapter()
+                adapter != null && adapter !== unfinished.staleAdapter
+            }
+            ?.let { unfinished ->
+                unfinishedSwitch = null
+                Outcome.Switched(unfinished.nodeName)
+            }
 
     /**
      * After [Outcome.MaybeSent]: moves the chain to another node, where the wallet syncs and
@@ -134,8 +137,17 @@ class SendNodeFailover(
         } else {
             null
         }
-        if (knownBefore == null) return Delivery.NotFound(nodeName)
+        val found = knownBefore?.let { newTransfer(it, amount, sendStartedAt, toSelf) }
+        return found?.let { Delivery.Found(it.hash) } ?: Delivery.NotFound(nodeName)
+    }
 
+    // Looks until the transfer is listed or the lookup time is over
+    private suspend fun newTransfer(
+        knownBefore: Set<String>,
+        amount: BigDecimal,
+        sendStartedAt: Long,
+        toSelf: Boolean,
+    ): SentTransfer? {
         val deadline = now() + lookupTimeMs
         while (true) {
             val found = sentTransfersOrNull()?.firstOrNull {
@@ -143,17 +155,17 @@ class SendNodeFailover(
                     (it.amount.compareTo(amount) == 0 || (toSelf && it.toSelf)) &&
                     it.timestamp * 1000 >= sendStartedAt - EARLIEST_MARGIN_MS
             }
-            if (found != null) return Delivery.Found(found.hash)
-            if (now() >= deadline) return Delivery.NotFound(nodeName)
+            if (found != null || now() >= deadline) return found
             wait(lookupIntervalMs)
         }
     }
 
+    // A list that cannot be read is a list that is not known: the caller says so
     private suspend fun sentTransfersOrNull(): List<SentTransfer>? = try {
         sentTransfers()
     } catch (e: CancellationException) {
         throw e
-    } catch (e: Throwable) {
+    } catch (_: Throwable) {
         null
     }
 
@@ -167,8 +179,9 @@ class SendNodeFailover(
         }
     } catch (e: CancellationException) {
         throw e
-    } catch (e: Throwable) {
-        Timber.e(e, "Node switch for a send failed on %s", token.blockchainType.uid)
+    } catch (expected: Throwable) {
+        // Whatever the node change fails with, the send's own error is what the user is shown
+        Timber.e(expected, "Node switch for a send failed on %s", token.blockchainType.uid)
         null
     }
 
@@ -198,16 +211,16 @@ class SendNodeFailover(
         }
 
         // Read anew on every call: the chain's adapter is rebuilt when its node changes
-        private suspend fun sentTransfers(token: Token): List<SentTransfer> {
-            val wallet = App.walletManager.activeWallets.firstOrNull { it.token == token } ?: return emptyList()
-            val adapter = App.transactionAdapterManager.getAdapter(wallet.transactionSource) ?: return emptyList()
-            return adapter
-                .getTransactions(null, token, SENT_LIST_SIZE, FilterTransactionType.Outgoing, null)
-                .mapNotNull { record ->
-                    val amount = record.mainValue?.decimalValue?.abs() ?: return@mapNotNull null
-                    SentTransfer(record.transactionHash, amount, record.timestamp, record.isToSelf())
+        private suspend fun sentTransfers(token: Token): List<SentTransfer> =
+            App.walletManager.activeWallets.firstOrNull { it.token == token }
+                ?.let { App.transactionAdapterManager.getAdapter(it.transactionSource) }
+                ?.getTransactions(null, token, SENT_LIST_SIZE, FilterTransactionType.Outgoing, null)
+                ?.mapNotNull { record ->
+                    record.mainValue?.decimalValue?.abs()?.let { amount ->
+                        SentTransfer(record.transactionHash, amount, record.timestamp, record.isToSelf())
+                    }
                 }
-        }
+                ?: emptyList()
 
         // The records of the chains that classify their send errors
         private fun TransactionRecord.isToSelf(): Boolean = when (this) {

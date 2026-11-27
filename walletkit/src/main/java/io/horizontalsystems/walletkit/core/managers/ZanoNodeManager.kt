@@ -81,8 +81,9 @@ class ZanoNodeManager(
         // Only built-in nodes take part; a custom selection gives way to the default one.
         if (enabled && currentNode !in defaultNodes) {
             select(defaultNodes.first())
+        } else {
+            _nodesUpdatedFlow.tryEmit(currentNode.host)
         }
-        _nodesUpdatedFlow.tryEmit(currentNode.host)
     }
 
     /**
@@ -98,7 +99,8 @@ class ZanoNodeManager(
         isEnabled = { autoSelectEnabled },
         current = { currentNode },
         probe = { nodePinger?.invoke(defaultNodes) ?: emptyList() },
-        switchTo = ::saveAutoSelected,
+        // A node Auto-Select picked; Auto-Select stays on
+        switchTo = ::select,
         startupChoice = { current, probes -> SourceRepick.choose(current, probes, LAG_THRESHOLD, switchForSpeed = false) },
         lagThreshold = LAG_THRESHOLD,
     )
@@ -139,18 +141,14 @@ class ZanoNodeManager(
     fun save(node: ZanoNode) {
         blockchainSettingsStorage.saveZanoAutoSelect(false)
         select(node)
-        _nodesUpdatedFlow.tryEmit(node.host)
     }
 
-    /** A node Auto-Select picked; Auto-Select stays on. */
-    private fun saveAutoSelected(node: ZanoNode) {
-        select(node)
-        _nodesUpdatedFlow.tryEmit(node.host)
-    }
-
+    // Stores the node, hands it to the kit and has the node list drawn again. The Auto-Select
+    // setting is not touched.
     private fun select(node: ZanoNode) {
         blockchainSettingsStorage.saveZanoNode(node.host)
         _nodeChangedFlow.tryEmit(node.host)
+        _nodesUpdatedFlow.tryEmit(node.host)
     }
 
     /**
@@ -159,7 +157,7 @@ class ZanoNodeManager(
      */
     fun adoptNode(host: String) {
         if (host == currentNode.host) return
-        allNodes.firstOrNull { it.host == host }?.let(::saveAutoSelected)
+        allNodes.firstOrNull { it.host == host }?.let(::select)
     }
 
     fun addZanoNode(url: String) {
@@ -174,8 +172,9 @@ class ZanoNodeManager(
         if (isCurrent) {
             // The selection only falls back; it is not a pick, so the setting is kept.
             select(defaultNodes.first())
+        } else {
+            _nodesUpdatedFlow.tryEmit(node.host)
         }
-        _nodesUpdatedFlow.tryEmit(node.host)
     }
 
     data class ZanoNode(val host: String, val name: String)

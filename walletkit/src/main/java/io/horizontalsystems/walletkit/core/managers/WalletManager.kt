@@ -100,7 +100,8 @@ class WalletManager(
     private fun handleUpdated(activeAccount: Account?) {
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
-        setWallets(activeWallets)
+        walletsSet.clear()
+        walletsSet.addAll(activeWallets)
         loaded.complete(Unit)
         notifyActiveWallets()
     }
@@ -110,12 +111,6 @@ class WalletManager(
      * that [activeWallets] is empty, which at app start says nothing about what is in use.
      */
     suspend fun awaitLoaded() = loaded.await()
-
-    @Synchronized
-    private fun setWallets(activeWallets: List<Wallet>) {
-        walletsSet.clear()
-        walletsSet.addAll(activeWallets)
-    }
 
     fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
         storage.handle(enabledWallets)
