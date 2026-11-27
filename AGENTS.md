@@ -5,7 +5,7 @@
 Unstoppable Wallet - A multi-currency crypto wallet Android app supporting Bitcoin, Ethereum, and many other blockchains.
 
 - **Package**: `io.horizontalsystems.bankwallet`
-- **Min SDK**: See `build.gradle` for `min_sdk_version`
+- **Min SDK**: `minSdk` in `gradle/libs.versions.toml`
 - **Language**: Kotlin
 - **UI**: Jetpack Compose (migrating from XML, see `ui/` vs `uiv3/`)
 
@@ -68,13 +68,25 @@ that way, add its test in the same change.
 
 ## Project Structure
 
+The wallet's code lives in `walletkit`; `app` is a thin shell around it.
+Dependencies point one way: `app` depends on `walletkit` and on every
+`walletkit-chain-<chain>`; each chain module depends on `walletkit`;
+`walletkit` depends on `designkit`, `components/icons`, `components/chartview`,
+`subscriptions-core` and `dapp-core`. `walletkit` and the chain modules import
+nothing from `app`, and `designkit` imports nothing from the other modules of
+the project; `architecture-tests` checks both. `app` plugs in, per flavor, one
+`subscriptions-*` implementation and, where the flavor has it,
+`dapp-wallet-connect`; the wiring is in `app/build.gradle.kts`.
+
 ```
-app/src/main/java/io/horizontalsystems/bankwallet/
+app/                         # Thin shell: MainApp, MainActivity, build config provider, flavors, build types
+walletkit/src/main/java/io/horizontalsystems/walletkit/
 ├── core/                    # Core infrastructure
 │   ├── managers/           # Business logic managers (singletons via App)
 │   ├── adapters/           # Blockchain adapters
 │   ├── factories/          # Factory classes
-│   └── providers/          # Data providers
+│   ├── providers/          # Data providers
+│   └── chain/              # Chain plugin interfaces
 ├── entities/               # Data models
 ├── modules/                # Feature modules (MVVM)
 │   ├── balance/           # Wallet balance
@@ -82,11 +94,19 @@ app/src/main/java/io/horizontalsystems/bankwallet/
 │   ├── multiswap/         # Token swaps
 │   └── ...
 ├── ui/                     # Legacy Compose components
-└── uiv3/                   # New Compose components (prefer this)
+└── uiv3/                   # New Compose components (prefer this), TestTags
 
-subscriptions-core/         # Subscription/paid features (IPaidAction)
-subscriptions-google-play/  # Google Play billing
-subscriptions-fdroid/       # F-Droid flavor
+walletkit-chain-<chain>/     # One module per blockchain, same package root and folders as walletkit
+designkit/                   # Figma design system: theme and generic components
+components/icons/            # Drawables and coin icons
+components/chartview/        # Chart view
+subscriptions-core/          # Subscription/paid features (IPaidAction)
+subscriptions-dev/           # Subscription service for dev and test builds
+subscriptions-google-play/   # Subscription service on Google Play billing; in the build only if its directory exists
+subscriptions-fdroid/        # Subscription service for the F-Droid flavors
+dapp-core/                   # dApp connection abstraction
+dapp-wallet-connect/         # WalletConnect implementation of it; in the build only if its directory exists
+architecture-tests/          # Konsist rules, a JVM module outside the app
 ```
 
 ## Architecture Patterns
@@ -182,12 +202,21 @@ override var myPreference: Boolean
 
 ## Blockchain Support
 
-Each blockchain has:
-- **Adapter**: `ISendXxxAdapter` in `core/adapters/`
-- **Kit**: Separate module (e.g., `ethereumkit`, `bitcoinkit`)
-- **SendTransactionService**: `modules/multiswap/sendtransaction/`
+Each blockchain is one `walletkit-chain-<chain>` module, in the same package
+root and folders as `walletkit`:
+- **Adapter**: the chain's adapters in `core/adapters/`, with an
+  `ISend<Chain>Adapter` interface for sending
+- **Kit**: the blockchain kit library the module depends on (`libs.kit.*` in
+  `gradle/libs.versions.toml`; Zcash uses the Zcash Android SDK)
+- **SendTransactionService**: `modules/multiswap/sendtransaction/` of the chain
+  module
+- **ChainPlugin**: `chain/<chain>/` of the chain module, registered in
+  `MainApp.registerChainPlugins()`; the interface is `ChainPlugin` in
+  `walletkit`'s `core/chain/`
 
-Supported chains: EVM (Ethereum, BSC, etc.), Bitcoin, Solana, Tron, TON, Zcash, Monero, Stellar
+Each supported chain family is one `walletkit-chain-<chain>` module, so the
+supported chains are those modules. Bitcoin's forks live in the bitcoin module,
+and Maya in the thorchain module.
 
 ### Adding or changing a chain
 
