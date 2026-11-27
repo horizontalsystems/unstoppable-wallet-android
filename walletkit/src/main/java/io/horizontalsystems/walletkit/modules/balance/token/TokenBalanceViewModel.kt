@@ -183,9 +183,10 @@ class TokenBalanceViewModel(
             showTronNotActiveAlert = true
         }
 
-        if (balanceViewItem.attentionIcon?.type == AttentionIconType.SyncError && showSyncErrorAlert == null) {
-            showSyncErrorAlert = true
-        }
+        showSyncErrorAlert = syncErrorAlert(
+            alert = showSyncErrorAlert,
+            syncFailed = balanceViewItem.attentionIcon?.type == AttentionIconType.SyncError,
+        )
 
         updateErrorState()
         emitState()
@@ -295,4 +296,19 @@ class TokenBalanceViewModel(
         balanceService.clear()
     }
 
+}
+
+/**
+ * Whether the sync error is to be shown by itself: once, the first time the sync fails. The
+ * page shows it only while it is on screen, so a failure that came and went behind another
+ * page is dropped; shown then, it would report an error that is no longer there.
+ *
+ * @param alert null while nothing was asked for, true while the alert waits to be shown, false
+ * once it was shown.
+ * @param syncFailed whether the sync is failed now.
+ */
+internal fun syncErrorAlert(alert: Boolean?, syncFailed: Boolean): Boolean? = when {
+    syncFailed && alert == null -> true
+    !syncFailed && alert == true -> null
+    else -> alert
 }
