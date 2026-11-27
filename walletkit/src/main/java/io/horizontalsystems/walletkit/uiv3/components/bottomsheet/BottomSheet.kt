@@ -67,6 +67,7 @@ fun BottomSheet(
         ),
         dragHandle = { }
     ) {
+        DisableSheetNavigationBarContrast()
         BottomSheetHeaderV3(
             image72 = painterResource(R.drawable.warning_filled_24),
             title = "Confirm"
@@ -175,6 +176,7 @@ fun BottomSheetContent(
         ),
         dragHandle = { }
     ) {
+        DisableSheetNavigationBarContrast()
         BottomSheetBody(buttons = buttons, content = content)
     }
 }

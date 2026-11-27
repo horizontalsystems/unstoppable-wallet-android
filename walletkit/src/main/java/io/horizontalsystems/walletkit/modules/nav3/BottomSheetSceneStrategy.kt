@@ -20,6 +20,7 @@ import androidx.navigation3.scene.SceneStrategyScope
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetSceneStrategy.Companion.bottomSheet
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.DisableSheetNavigationBarContrast
 import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
@@ -73,6 +74,7 @@ internal class BottomSheetScene<T : Any>(
                 properties = modalBottomSheetProperties,
                 dragHandle = null
             ) {
+                DisableSheetNavigationBarContrast()
                 CompositionLocalProvider(LocalBottomSheetDismissRegistry provides dismissRegistry) {
                     entry.Content()
                 }
