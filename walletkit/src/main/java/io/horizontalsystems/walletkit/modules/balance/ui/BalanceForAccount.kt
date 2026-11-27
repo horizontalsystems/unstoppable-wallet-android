@@ -141,7 +141,7 @@ fun BalanceForAccount(
                 add(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
-                        icon = R.drawable.ic_scan_24,
+                        icon = R.drawable.scan_24,
                         onClick = {
                             onScanClick(qrScannerLauncher, context)
                         }
@@ -151,7 +151,7 @@ fun BalanceForAccount(
             add(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Activity_Title),
-                    icon = R.drawable.ic_circle_clock_24,
+                    icon = R.drawable.clock_24,
                     testTag = TestTags.BALANCE_TRANSACTIONS,
                     onClick = {
                         navigation.slideFromRight(TransactionsPage)
@@ -166,7 +166,7 @@ fun BalanceForAccount(
             add(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
-                    icon = R.drawable.ic_wallet_switch_24,
+                    icon = R.drawable.wallet_change_24,
                     testTag = TestTags.BALANCE_MANAGE_ACCOUNTS,
                     onClick = {
                         navigation.slideFromRight(

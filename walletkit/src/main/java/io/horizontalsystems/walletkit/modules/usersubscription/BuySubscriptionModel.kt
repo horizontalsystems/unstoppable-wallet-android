@@ -41,9 +41,9 @@ object BuySubscriptionModel {
 
     val IPaidAction.iconRes: Int
         get() = when (this) {
-            AdvancedSearch -> R.drawable.prem_search_24
-            TradeSignals -> R.drawable.prem_bell_24
-            PrioritySupport -> R.drawable.prem_message_24
+            AdvancedSearch -> R.drawable.search_24
+            TradeSignals -> R.drawable.bell_24
+            PrioritySupport -> R.drawable.message_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 

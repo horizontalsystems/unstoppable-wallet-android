@@ -63,7 +63,7 @@ fun AlertCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        painter = painterResource(R.drawable.ic_warning_filled_24),
+                        painter = painterResource(R.drawable.warning_filled_24),
                         contentDescription = null,
                         tint = alertColor
                     )
@@ -84,7 +84,7 @@ fun AlertCard(
                 Row {
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        painter = painterResource(R.drawable.ic_warning_filled_24),
+                        painter = painterResource(R.drawable.warning_filled_24),
                         contentDescription = null,
                         tint = alertColor
                     )

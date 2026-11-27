@@ -86,7 +86,7 @@ fun SearchBar(
                 }
             }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_left_24),
+                    painter = painterResource(id = R.drawable.arrow_m_left_24),
                     contentDescription = stringResource(R.string.Button_Back),
                     tint = ComposeAppTheme.colors.grey
                 )
@@ -138,7 +138,7 @@ fun SearchBar(
                                 showClearButton = false
                             }) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_close),
+                                    painter = painterResource(R.drawable.close_24),
                                     contentDescription = stringResource(R.string.Button_Cancel),
                                     tint = ComposeAppTheme.colors.grey
                                 )
@@ -155,7 +155,7 @@ fun SearchBar(
 
             if (!searchMode) {
                 AppBarMenuButton(
-                    icon = R.drawable.ic_search,
+                    icon = R.drawable.search_24,
                     onClick = { searchMode = true },
                     description = stringResource(R.string.Button_Search),
                 )

@@ -82,7 +82,7 @@ private fun ThorchainNetworkScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
+                        icon = R.drawable.close_24,
                         onClick = {
                             navigation.removeLastOrNull()
                         }
@@ -151,7 +151,8 @@ private fun NetworkSettingCell(
         ) {
             if (checked) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.check_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null,
                 )

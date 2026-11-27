@@ -30,7 +30,7 @@ data class FeeSettingsInfoSheet(val input: Input) : HSBottomSheet() {
 @Composable
 fun FeeSettingsInfoScreen(title: String?, text: String?, onCloseClick: () -> Unit) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_info_24),
+        iconPainter = painterResource(R.drawable.info_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
         title = title ?: "",
         onCloseClick = onCloseClick

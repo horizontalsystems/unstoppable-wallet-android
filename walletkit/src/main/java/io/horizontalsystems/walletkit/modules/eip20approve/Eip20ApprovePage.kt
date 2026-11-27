@@ -66,7 +66,7 @@ fun Eip20ApproveScreen(navigation: HSNavigation, input: Eip20ApprovePage.Input) 
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
+                icon = R.drawable.close_24,
                 onClick = navigation::removeLastOrNull
             )
         ),

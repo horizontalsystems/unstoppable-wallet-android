@@ -207,7 +207,7 @@ private fun CrossPayConfirmationScreen(
                                 SwapInfoSheet.Input(
                                     context.getString(R.string.PrivateSend_EstimatedTime),
                                     context.getString(R.string.Swap_EstimatedTimeDescription),
-                                    R.drawable.ic_circle_clock_24,
+                                    R.drawable.clock_24,
                                 )
                             )
                         )
@@ -284,7 +284,7 @@ private fun CrossPayConfirmationError(navigation: HSNavigation, error: Throwable
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 64.dp, vertical = 32.dp),
-            icon = painterResource(R.drawable.ic_warning_filled_24),
+            icon = painterResource(R.drawable.warning_filled_24),
             iconTint = ComposeAppTheme.colors.grey,
             text = message,
             button4config = ButtonConfig(

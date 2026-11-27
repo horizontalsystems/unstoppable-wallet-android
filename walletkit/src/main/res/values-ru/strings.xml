@@ -324,10 +324,7 @@
     <string name="Balance_Downloading">Загрузка…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_BlocksRemaining">Осталось блоков - %d</string>
-    <string name="Balance_Sort_Balance">по балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировка</string>
-    <string name="Balance_Sort_Az">по названию</string>
-    <string name="Balance_Sort_24hPriceChange">по изменению цены(%)</string>
     <string name="Balance_NoCoinsAlert">Здесь нет токенов. Добавьте один, чтобы начать.</string>
     <string name="Balance_NoAssetsToSend">У вас нет активов для отправки.</string>
     <string name="Balance_Network">Сеть</string>
@@ -465,7 +462,6 @@
     <string name="FeeSettings_Overpricing_Title">Слишком высокая комиссия</string>
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_FeeRate">Ставка комиссии (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Это рекомендуемое значение для попадания в следующие 2 блока</string>
     <string name="FeeSettings_FeeRate_Info">При отправке транзакции вы должны оплатить сетевую плату. Работник сети, чем больше комиссия.
         \n\nНеостановимый кошелек предлагает оптимальную комиссию для подтверждения вашей транзакции в разумные сроки. Вы можете увеличить или уменьшить это значение.
         \n\nУстановка комиссии может привести к тому, что ваша транзакция будет оставаться в ожидании долгого времени или даже быть отклонена. Для более быстрого подтверждения, используйте более высокую комиссию.</string>
@@ -987,8 +983,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Медленно, приватно</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">Скрыть подозрительные Txs</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Скрывает подозрительные мелкие передачи, часто используемые при фишинговых атаках.</string>
-    <string name="SetDuressPin_Title">Duress код</string>
-    <string name="SetDuressPin_Description">Установите код для режима Duress</string>
+    <string name="SetDuressPin_Description">Установите код доступа для защиты от грабежа</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
     <string name="EditDuressPin_Description">Введите новый код для режима Duress</string>
     <string name="DuressPin_Title">Режим Duress</string>
@@ -1565,7 +1560,6 @@
     <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
     <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-кода вашего телефона, чтобы сохранить конфиденциальные данные из вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">Разблокировать</string>
     <string name="Unlock_Passcode">Код доступа</string>
     <string name="Unlock_EnterPasscode">Введите код доступа</string>
     <string name="Unlock_BiometricScanner">Биометрический сканер</string>
@@ -1576,12 +1570,12 @@
     <string name="Unlock_Random">Случайный</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Установить код доступа</string>
-    <string name="PinSet_Info">Код доступа будет использоваться для разблокировки вашего кошелька</string>
+    <string name="PinSet_Info">Код доступа будет использоваться для разблокировки</string>
     <string name="PinSet_ConfirmInfo">Подтвердить</string>
-    <string name="PinSet_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Неверное подтверждение</string>
     <string name="PinSet_ErrorFailedToSavePin">Произошла ошибка при сохранении пароля. Пожалуйста, попробуйте еще раз.</string>
     <string name="PinSet_ForBiometrics">Установить код доступа для включения биометрических данных</string>
-    <string name="PinSet_ForDuress">Установите код доступа для включения режима Duress</string>
+    <string name="PinSet_ForDuress">Установите код доступа, чтобы включить защиту от грабежа</string>
     <string name="PinSet_ErrorPinInUse">Этот код доступа уже используется.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

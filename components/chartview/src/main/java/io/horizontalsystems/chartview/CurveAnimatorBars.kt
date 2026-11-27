@@ -5,25 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 class CurveAnimatorBars(
-    private var targetValues: LinkedHashMap<Long, Float>,
-    private var targetMinKey: Long,
-    private var targetMaxKey: Long,
-    private var targetMinValue: Float,
-    private var targetMaxValue: Float,
+    targetValues: LinkedHashMap<Long, Float>,
+    targetMinKey: Long,
+    targetMaxKey: Long,
+    targetMinValue: Float,
+    targetMaxValue: Float,
+    private val transition: ChartTransition,
+    private var appear: ChartTransition,
 ) {
-    private var fromValues: LinkedHashMap<Long, Float> = targetValues
-    private var fromMinKey: Long = targetMinKey
-    private var fromMaxKey: Long = targetMaxKey
-    private var fromMinValue: Float = targetMinValue
-    private var fromMaxValue: Float = targetMaxValue
+    private var target = CurveFrame(targetValues, targetMinKey, targetMaxKey, targetMinValue, targetMaxValue)
 
-    private var frameValues: LinkedHashMap<Long, Float> = fromValues
-    private var frameMinKey: Long = fromMinKey
-    private var frameMaxKey: Long = fromMaxKey
-    private var frameMinValue: Float = fromMinValue
-    private var frameMaxValue: Float = fromMaxValue
+    // New bars have no old frame to leave, so they play the appear transition from their own
+    // data, and already show that transition's first frame before the animation starts.
+    private var frameAt: (Float) -> CurveFrame = appear.bars(target.copy(alpha = 0f), target)
+    private var frame = frameAt(0f)
+    private var appeared = false
 
-    private var combinedKeys = (fromValues.keys + targetValues.keys).distinct().sorted()
+    // How opaque the bars are on screen while they have not appeared: not at all, unless
+    // they come back before they were gone.
+    private var shownAlpha = 0f
 
     data class UiState(
         val values: LinkedHashMap<Long, Float>,
@@ -31,17 +31,10 @@ class CurveAnimatorBars(
         val endTimestamp: Long,
         val minValue: Float,
         val maxValue: Float,
+        val alpha: Float,
     )
 
-    var state by mutableStateOf(
-        UiState(
-            values = frameValues,
-            startTimestamp = frameMinKey,
-            endTimestamp = frameMaxKey,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-        )
-    )
+    var state by mutableStateOf(uiState())
         private set
 
     fun setValues(
@@ -51,80 +44,66 @@ class CurveAnimatorBars(
         minValue: Float = values.minOfOrNull { it.value } ?: 0f,
         maxValue: Float = values.maxOfOrNull { it.value } ?: 0f,
     ) {
-        targetValues = values
-        targetMinKey = minKey
-        targetMaxKey = maxKey
-        targetMinValue = minValue
-        targetMaxValue = maxValue
+        // A single timestamp has no width to animate across, so it is shown at once.
+        val animated = minKey != maxKey && frame.values.isNotEmpty()
 
-        fromValues = frameValues
-        fromMinKey = frameMinKey
-        fromMaxKey = frameMaxKey
-        fromMinValue = frameMinValue
-        fromMaxValue = frameMaxValue
+        val to = CurveFrame(
+            values = values,
+            startTimestamp = if (minKey == maxKey) (minKey * 0.9).toLong() else minKey,
+            endTimestamp = if (minKey == maxKey) (maxKey * 1.1).toLong() else maxKey,
+            minValue = if (minValue == maxValue) minValue * 0.9f else minValue,
+            maxValue = maxValue,
+        )
 
-        if (targetMinValue == targetMaxValue) {
-            targetMinValue *= 0.9f
+        target = to
+        frameAt = when {
+            !appeared -> appear.bars(to.copy(alpha = shownAlpha), to)
+            animated -> transition.bars(frame, to)
+            else -> { _ -> to }
         }
 
-        if (minKey == maxKey) {
-            targetMinKey = (minKey * 0.9).toLong()
-            targetMaxKey = (maxKey * 1.1).toLong()
-
-            // turn off animation
-            fromValues = targetValues
-            fromMinKey = targetMinKey
-            fromMaxKey = targetMaxKey
-            fromMinValue = targetMinValue
-            fromMaxValue = targetMaxValue
+        if (!appeared) {
+            // Bars coming back still hold the frame they left with. Show the first frame of
+            // their return now, so the old one is not drawn before the animation starts.
+            frame = frameAt(0f)
+            state = uiState()
         }
+    }
 
-        combinedKeys = (fromValues.keys + targetValues.keys).distinct().sorted()
+    /**
+     * Plays [disappear] on what is on screen. The bars do not remove themselves: their owner
+     * drops them when the animation ends.
+     */
+    fun leave(disappear: ChartTransition) {
+        frameAt = disappear.bars(frame, frame)
+        target = frameAt(1f)
+    }
+
+    /**
+     * Makes the next data come in with [appear], for bars that come back into view.
+     * [stillShown] says they were on their way out and are partly visible, so they come back
+     * from the opacity they have; otherwise from nothing.
+     */
+    fun reappear(appear: ChartTransition, stillShown: Boolean) {
+        this.appear = appear
+        shownAlpha = if (stillShown) frame.alpha else 0f
+        appeared = false
     }
 
     fun onNextFrame(animatedFraction: Float) {
-        if (fromValues.isEmpty() || animatedFraction == 1f) {
-            frameValues = targetValues
-            frameMinKey = targetMinKey
-            frameMaxKey = targetMaxKey
-            frameMinValue = targetMinValue
-            frameMaxValue = targetMaxValue
-        } else {
-            frameValues = LinkedHashMap(
-                combinedKeys.map { key ->
-                    val fromValue = fromValues.getOrDefault(key, fromMinValue / 10)
-                    val targetValue = targetValues.getOrDefault(key, targetMinValue / 10)
-                    val frameValue = changeByPercentage(fromValue, targetValue, animatedFraction)
+        // The last frame is the target itself, not a computed copy that may differ by rounding.
+        frame = if (animatedFraction == 1f) target else frameAt(animatedFraction)
+        appeared = true
 
-                    key to frameValue
-                }.toMap()
-            )
-            frameMinKey = changeByPercentage(fromMinKey, targetMinKey, animatedFraction)
-            frameMaxKey = changeByPercentage(fromMaxKey, targetMaxKey, animatedFraction)
-            frameMinValue = changeByPercentage(fromMinValue, targetMinValue, animatedFraction)
-            frameMaxValue = changeByPercentage(fromMaxValue, targetMaxValue, animatedFraction)
-        }
-
-        emitState()
+        state = uiState()
     }
 
-    private fun emitState() {
-        state = UiState(
-            values = frameValues,
-            startTimestamp = frameMinKey,
-            endTimestamp = frameMaxKey,
-            minValue = frameMinValue,
-            maxValue = frameMaxValue,
-        )
-    }
-
-    private fun changeByPercentage(fromValue: Float, targetValue: Float, percentage: Float): Float {
-        val change = targetValue - fromValue
-        return fromValue + change * percentage
-    }
-
-    private fun changeByPercentage(fromValue: Long, targetValue: Long, percentage: Float): Long {
-        val change = targetValue - fromValue
-        return (fromValue + change * percentage).toLong()
-    }
+    private fun uiState() = UiState(
+        values = frame.values,
+        startTimestamp = frame.startTimestamp,
+        endTimestamp = frame.endTimestamp,
+        minValue = frame.minValue,
+        maxValue = frame.maxValue,
+        alpha = frame.alpha,
+    )
 }

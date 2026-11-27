@@ -182,7 +182,7 @@ private fun RestoreLocalScreen(
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
-                icon = R.drawable.icon_add_to_wallet_2_24,
+                icon = R.drawable.wallet_in_24,
                 iconTint = R.color.white
             )
             delay(300)
@@ -233,7 +233,7 @@ private fun RestoreLocalScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
+                icon = R.drawable.close_24,
                 onClick = onBackClick
             )
         ),
@@ -299,7 +299,7 @@ private fun BackupFileItems(
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
-                icon = R.drawable.icon_add_to_wallet_2_24,
+                icon = R.drawable.wallet_in_24,
                 iconTint = R.color.white
             )
             delay(300)

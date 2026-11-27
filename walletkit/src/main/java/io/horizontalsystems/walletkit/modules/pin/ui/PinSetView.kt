@@ -1,20 +1,13 @@
 package io.horizontalsystems.walletkit.modules.pin.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.pin.set.PinSetModule
 import io.horizontalsystems.walletkit.modules.pin.set.PinSetViewModel
 import io.horizontalsystems.walletkit.ui.compose.animations.CrossSlide
-import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 
 @Composable
 fun PinSet(
@@ -22,6 +15,7 @@ fun PinSet(
     description: String,
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
     forDuress: Boolean = false,
     viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress))
 ) {
@@ -30,48 +24,42 @@ fun PinSet(
         viewModel.finished()
     }
 
-    HSScaffold(
-        title = title,
-        onBack = onBackPress,
-    ) {
-        Column(
-            modifier = Modifier
-                .statusBarsPadding()
-                .navigationBarsPadding()
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = ComposeAppTheme.colors.tyler)
-            ) {
-                CrossSlide(
-                    targetState = viewModel.uiState.stage,
-                    modifier = Modifier.weight(1f),
-                    reverseAnimation = viewModel.uiState.reverseSlideAnimation
-                ) { stage ->
-                    when (stage) {
-                        PinSetModule.SetStage.Enter -> {
-                            PinTopBlock(
-                                title = description,
-                                error = viewModel.uiState.error,
-                                enteredCount = viewModel.uiState.enteredCount,
-                            )
-                        }
+    val uiState = viewModel.uiState
 
-                        PinSetModule.SetStage.Confirm -> {
-                            PinTopBlock(
-                                title = stringResource(R.string.PinSet_ConfirmInfo),
-                                enteredCount = viewModel.uiState.enteredCount,
-                            )
-                        }
+    PinScreen(
+        modifier = modifier,
+        onBack = onBackPress,
+        topBlock = {
+            CrossSlide(
+                targetState = uiState.stage,
+                modifier = Modifier.weight(1f),
+                reverseAnimation = uiState.reverseSlideAnimation
+            ) { stage ->
+                when (stage) {
+                    PinSetModule.SetStage.Enter -> {
+                        PinTopBlock(
+                            title = title,
+                            description = description,
+                            error = uiState.error,
+                            enteredCount = uiState.enteredCount,
+                        )
+                    }
+
+                    PinSetModule.SetStage.Confirm -> {
+                        PinTopBlock(
+                            title = stringResource(R.string.PinSet_ConfirmInfo),
+                            enteredCount = uiState.enteredCount,
+                        )
                     }
                 }
-
-                PinNumpad(
-                    onNumberClick = { number -> viewModel.onKeyClick(number) },
-                    onDeleteClick = { viewModel.onDelete() },
-                )
             }
-        }
-    }
+        },
+        numpad = {
+            PinNumpad(
+                onNumberClick = { number -> viewModel.onKeyClick(number) },
+                onDeleteClick = { viewModel.onDelete() },
+                deleteEnabled = uiState.enteredCount > 0,
+            )
+        },
+    )
 }

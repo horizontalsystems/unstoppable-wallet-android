@@ -22,6 +22,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.FeePriority
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
@@ -459,7 +460,7 @@ class PrivateSendConfirmViewModel(
                 request = request,
                 btcParams = btcParams,
                 manager = App.privateSendManager,
-                sendTransactionService = SendTransactionServiceFactory.create(request.token),
+                sendTransactionService = SendTransactionServiceFactory.create(request.token, FeePriority.Priority),
                 currencyManager = App.currencyManager,
                 timerService = TimerService(),
                 swapRecordManager = App.swapRecordManager,

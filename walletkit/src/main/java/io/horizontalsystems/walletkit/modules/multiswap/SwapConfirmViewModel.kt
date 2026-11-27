@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.RetryableSwapE
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.FeePriority
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -806,7 +807,7 @@ class SwapConfirmViewModel(
             initialRecipient: Address? = null,
             splitRecipients: List<SplitSwapRecipient>? = null,
         ): CreationExtras.() -> SwapConfirmViewModel = {
-            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
+            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn, FeePriority.Priority)
 
             SwapConfirmViewModel(
                 quote.provider,

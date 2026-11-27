@@ -23,6 +23,13 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     open val networkFeeInfoRes: Int? = null
 
     /**
+     * Set by [SendTransactionServiceFactory] right after the service is created and before
+     * [start]; a later change has no effect on a fee that is already fetched. Services of chains
+     * without a faster default fee ignore it.
+     */
+    var feePriority: FeePriority = FeePriority.Standard
+
+    /**
      * The most of the token this service can send under its current fee estimate, for chains
      * where "requested amount minus fee" is not the answer (input selection, rent reserves).
      * Null means that plain rule applies. Read after the state has settled.

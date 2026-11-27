@@ -315,7 +315,7 @@ private fun DeleteContactButton(onClick: () -> Unit) {
         onClick = onClick
     ) {
         Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
             painter = painterResource(R.drawable.ic_delete_20),
             contentDescription = null,
             tint = ComposeAppTheme.colors.lucian
@@ -332,7 +332,7 @@ private fun AddAddressButton(onClick: () -> Unit) {
         onClick = onClick
     ) {
         Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
             painter = painterResource(R.drawable.ic_plus),
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
@@ -382,6 +382,7 @@ private fun ContactAddress(
         }
         Spacer(Modifier.width(9.dp))
         Icon(
+            modifier = Modifier.size(20.dp),
             painter = painterResource(id = R.drawable.ic_edit_20),
             contentDescription = null,
             tint = if (addressViewItem.edited) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey

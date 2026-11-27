@@ -322,10 +322,7 @@
     <string name="Balance_Downloading">正在下载…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_BlocksRemaining">剩余区块数 - %d</string>
-    <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序</string>
-    <string name="Balance_Sort_Az">名称</string>
-    <string name="Balance_Sort_24hPriceChange">价格变化</string>
     <string name="Balance_NoCoinsAlert">这里没有代币。添加一个以开始。</string>
     <string name="Balance_NoAssetsToSend">您没有要发送的资产。</string>
     <string name="Balance_Network">網絡</string>
@@ -463,7 +460,6 @@
     <string name="FeeSettings_Overpricing_Title">费用太高</string>
     <string name="FeeSettings_Overpricing">当前设置的交易费用高于处理此交易所需的费用。</string>
     <string name="FeeSettings_FeeRate">费率(SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">这是击中下2个区块的推荐值</string>
     <string name="FeeSettings_FeeRate_Info">当发送交易时，您必须支付网络费用。网络变得更加繁忙，收费越高。
         \n\n不可阻挡的钱包建议提供最佳费用以帮助您在合理的时间内确认交易。 您可以增加或减少这个值。
         \n\n设置收费太低可能会导致您的交易被长期搁置，甚至被拒绝。 为了更快的确认，请使用更高的费用。</string>
@@ -984,8 +980,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">慢，私密.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">隐藏可疑Txs</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">隐藏经常用于钓鱼攻击的可疑小规模转帐。</string>
-    <string name="SetDuressPin_Title">密码错误</string>
-    <string name="SetDuressPin_Description">设置口令模式密码</string>
+    <string name="SetDuressPin_Description">设置脅迫模式密码</string>
     <string name="EditDuressPin_Title">编辑货币密码</string>
     <string name="EditDuressPin_Description">输入新的密码来复位模式</string>
     <string name="DuressPin_Title">服用模式</string>
@@ -1557,7 +1552,6 @@
     <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
     <string name="OSPin_Prompt_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
     <!--Unlock-->
-    <string name="Unlock_Title">解锁​​​​</string>
     <string name="Unlock_Passcode">密码</string>
     <string name="Unlock_EnterPasscode">输入密码</string>
     <string name="Unlock_BiometricScanner">生物扫描仪</string>
@@ -1568,12 +1562,12 @@
     <string name="Unlock_Random">随机</string>
     <!--Set Pin-->
     <string name="PinSet_Title">设置密码</string>
-    <string name="PinSet_Info">您的密码将用于解锁钱包和发送资金</string>
+    <string name="PinSet_Info">密码将用于解锁</string>
     <string name="PinSet_ConfirmInfo">确认</string>
-    <string name="PinSet_ErrorPinsDontMatch">密码不匹配。请重试。</string>
+    <string name="PinSet_ErrorPinsDontMatch">确认无效</string>
     <string name="PinSet_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
     <string name="PinSet_ForBiometrics">设置密码以启用生物计。</string>
-    <string name="PinSet_ForDuress">设置密码以启用压力模式</string>
+    <string name="PinSet_ForDuress">设置密码以启用脅迫模式</string>
     <string name="PinSet_ErrorPinInUse">此密码已被使用.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

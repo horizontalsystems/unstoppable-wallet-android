@@ -143,8 +143,8 @@ private fun BlockchainSettingCell(
             subhead2_grey(text = item.subtitle)
         }
         Icon(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
+            modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
+            painter = painterResource(id = R.drawable.arrow_b_right_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )

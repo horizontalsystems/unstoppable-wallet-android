@@ -148,7 +148,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.SettingsAboutApp_Site,
-                R.drawable.ic_globe,
+                R.drawable.globe_24,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink)
 
@@ -198,7 +198,7 @@ private fun HsSettingCell(
 
         Image(
             modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
+            painter = painterResource(id = R.drawable.arrow_b_right_24),
             contentDescription = null,
         )
     }

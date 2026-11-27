@@ -14,7 +14,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MarkdownPage(val input: Input) : HSPage() {
+data class MarkdownPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -54,7 +54,7 @@ private fun MarkdownScreen(
         menuItems = if (showAsPopup) listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
+                icon = R.drawable.close_24,
                 onClick = onCloseClick
             )
         ) else listOf()

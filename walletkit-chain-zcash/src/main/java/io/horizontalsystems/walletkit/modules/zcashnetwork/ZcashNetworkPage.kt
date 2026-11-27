@@ -173,7 +173,7 @@ private fun LazyListScope.customEndpointListSection(
                     onClick = { onDelete(item.endpoint) },
                     content = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_circle_minus_24),
+                            painter = painterResource(R.drawable.minus_e_24),
                             tint = ComposeAppTheme.colors.grey,
                             contentDescription = "delete",
                         )
@@ -220,7 +220,8 @@ private fun ZcashEndpointCell(
             if (item.selected) {
                 Spacer(Modifier.width(16.dp))
                 Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.check_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
                 )
@@ -279,7 +280,8 @@ private fun ZcashEndpointRow(
         if (item.selected) {
             Spacer(Modifier.width(16.dp))
             Icon(
-                painter = painterResource(R.drawable.ic_checkmark_20),
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.check_24),
                 tint = ComposeAppTheme.colors.jacob,
                 contentDescription = null
             )

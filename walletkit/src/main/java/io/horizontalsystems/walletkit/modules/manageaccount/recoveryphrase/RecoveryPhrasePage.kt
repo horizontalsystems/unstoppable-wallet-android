@@ -70,7 +70,7 @@ private fun RecoveryPhraseScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
-                icon = R.drawable.ic_info_24,
+                icon = R.drawable.info_24,
                 onClick = {
                     FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
                     stat(

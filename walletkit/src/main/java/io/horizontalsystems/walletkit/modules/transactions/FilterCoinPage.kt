@@ -111,7 +111,8 @@ fun FilterCoinScreen(navigation: HSNavigation, viewModel: TransactionsViewModel)
                                 if (it.selected) {
                                     Spacer(modifier = Modifier.weight(1f))
                                     Icon(
-                                        painter = painterResource(R.drawable.icon_20_check_1),
+                                        modifier = Modifier.size(20.dp),
+                                        painter = painterResource(R.drawable.check_24),
                                         contentDescription = null,
                                         tint = ComposeAppTheme.colors.orange
                                     )

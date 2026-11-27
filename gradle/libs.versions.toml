@@ -124,6 +124,14 @@ spek = "2.0.19"
 espresso = "3.7.0"
 testRunner = "1.7.0"
 
+# Static analysis
+# Detekt 2 is still alpha, but 1.23.x parses with the Kotlin 2.0 compiler and
+# rejects newer syntax. Compose Rules is built against one exact Detekt
+# version, so bump the two together.
+detekt = "2.0.0-alpha.6"
+composeRules = "0.6.8"
+konsist = "0.18.1"
+
 # AGP
 agp = "9.4.1"
 
@@ -301,6 +309,10 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 test-runner = { module = "androidx.test:runner", version.ref = "testRunner" }
 
+# Static analysis
+compose-rules-detekt = { module = "io.nlopez.compose.rules:detekt", version.ref = "composeRules" }
+konsist = { module = "com.lemonappdev:konsist", version.ref = "konsist" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
@@ -308,5 +320,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 # Optional plugins
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}

@@ -1,40 +1,21 @@
 package io.horizontalsystems.walletkit.modules.pin.ui
 
 import androidx.biometric.BiometricPrompt
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.Scaffold
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.pin.unlock.PinUnlockModule
 import io.horizontalsystems.walletkit.modules.pin.unlock.PinUnlockViewModel
-import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PinUnlock(isLocked: Boolean) {
+fun PinUnlock(isLocked: Boolean, modifier: Modifier = Modifier) {
     val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
     val uiState = viewModel.uiState
 
@@ -71,33 +52,25 @@ fun PinUnlock(isLocked: Boolean) {
         }
     }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-                    .fillMaxWidth()
-                    .height(64.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                headline1_leah(
-                    text = stringResource(R.string.Unlock_Title),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-        ) {
+    PinUnlockScreen(
+        viewModel = viewModel,
+        onBiometricClick = { showBiometricPrompt = true },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun PinUnlockScreen(
+    viewModel: PinUnlockViewModel,
+    onBiometricClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val uiState = viewModel.uiState
+
+    PinScreen(
+        modifier = modifier,
+        onBack = null,
+        topBlock = {
             PinTopBlock(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.Unlock_EnterPasscode),
@@ -106,20 +79,24 @@ fun PinUnlock(isLocked: Boolean) {
                 inputState = uiState.inputState,
                 onShakeAnimationFinish = { viewModel.onShakeAnimationFinish() },
             )
-
+        },
+        numpad = {
             PinNumpad(
                 onNumberClick = { number -> viewModel.onKeyClick(number) },
                 onDeleteClick = { viewModel.onDelete() },
                 showBiometricScanner = uiState.biometricEnabled,
                 pinRandomized = viewModel.pinRandomized,
-                showBiometricPrompt = {
-                    showBiometricPrompt = true
-                },
+                deleteEnabled = uiState.enteredCount > 0,
+                showBiometricPrompt = onBiometricClick,
                 inputState = uiState.inputState,
-                updatePinRandomized = { randomized ->
-                    viewModel.updatePinRandomized(randomized)
-                }
             )
-        }
-    }
+        },
+        bottomButton = {
+            PinRandomButton(
+                pinRandomized = viewModel.pinRandomized,
+                enabled = uiState.inputState is PinUnlockModule.InputState.Enabled,
+                onClick = { randomized -> viewModel.updatePinRandomized(randomized) },
+            )
+        },
+    )
 }

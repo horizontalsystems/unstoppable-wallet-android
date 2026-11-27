@@ -144,7 +144,7 @@ fun FloatingSearchBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_search),
+            painter = painterResource(R.drawable.search_24),
             contentDescription = "Search",
             tint = ComposeAppTheme.colors.grey,
             modifier = Modifier.size(24.dp)

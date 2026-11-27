@@ -133,7 +133,7 @@ fun ManageWalletsScreen(
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
-                icon = R.drawable.icon_add_to_wallet_2_24,
+                icon = R.drawable.wallet_in_24,
                 iconTint = R.color.white
             )
             delay(300)
@@ -215,6 +215,7 @@ fun ManageWalletsScreen(
                                     onClick = { viewModel.onClickSettings(viewItem.item) }
                                 ) {
                                     Icon(
+                                        modifier = Modifier.size(20.dp),
                                         painter = painterResource(R.drawable.ic_edit_20),
                                         contentDescription = null,
                                         tint = ComposeAppTheme.colors.grey

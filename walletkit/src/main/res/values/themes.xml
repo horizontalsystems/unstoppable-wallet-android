@@ -12,7 +12,7 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/orange</item>
         <item name="colorControlHighlight">#6E7899</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
+        <item name="android:homeAsUpIndicator">@drawable/arrow_b_left_24</item>
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
         <item name="android:statusBarColor">@color/transparent</item>
 

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.getValue
@@ -67,7 +68,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                     menuItems = listOf(
                         MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
+                        icon = R.drawable.close_24,
                         onClick = { finish() }
                     ))
                 ) {
@@ -94,7 +95,8 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                                 )
                                 if (selectedType == type) {
                                     Image(
-                                        painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                        modifier = Modifier.size(20.dp),
+                                        painter = painterResource(id = R.drawable.check_24),
                                         contentDescription = null,
                                         colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange)
                                     )

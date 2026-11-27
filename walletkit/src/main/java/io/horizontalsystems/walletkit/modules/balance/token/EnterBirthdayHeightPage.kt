@@ -249,7 +249,7 @@ internal fun BirthdayHeightInputField(
             HSIconButton(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Small,
-                icon = painterResource(id = R.drawable.ic_date_20),
+                icon = painterResource(id = R.drawable.date_24),
                 onClick = onCalendarClick
             )
             HSButton(

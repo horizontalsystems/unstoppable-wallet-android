@@ -39,7 +39,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinFeeRateSer
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinFeeService
 import io.horizontalsystems.walletkit.modules.send.bitcoin.settings.SendBtcSettingsViewModel
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -337,9 +336,6 @@ fun SendBtcFeeSettingsScreen(
                     onClickDecrement = {
                         viewModel.decrementFeeRate()
                     }
-                )
-                InfoText(
-                    text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                 )
             }
 

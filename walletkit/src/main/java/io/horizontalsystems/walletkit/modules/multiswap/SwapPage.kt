@@ -162,7 +162,7 @@ fun SwapScreen(
             TabsFolder(
                 tabs = listOf(
                     TabFolderItem(stringResource(R.string.Swap_Tab_Standard)),
-                    TabFolderItem(stringResource(R.string.Swap_Tab_Private), R.drawable.prem_fraud_24),
+                    TabFolderItem(stringResource(R.string.Swap_Tab_Private), R.drawable.fraud_24),
                 ),
                 selectedIndex = selectedTab.ordinal,
                 onSelect = {
@@ -594,7 +594,7 @@ private fun SwapScreenInner(
                                 },
                                 onClickSwapTimeInfo = { infoTitle, infoText ->
                                     navigation.slideFromBottom(
-                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.clock_24))
                                     )
                                 }
                             )
@@ -857,7 +857,7 @@ private fun ProviderCellInfo(
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
-                        icon = painterResource(R.drawable.ic_info_24),
+                        icon = painterResource(R.drawable.info_24),
                         iconTint = ComposeAppTheme.colors.grey,
                     )
                 },
@@ -874,7 +874,7 @@ private fun ProviderCellInfo(
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = infoTitle.hs,
-                        icon = painterResource(R.drawable.ic_info_24),
+                        icon = painterResource(R.drawable.info_24),
                         iconTint = ComposeAppTheme.colors.grey,
                     )
                 },
@@ -1066,7 +1066,7 @@ private fun SwapInput(
                     variant = ButtonVariant.Secondary,
                     style = ButtonStyle.Solid,
                     size = ButtonSize.Small,
-                    icon = painterResource(id = R.drawable.ic_arrow_down_24),
+                    icon = painterResource(id = R.drawable.arrow_m_down_24),
                     enabled = switchPairsEnabled,
                     modifier = Modifier.testTag(TestTags.SWAP_SWITCH),
                     onClick = onSwitchPairs

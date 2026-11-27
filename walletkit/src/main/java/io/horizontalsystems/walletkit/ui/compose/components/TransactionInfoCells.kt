@@ -270,7 +270,8 @@ fun PriceWithToggleCell(
                 .clip(CircleShape),
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_arrow_swap3_20),
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.arrow_m_left_right_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
             )
@@ -406,6 +407,7 @@ fun TransactionInfoStatusCell(
             }
         ) {
             Image(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(R.drawable.ic_info_20),
                 contentDescription = null
             )
@@ -425,7 +427,8 @@ fun TransactionInfoStatusCell(
         when (status) {
             TransactionStatus.Completed -> {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_checkmark_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.check_24),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.remus
                 )
@@ -468,7 +471,7 @@ fun TransactionInfoSpeedUpCell(
         }
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_arrow_medium2_up_24),
+            painter = painterResource(R.drawable.arrow_m_up_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.orange
         )
@@ -586,7 +589,7 @@ fun TransactionInfoExplorerCell(
         )
         Image(
             modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
+            painter = painterResource(id = R.drawable.arrow_b_right_24),
             contentDescription = null,
         )
     }
@@ -665,7 +668,7 @@ fun TransactionInfoBtcLockCell(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         Icon(
-            modifier = Modifier.padding(end = 16.dp),
+            modifier = Modifier.padding(end = 16.dp).size(20.dp),
             painter = painterResource(lockState.leftIcon),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
@@ -690,6 +693,7 @@ fun TransactionInfoBtcLockCell(
                 }
             ) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_info_20),
                     tint = ComposeAppTheme.colors.grey,
                     contentDescription = null,
@@ -709,7 +713,7 @@ fun TransactionInfoDoubleSpendCell(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         Icon(
-            modifier = Modifier.padding(end = 16.dp),
+            modifier = Modifier.padding(end = 16.dp).size(20.dp),
             painter = painterResource(R.drawable.ic_double_spend_20),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
@@ -735,6 +739,7 @@ fun TransactionInfoDoubleSpendCell(
             }
         ) {
             Icon(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(R.drawable.ic_info_20),
                 tint = ComposeAppTheme.colors.grey,
                 contentDescription = null,
@@ -752,8 +757,8 @@ fun TransactionInfoSentToSelfCell() {
             .padding(horizontal = 16.dp),
     ) {
         Icon(
-            modifier = Modifier.padding(end = 16.dp),
-            painter = painterResource(R.drawable.ic_arrow_return_20),
+            modifier = Modifier.padding(end = 16.dp).size(20.dp),
+            painter = painterResource(R.drawable.arrow_return_24),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
         )

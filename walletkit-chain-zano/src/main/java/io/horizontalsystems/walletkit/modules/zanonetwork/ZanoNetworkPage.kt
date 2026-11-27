@@ -118,7 +118,7 @@ private fun ZanoNetworkScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
+                        icon = R.drawable.close_24,
                         onClick = onBackPress
                     )
                 )
@@ -196,7 +196,7 @@ private fun LazyListScope.customNodeListSection(
                     onClick = { onDelete(item.node) },
                     content = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_circle_minus_24),
+                            painter = painterResource(R.drawable.minus_e_24),
                             tint = ComposeAppTheme.colors.grey,
                             contentDescription = "delete",
                         )
@@ -241,7 +241,8 @@ private fun ZanoNodeCell(
             }
             if (item.selected) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.check_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
                 )

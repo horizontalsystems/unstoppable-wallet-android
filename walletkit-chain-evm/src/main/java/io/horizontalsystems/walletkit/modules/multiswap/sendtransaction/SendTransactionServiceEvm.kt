@@ -75,7 +75,8 @@ class SendTransactionServiceEvm(
         EvmKitManagerRegistry.getEvmKitManager(blockchainType)
             .getEvmKitWrapper(account, blockchainType)
     }
-    // Lazy so a service that never started has nothing to release; see clear().
+    // Lazy so a service that never started has nothing to release; see clear(). It also lets
+    // feePriority, set after construction, reach the gas price service.
     private val gasPriceServiceDelegate = lazy<IEvmGasPriceService> {
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
@@ -84,14 +85,16 @@ class SendTransactionServiceEvm(
                 gasProvider = gasPriceProvider,
                 refreshSignalFlow = emptyFlow(),
                 minGasPrice = minGasPrice as? GasPrice.Eip1559,
-                initialGasPrice = initialGasPrice as? GasPrice.Eip1559
+                initialGasPrice = initialGasPrice as? GasPrice.Eip1559,
+                feePriority = feePriority,
             )
         } else {
             val gasPriceProvider = LegacyGasPriceProvider(evmKit)
             LegacyGasPriceService(
                 gasPriceProvider = gasPriceProvider,
                 minRecommendedGasPrice = (minGasPrice as? GasPrice.Legacy)?.legacyGasPrice,
-                initialGasPrice = (initialGasPrice as? GasPrice.Legacy)?.legacyGasPrice
+                initialGasPrice = (initialGasPrice as? GasPrice.Legacy)?.legacyGasPrice,
+                feePriority = feePriority,
             )
         }
     }
@@ -244,7 +247,7 @@ class SendTransactionServiceEvm(
             blockchainType,
             initialGasPrice = gasPriceService.stateFlow.value.dataOrNull?.gasPrice,
             initialNonce = nonce,
-        )
+        ).also { it.feePriority = feePriority }
     }
 
     suspend fun signTransaction(): EvmKitManager.SignedTx {

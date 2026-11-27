@@ -63,7 +63,7 @@ private fun RestoreFromPrivateKeyNavHost(
             HudHelper.showSuccessMessage(
                 contenView = view,
                 resId = R.string.Hud_Text_Restored,
-                icon = R.drawable.icon_add_to_wallet_2_24,
+                icon = R.drawable.wallet_in_24,
                 iconTint = R.color.white
             )
             delay(300)
@@ -115,7 +115,7 @@ data class restore_select_network(val input: ManageAccountsModule.Input) : HSPag
                 HudHelper.showSuccessMessage(
                     contenView = view,
                     resId = R.string.Hud_Text_Restored,
-                    icon = R.drawable.icon_add_to_wallet_2_24,
+                    icon = R.drawable.wallet_in_24,
                     iconTint = R.color.white
                 )
                 delay(300)

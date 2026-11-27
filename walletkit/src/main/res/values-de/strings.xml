@@ -323,10 +323,7 @@
     <string name="Balance_Downloading">Herunterladen…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_BlocksRemaining">Verbleibende Blöcke - %d</string>
-    <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
-    <string name="Balance_Sort_Az">Name</string>
-    <string name="Balance_Sort_24hPriceChange">Preisänderung</string>
     <string name="Balance_NoCoinsAlert">Keine Tokens vorhanden. Fügen Sie einen hinzu, um zu beginnen.</string>
     <string name="Balance_NoAssetsToSend">Sie haben keine Assets zu senden.</string>
     <string name="Balance_Network">Netzwerk</string>
@@ -464,7 +461,6 @@
     <string name="FeeSettings_Overpricing_Title">Gebühr zu hoch</string>
     <string name="FeeSettings_Overpricing">Die festgelegte Transaktionsgebühr ist jetzt höher als für die Verarbeitung dieser Transaktion erforderlich.</string>
     <string name="FeeSettings_FeeRate">Gebühr (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Hier ist der empfohlene Wert, um die nächsten 2 Blöcke zu treffen</string>
     <string name="FeeSettings_FeeRate_Info">Wenn Sie eine Transaktion versenden, zahlen Sie eine Netzwerkgebühr. Je stärker das Netzwerk ist, desto höher die Gebühr.
         \n\nUnstoppable Wallet schlägt eine optimale Gebühr vor, um Ihre Transaktion in einer angemessenen Zeit zu bestätigen. Sie können diesen Wert erhöhen oder verringern.
         \n\nSetzen der Gebühr zu niedrig kann dazu führen, dass Ihre Transaktion lange ausbleibt oder sogar abgelehnt wird. Benutzen Sie für eine schnellere Bestätigung eine höhere Gebühr.</string>
@@ -985,8 +981,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Langsam. Höchste Privatsphäre.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">Verdächtige Txs ausblenden</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Verdächtige kleine Transfers, die oft bei Phishing-Attacken verwendet werden.</string>
-    <string name="SetDuressPin_Title">Duress Passwort</string>
-    <string name="SetDuressPin_Description">Passwort für Duress Modus festlegen</string>
+    <string name="SetDuressPin_Description">Zugangscode für den Duress-Modus festlegen</string>
     <string name="EditDuressPin_Title">Duress Code bearbeiten</string>
     <string name="EditDuressPin_Description">Neues Passwort für Duress Modus eingeben</string>
     <string name="DuressPin_Title">Duress-Modus</string>
@@ -1563,7 +1558,6 @@
     <string name="OSPin_Confirm_Desciption">Diese App erfordert, dass das Telefon das Passwort (Bildschirmsperre) aktiviert hat.\n\n Sie können es in den Android-Einstellungen aktivieren.\n\nBitte beachten Sie, dass, wenn Sie die PIN auf Betriebssystem-Ebene deaktivieren, die Sicherheitsmaßnahmen in der sicheren Speicherung Ihres Telefons die zuvor gespeicherten Daten ungültig gemacht haben. Sie müssen Ihre Wallet-Schlüssel wiederherstellen, um zurück zu Ihrer Wallet zu gelangen.</string>
     <string name="OSPin_Prompt_Desciption">Diese App erfordert die PIN Ihres Telefons, um sensible Daten von Ihrer Brieftasche auf dem sicheren Speicher von Android zu halten und nicht in der App selbst.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">Entsperren</string>
     <string name="Unlock_Passcode">Passcode</string>
     <string name="Unlock_EnterPasscode">Passwort eingeben</string>
     <string name="Unlock_BiometricScanner">Biometriescanner</string>
@@ -1574,12 +1568,12 @@
     <string name="Unlock_Random">Zufällig</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Zugangscode erstellen</string>
-    <string name="PinSet_Info">Ihr Passwort wird zum Entsperren Ihrer Brieftasche verwendet</string>
+    <string name="PinSet_Info">Der Zugangscode wird zum Entsperren verwendet</string>
     <string name="PinSet_ConfirmInfo">Bestätigen</string>
-    <string name="PinSet_ErrorPinsDontMatch">Passwort stimmt nicht überein. Versuchen Sie es erneut.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Ungültige Bestätigung</string>
     <string name="PinSet_ErrorFailedToSavePin">Beim Speichern Ihren Code ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
     <string name="PinSet_ForBiometrics">Passcode zum Aktivieren von Biometrien festlegen</string>
-    <string name="PinSet_ForDuress">Code zum Aktivieren des Duress Modus festlegen</string>
+    <string name="PinSet_ForDuress">Zugangscode festlegen, um den Duress-Modus zu aktivieren</string>
     <string name="PinSet_ErrorPinInUse">Dieser Code wird bereits verwendet.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

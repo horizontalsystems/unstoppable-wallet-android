@@ -107,9 +107,7 @@
     <string name="Balance_SyncedUntil">تا %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
-    <string name="Balance_Sort_Balance">بالانس</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
-    <string name="Balance_Sort_Az">نام</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
@@ -475,9 +473,9 @@
     <string name="Unlock_WalletDisabledUntil">معلول تا: %s</string>
     <!--Set Pin-->
     <string name="PinSet_Title">تنظیم یک گذرواژه</string>
-    <string name="PinSet_Info">از کد عبور شما برای باز کردن کیف پول و ارسال پول استفاده می شود</string>
+    <string name="PinSet_Info">رمز عبور برای باز کردن قفل استفاده می‌شود</string>
     <string name="PinSet_ConfirmInfo">تاييد</string>
-    <string name="PinSet_ErrorPinsDontMatch">کد عبور مطابقت نداشت. دوباره امتحان کنید.</string>
+    <string name="PinSet_ErrorPinsDontMatch">تأیید نامعتبر</string>
     <string name="PinSet_ErrorFailedToSavePin">هنگام ذخیره کد عبور شما خطایی روی داد. لطفا دوباره تلاش کنید.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->
@@ -1083,7 +1081,6 @@
     <string name="Balance_Downloading">در حال دانلود…</string>
     <string name="Balance_FoundTx">%s تراکنش</string>
     <string name="Balance_BlocksRemaining">بلاک‌های باقی‌مانده - %d</string>
-    <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_NoAssetsToSend">دارایی‌ای برای ارسال ندارید.</string>
     <string name="Balance_Network">شبکه</string>
     <string name="Balance_Format">فرمت</string>
@@ -1182,7 +1179,6 @@
     <string name="FeeSettings_RiskOfGettingStuckLegacy">تراکنش ممکن است مدتی در انتظار بماند یا به‌کلی ناموفق شود.</string>
     <string name="FeeSettings_RiskOfGettingStuck">برای اطمینان از اجرای سریع تراکنش، حداکثر نرخ کارمزد (منهای حداکثر انعام ماینر) باید بالاتر از نرخ کارمزد پایه فعلی باشد. در غیر این صورت تراکنش ممکن است تا برقراری این شرط در انتظار بماند.</string>
     <string name="FeeSettings_FeeRate">نرخ کارمزد (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">این مقدار پیشنهادی برای قرار گرفتن در 2 بلاک بعدی است</string>
     <string name="FeeSettings_FeeRate_Info">هنگام ارسال تراکنش باید کارمزد شبکه بپردازید. هرچه شبکه شلوغ‌تر باشد، کارمزد بالاتر است. \n\nUnstoppable Wallet کارمزد بهینه‌ای پیشنهاد می‌کند تا تراکنش شما در زمان معقولی تأیید شود. می‌توانید این مقدار را افزایش یا کاهش دهید. \n\nتنظیم کارمزد بسیار پایین ممکن است باعث شود تراکنش شما مدت زیادی در انتظار بماند یا حتی رد شود. برای تأیید سریع‌تر، کارمزد بالاتری تعیین کنید.</string>
     <string name="FeeInfo_TronFee_Description">هزینه تخمینی ارسال این تراکنش در شبکه. (بدون کسر انرژی، پهنای باند و کارمزد فعال‌سازی)</string>
     <string name="FeeInfo_TronActivationFee_Title">کارمزد فعال‌سازی</string>
@@ -1494,8 +1490,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">کند. بالاترین حریم خصوصی.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">پنهان کردن تراکنش‌های مشکوک</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">انتقال‌های کوچک مشکوک را که اغلب در حملات فیشینگ استفاده می‌شوند پنهان می‌کند.</string>
-    <string name="SetDuressPin_Title">رمز عبور اضطرار</string>
-    <string name="SetDuressPin_Description">رمز عبوری برای حالت اضطرار تنظیم کنید</string>
+    <string name="SetDuressPin_Description">برای محافظت در برابر سرقت رمز عبور تنظیم کنید</string>
     <string name="EditDuressPin_Title">ویرایش رمز عبور اضطرار</string>
     <string name="EditDuressPin_Description">رمز عبور جدید برای حالت اضطرار را وارد کنید</string>
     <string name="DuressPin_Title">حالت اضطرار</string>
@@ -1839,12 +1834,11 @@
     <string name="Widget_EnableAutostartWarning">برای اطمینان از عملکرد درست این ویجت، باید اجرای خودکار را فعال کنید.</string>
     <string name="Alert_CustomKeyboardIsUsed">به نظر می‌رسد دستگاه شما از صفحه‌کلیدی غیر از صفحه‌کلید پیش‌فرض استفاده می‌کند. Unstoppable توصیه می‌کند صفحه‌کلید پیش‌فرض دستگاه را انتخاب کنید، زیرا صفحه‌کلیدهای شخص ثالث ممکن است داده‌های ورودی کاربران را جمع‌آوری و افشا کنند. \n\nاگر می‌خواهید همچنان از صفحه‌کلید دلخواه خود استفاده کنید، دکمه «رد کردن» را بزنید.</string>
     <string name="Alert_DeviceIsRootedWarning">تیم Unstoppable توصیه می‌کند برنامه را فقط روی گوشی‌های روت‌نشده (جیلبریک‌نشده) اجرا کنید.\n\nتوجه داشته باشید که هنگام استفاده از دستگاه روت‌شده، برنامه دیگر نمی‌تواند امنیت رمزارزهای شما را در برابر بدافزارها تضمین کند.</string>
-    <string name="Unlock_Title">باز کردن قفل</string>
     <string name="Unlock_EnterPasscode">رمز عبور را وارد کنید</string>
     <string name="Unlock_AttemptsLeft">تلاش‌های باقی‌مانده: %s</string>
     <string name="Unlock_Random">تصادفی</string>
     <string name="PinSet_ForBiometrics">برای فعال‌سازی بیومتریک، رمز عبور تنظیم کنید</string>
-    <string name="PinSet_ForDuress">برای فعال‌سازی حالت اضطرار، رمز عبور تنظیم کنید</string>
+    <string name="PinSet_ForDuress">برای فعال‌سازی محافظت در برابر سرقت، رمز عبور تنظیم کنید</string>
     <string name="PinSet_ErrorPinInUse">این رمز عبور قبلاً استفاده شده است.</string>
     <string name="Contacts">مخاطبین</string>
     <string name="Contacts_Backup">پشتیبان‌گیری از مخاطبین</string>

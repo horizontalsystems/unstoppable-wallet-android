@@ -285,32 +285,18 @@ private fun MarketCoin(
             )
         }
         HSpacer(16.dp)
-        if (favourited) {
-            HsIconButton(
-                modifier = Modifier.size(20.dp),
-                onClick = {
-                    onFavoriteClick(true, coinUid)
-                }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_heart_filled_20),
-                    contentDescription = "heart icon button",
-                    tint = ComposeAppTheme.colors.orange
-                )
+        HsIconButton(
+            modifier = Modifier.size(20.dp),
+            onClick = {
+                onFavoriteClick(favourited, coinUid)
             }
-        } else {
-            HsIconButton(
+        ) {
+            Icon(
                 modifier = Modifier.size(20.dp),
-                onClick = {
-                    onFavoriteClick(false, coinUid)
-                }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_heart_20),
-                    contentDescription = "heart icon button",
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
+                painter = painterResource(if (favourited) R.drawable.ic_heart_filled_20 else R.drawable.ic_heart_20),
+                contentDescription = "heart icon button",
+                tint = if (favourited) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
+            )
         }
     }
 }

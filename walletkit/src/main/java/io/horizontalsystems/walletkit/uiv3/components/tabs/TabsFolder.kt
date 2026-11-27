@@ -158,7 +158,7 @@ private fun Preview_TabsFolder() {
             TabsFolder(
                 tabs = listOf(
                     TabFolderItem("Standard"),
-                    TabFolderItem("Private", icon = R.drawable.ic_incognito_24),
+                    TabFolderItem("Private", icon = R.drawable.fraud_24),
                     TabFolderItem("CrossPay"),
                 ),
                 selectedIndex = selected,

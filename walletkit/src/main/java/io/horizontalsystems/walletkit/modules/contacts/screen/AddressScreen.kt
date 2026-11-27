@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -15,9 +16,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
@@ -32,6 +37,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
@@ -74,6 +80,7 @@ fun AddressScreen(
                 listOf {
                     RowUniversal(
                         modifier = Modifier
+                            .testTag(TestTags.CONTACT_ADDRESS_BLOCKCHAIN)
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                         onClick = if (uiState.canChangeBlockchain) onNavigateToBlockchainSelector else null
@@ -82,15 +89,18 @@ fun AddressScreen(
                             text = stringResource(R.string.AddToken_Blockchain),
                             modifier = Modifier.weight(1f)
                         )
-                        subhead1_leah(
-                            text = uiState.blockchain.name,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
                         if (uiState.canChangeBlockchain) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.grey
+                            HSDropdownButton(
+                                modifier = Modifier.testTag(TestTags.dropdownValue(TestTags.CONTACT_ADDRESS_BLOCKCHAIN)),
+                                variant = ButtonVariant.Secondary,
+                                style = ButtonStyle.Transparent,
+                                title = uiState.blockchain.name,
+                                onClick = onNavigateToBlockchainSelector,
+                            )
+                        } else {
+                            subhead1_leah(
+                                text = uiState.blockchain.name,
+                                modifier = Modifier.padding(horizontal = 8.dp)
                             )
                         }
                     }
@@ -157,7 +167,7 @@ private fun DeleteAddressButton(onClick: () -> Unit) {
                 onClick = onClick
             ) {
                 Icon(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
                     painter = painterResource(R.drawable.ic_delete_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.lucian

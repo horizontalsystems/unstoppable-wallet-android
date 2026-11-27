@@ -105,7 +105,7 @@ fun CardsErrorMessageDefault(
 fun Preview_CardsErrorMessageDefault() {
     HSPreview {
         CardsErrorMessageDefault(
-            icon = painterResource(R.drawable.ic_warning_filled_24),
+            icon = painterResource(R.drawable.warning_filled_24),
             title = "Title",
             text = "Please wait for the sync to finish.",
             buttonTitle = "Button1",

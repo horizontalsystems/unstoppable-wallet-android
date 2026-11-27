@@ -69,7 +69,7 @@ fun LocalBackupPasswordScreen(
                                     contenView = view,
                                     resId = R.string.LocalBackup_BackupSaved,
                                     duration = SnackbarDuration.SHORT,
-                                    icon = R.drawable.ic_download_24,
+                                    icon = R.drawable.arrow_in_24,
                                     iconTint = R.color.white
                                 )
 

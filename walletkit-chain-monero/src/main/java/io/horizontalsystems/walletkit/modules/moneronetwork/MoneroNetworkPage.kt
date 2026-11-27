@@ -235,7 +235,7 @@ private fun LazyListScope.customNodeListSection(
                     onClick = { onDelete(item.node) },
                     content = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                            painter = painterResource(id = R.drawable.minus_e_24),
                             tint = ComposeAppTheme.colors.grey,
                             contentDescription = "delete",
                         )
@@ -321,7 +321,8 @@ fun RpcCell(
             if (item.selected) {
                 Spacer(Modifier.width(16.dp))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_checkmark_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.check_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
                 )
@@ -381,7 +382,8 @@ private fun MoneroNodeRow(
         if (item.selected) {
             Spacer(Modifier.width(16.dp))
             Icon(
-                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(id = R.drawable.check_24),
                 tint = ComposeAppTheme.colors.jacob,
                 contentDescription = null
             )

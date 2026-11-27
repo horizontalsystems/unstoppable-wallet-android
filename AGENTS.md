@@ -23,7 +23,48 @@ Unstoppable Wallet - A multi-currency crypto wallet Android app supporting Bitco
 
 # Lint
 ./gradlew lint
+
+# Code smells (Detekt)
+./gradlew detekt
+
+# Architecture rules (Konsist)
+./gradlew :architecture-tests:test
 ```
+
+## Static Analysis
+
+Both checks must pass before a pull request is opened, and again after every
+later push to it. Run them yourself: no CI job does it yet. When one fails,
+fix the code; do not open the pull request with a failure and a note about
+it. Neither check compiles the app, so they take seconds.
+
+    ./gradlew detekt :architecture-tests:test
+
+The steps still to come (a CI check, a weekly review of the whole project)
+are in `docs/code-quality-plan.md`.
+
+**Detekt** reports code smells: complexity, long methods, swallowed
+exceptions, and Compose mistakes through the Compose Rules plugin. The
+overrides are in `config/detekt/detekt.yml`. Findings that predate Detekt are
+recorded in `config/detekt/baseline.xml`, so only new ones fail the run.
+
+- Fix a new finding; do not add it to the baseline.
+- A baseline entry names the rule, the file and the declaration, not the
+  line. A second finding of the same rule in the same declaration, such as
+  another swallowed exception in an already listed function, is therefore
+  not reported. When you change a declaration the baseline lists, check it
+  for that rule yourself.
+- When a change removes baselined findings, shrink the baseline with
+  `./gradlew detektBaseline` and commit the result. Check the diff only
+  removes entries.
+- A rule that is wrong for this project is switched off in `detekt.yml` with
+  a comment that says why, not suppressed case by case.
+
+**Konsist** holds the rules of this file that can be read off the source, as
+unit tests in `architecture-tests`: module layering, no RxJava, naming, test
+tags. It has no baseline: a rule must hold for the whole project, with a known
+exception named in the rule itself. When a rule in this file can be checked
+that way, add its test in the same change.
 
 ## Project Structure
 
@@ -458,6 +499,9 @@ may take several pull requests.
 - For a user-facing change, what the user does and sees, which its UI test
   is written from ([UI tests for features](#ui-tests-for-features)).
 - Dependencies and merge order, or the target branch for a backport.
+
+Before opening one, make sure Detekt and the architecture tests pass, see
+[Static Analysis](#static-analysis).
 
 Cover only the points above that apply, each in a sentence. Most pull
 requests need one or two. Do not list the changes; the diff and the commit

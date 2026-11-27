@@ -43,6 +43,39 @@ data class ButtonConfig(
     val onClick: () -> Unit,
 )
 
+private class ButtonMetrics(
+    val height: Dp,
+    val textOnlyPadding: Dp,
+    val iconStartPadding: Dp,
+    val iconEndPadding: Dp,
+    val textStyle: TextStyle,
+    val iconSize: Dp,
+    val iconGap: Dp,
+)
+
+@Composable
+private fun buttonMetrics(size: ButtonSize) = when (size) {
+    ButtonSize.Medium -> ButtonMetrics(
+        height = 64.dp,
+        textOnlyPadding = 40.dp,
+        iconStartPadding = 36.dp,
+        iconEndPadding = 44.dp,
+        textStyle = ComposeAppTheme.typography.headlineB,
+        iconSize = 24.dp,
+        iconGap = 8.dp,
+    )
+
+    ButtonSize.Small -> ButtonMetrics(
+        height = 32.dp,
+        textOnlyPadding = 16.dp,
+        iconStartPadding = 12.dp,
+        iconEndPadding = 20.dp,
+        textStyle = ComposeAppTheme.typography.captionSB,
+        iconSize = 20.dp,
+        iconGap = 4.dp,
+    )
+}
+
 @Composable
 fun HSButton(
     modifier: Modifier = Modifier,
@@ -55,46 +88,28 @@ fun HSButton(
     enabled: Boolean = true,
     onClick: () -> Unit = {}
 ) {
-    val height: Dp
-    val horizontalPadding: Dp
-    val textStyle: TextStyle
-    val iconSize: Dp
-    val iconGap: Dp
-
-    when (size) {
-        ButtonSize.Medium -> {
-            height = 64.dp
-            horizontalPadding = 40.dp
-            textStyle = ComposeAppTheme.typography.headlineB
-            iconSize = 24.dp
-            iconGap = 8.dp
-        }
-
-        ButtonSize.Small -> {
-            height = 32.dp
-            horizontalPadding = 16.dp
-            textStyle = ComposeAppTheme.typography.captionSB
-            iconSize = 20.dp
-            iconGap = 4.dp
-        }
-    }
+    val metrics = buttonMetrics(size)
+    val hasIcon = icon != null
 
     ButtonSurface(
-        modifier = modifier.height(height),
+        modifier = modifier.height(metrics.height),
         shape = RoundedCornerShape(percent = 50),
         appearance = buttonAppearance(variant, style, size, enabled),
         enabled = enabled,
         onClick = onClick,
-        startPadding = horizontalPadding,
+        // With equal padding an icon and title look shifted to the right, so
+        // the leading side gets less padding and the trailing side more.
+        startPadding = if (hasIcon) metrics.iconStartPadding else metrics.textOnlyPadding,
+        endPadding = if (hasIcon) metrics.iconEndPadding else metrics.textOnlyPadding,
         minHorizontalPadding = 16.dp,
     ) {
         icon?.let {
             Icon(
-                modifier = Modifier.size(iconSize),
+                modifier = Modifier.size(metrics.iconSize),
                 painter = it,
                 contentDescription = null,
             )
-            Spacer(Modifier.width(iconGap))
+            Spacer(Modifier.width(metrics.iconGap))
         }
         if (loadingIndicator) {
             CircularProgressIndicator(
@@ -102,11 +117,11 @@ fun HSButton(
                 color = ComposeAppTheme.colors.grey,
                 strokeWidth = 2.dp
             )
-            Spacer(Modifier.width(iconGap))
+            Spacer(Modifier.width(metrics.iconGap))
         }
         Text(
             text = title,
-            style = textStyle,
+            style = metrics.textStyle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

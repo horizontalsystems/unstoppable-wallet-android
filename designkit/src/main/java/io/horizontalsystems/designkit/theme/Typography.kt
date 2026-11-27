@@ -55,7 +55,7 @@ class Typography internal constructor(
         ),
         title2R: TextStyle = TextStyle(
             fontWeight = FontWeight.Normal,
-            fontSize = 32.sp,
+            fontSize = 36.sp,
             letterSpacing = 0.sp,
         ),
         title3: TextStyle = TextStyle(

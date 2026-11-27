@@ -180,11 +180,11 @@ private fun EstimatedArrivalRow(arrival: String, navigation: HSNavigation) {
         middle = {
             CellMiddleInfoTextIcon(
                 text = title.hs,
-                icon = painterResource(R.drawable.ic_info_24),
+                icon = painterResource(R.drawable.info_24),
                 iconTint = ComposeAppTheme.colors.grey,
                 onIconClick = {
                     navigation.slideFromBottom(
-                        SwapInfoSheet(SwapInfoSheet.Input(title, description, R.drawable.ic_circle_clock_24))
+                        SwapInfoSheet(SwapInfoSheet.Input(title, description, R.drawable.clock_24))
                     )
                 },
             )

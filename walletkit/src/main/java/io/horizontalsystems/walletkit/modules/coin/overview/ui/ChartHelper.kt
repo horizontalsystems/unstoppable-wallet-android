@@ -1,10 +1,13 @@
 package io.horizontalsystems.walletkit.modules.coin.overview.ui
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.ChartTransition
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -14,7 +17,15 @@ import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
-class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, private val colors: Colors) {
+class ChartHelper(
+    private var target: ChartData,
+    var hasVolumes: Boolean,
+    private val colors: Colors,
+    private val transition: ChartTransition,
+    private val appear: ChartTransition,
+    private val show: ChartTransition,
+    private val hide: ChartTransition,
+) {
 
     private var minValue: Float = 0.0f
     private var maxValue: Float = 0.0f
@@ -30,8 +41,30 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     private var macdSignalCurve: CurveAnimator2? = null
     private var macdHistogramBars: CurveAnimatorBars? = null
 
-    var mainCurveColor = colors.greenD
-    var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
+    // Layers whose data was taken away stay until they have played the hide transition.
+    private val leavingMovingAverageCurves = mutableMapOf<String, CurveAnimator2>()
+    private var dominanceLeaving = false
+    private var rsiLeaving = false
+    private var macdLeaving = false
+
+    // RSI and MACD take the panel of the volume bars, which leave and come back like a layer
+    // but keep their data meanwhile.
+    private var volumeBarsLeaving = false
+    private var volumeBarsCovered = false
+
+    // Which layers exist is not snapshot state by itself. Reading this where they are handed
+    // out redraws the chart when one is dropped on a frame that changes no other layer.
+    private var layersVersion by mutableIntStateOf(0)
+
+    // The colours a data change leaves and the ones it moves to. The curve is drawn in a blend
+    // of the two that follows the same fraction as its points.
+    private var mainCurveColorsFrom: MainCurveColors
+    private var mainCurveColorsTo: MainCurveColors
+
+    var mainCurveColor by mutableStateOf(colors.greenD)
+        private set
+    var mainCurveGradientColors by mutableStateOf(Pair(Color(0x00416BFF), Color(0x8013D670)))
+        private set
     var mainCurvePressedColor = colors.leah
     var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
     var mainBarsColor = colors.orange
@@ -45,15 +78,17 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             minKey,
             maxKey,
             minValue,
-            maxValue
+            maxValue,
+            transition,
+            appear
         )
 
-        initDominanceCurve()
+        initDominanceCurve(appear)
 
         initMovingAverages()
 
-        initRsiCurve()
-        initMacdCurves()
+        initRsiCurve(appear)
+        initMacdCurves(appear)
 
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
@@ -66,15 +101,21 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     minKey,
                     maxKey,
                     volumeByTimestamp.minOf { it.value },
-                    volumeByTimestamp.maxOf { it.value }
+                    volumeByTimestamp.maxOf { it.value },
+                    transition,
+                    appear
                 )
             }
         }
 
-        defineColors()
+        volumeBarsCovered = hasBottomIndicator
+
+        mainCurveColorsTo = targetColors()
+        mainCurveColorsFrom = mainCurveColorsTo
+        showColors(mainCurveColorsTo)
     }
 
-    private fun initDominanceCurve() {
+    private fun initDominanceCurve(appear: ChartTransition) {
         val dominanceValues = target.dominanceByTimestamp()
         if (dominanceValues.isNotEmpty()) {
             dominanceCurve = CurveAnimator2(
@@ -82,38 +123,45 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 minKey,
                 maxKey,
                 dominanceValues.minOf { it.value },
-                dominanceValues.maxOf { it.value }
+                dominanceValues.maxOf { it.value },
+                transition,
+                appear
             )
         }
     }
 
-    private fun defineColors() {
+    private fun targetColors(): MainCurveColors {
         val chartData = target
 
-        when {
-            chartData.disabled -> {
-                mainCurveColor = colors.grey
-                mainCurveGradientColors = Pair(colors.grey.copy(alpha = 0f), colors.grey.copy(alpha = 0.5f))
-            }
+        return when {
+            chartData.disabled -> MainCurveColors(
+                curve = colors.grey,
+                gradient = Pair(colors.grey.copy(alpha = 0f), colors.grey.copy(alpha = 0.5f))
+            )
 
-            !chartData.isMovementChart -> {
-                mainCurveColor = colors.orange
-                mainCurveGradientColors = Pair(Color(0x00FE4A11), Color(0x80FE4A11))
-            }
+            !chartData.isMovementChart -> MainCurveColors(
+                curve = colors.orange,
+                gradient = Pair(Color(0x00FE4A11), Color(0x80FE4A11))
+            )
 
-            chartData.diff() < BigDecimal.ZERO -> {
-                mainCurveColor = colors.redD
-                mainCurveGradientColors = Pair(Color(0x007413D6), Color(0x80FF0303))
-            }
+            chartData.diff() < BigDecimal.ZERO -> MainCurveColors(
+                curve = colors.redD,
+                gradient = Pair(Color(0x007413D6), Color(0x80FF0303))
+            )
 
-            else -> {
-                mainCurveColor = colors.greenD
-                mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
-            }
+            else -> MainCurveColors(
+                curve = colors.greenD,
+                gradient = Pair(Color(0x00416BFF), Color(0x8013D670))
+            )
         }
     }
 
-    private fun initMacdCurves() {
+    private fun showColors(colors: MainCurveColors) {
+        mainCurveColor = colors.curve
+        mainCurveGradientColors = colors.gradient
+    }
+
+    private fun initMacdCurves(appear: ChartTransition) {
         val macd = target.macd
         if (macd != null) {
             val macdLine = macd.macdLine
@@ -133,14 +181,18 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 minKey,
                 maxKey,
                 absMin,
-                absMax
+                absMax,
+                transition,
+                appear
             )
             macdSignalCurve = CurveAnimator2(
                 signalLine,
                 minKey,
                 maxKey,
                 absMin,
-                absMax
+                absMax,
+                transition,
+                appear
             )
             val histogram = macd.histogram
             val histogramAbsMax = histogram.values.maxOfOrNull { it.absoluteValue } ?: 0f
@@ -150,12 +202,14 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 minKey,
                 maxKey,
                 histogramAbsMin,
-                histogramAbsMax
+                histogramAbsMax,
+                transition,
+                appear
             )
         }
     }
 
-    private fun initRsiCurve() {
+    private fun initRsiCurve(appear: ChartTransition) {
         rsiCurve = target.rsi?.let { chartIndicatorRsi ->
             val values = chartIndicatorRsi.points
             // Too few points, or all of them filtered out, leaves this empty and minOf throws.
@@ -166,60 +220,108 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 values,
                 minKey,
                 maxKey,
-                values.minOf { it.value },
-                values.maxOf { it.value }
+                RSI_MIN,
+                RSI_MAX,
+                transition,
+                appear
             )
         }
     }
 
     private fun initMovingAverages() {
         movingAverageCurves.clear()
-        movingAverageCurves.putAll(
-            target.movingAverages
-                .map { (id, movingAverage: ChartIndicator.MovingAverage) ->
-                    id to CurveAnimator2(
-                        movingAverage.line,
-                        minKey,
-                        maxKey,
-                        minValue,
-                        maxValue
-                    ).apply {
-                        color = movingAverage.color
-                    }
-                }
-        )
+        target.movingAverages.forEach { (id, movingAverage) ->
+            movingAverageCurves[id] = movingAverageCurve(movingAverage, appear)
+        }
     }
+
+    private fun movingAverageCurve(
+        movingAverage: ChartIndicator.MovingAverage,
+        appear: ChartTransition,
+    ) = CurveAnimator2(
+        movingAverage.line,
+        minKey,
+        maxKey,
+        minValue,
+        maxValue,
+        transition,
+        appear
+    ).apply {
+        color = movingAverage.color
+    }
+
+    private fun dropLeavingLayers() {
+        leavingMovingAverageCurves.clear()
+        if (dominanceLeaving) {
+            dominanceCurve = null
+            dominanceLeaving = false
+        }
+        if (rsiLeaving) {
+            rsiCurve = null
+            rsiLeaving = false
+        }
+        if (macdLeaving) {
+            macdLineCurve = null
+            macdSignalCurve = null
+            macdHistogramBars = null
+            macdLeaving = false
+        }
+        if (volumeBarsLeaving) {
+            volumeBarsCovered = true
+            volumeBarsLeaving = false
+        }
+        layersVersion++
+    }
+
+    /**
+     * Whether RSI or MACD holds the panel under the chart. One that is leaving does not, so
+     * the volume bars come back under it while it goes.
+     */
+    private val hasBottomIndicator: Boolean
+        get() = (rsiCurve != null && !rsiLeaving) || (macdLineCurve != null && !macdLeaving)
+
+    // RSI and MACD share one panel. With both in the data, RSI has it. One that is leaving
+    // is still drawn under or over the other until its fade ends.
+    private val macdShown: Boolean
+        get() = rsiCurve == null || rsiLeaving || macdLeaving
 
     fun getMainCurveState(): CurveAnimator2.UiState {
         return mainCurve.state
     }
 
     fun getDominanceCurveState(): CurveAnimator2.UiState? {
+        layersVersion
         return dominanceCurve?.state
     }
 
     fun getVolumeBarsState(): CurveAnimatorBars.UiState? {
-        return volumeBars?.state
+        layersVersion
+        return volumeBars?.state.takeUnless { volumeBarsCovered }
     }
 
     fun getMovingAverageCurveStates(): List<CurveAnimator2.UiState> {
-        return movingAverageCurves.map { it.value.state }
+        layersVersion
+        return (movingAverageCurves.values + leavingMovingAverageCurves.values).map { it.state }
     }
 
     fun getRsiCurveState(): CurveAnimator2.UiState? {
+        layersVersion
         return rsiCurve?.state
     }
 
     fun getMacdLineCurveState(): CurveAnimator2.UiState? {
-        return macdLineCurve?.state
+        layersVersion
+        return macdLineCurve?.state.takeIf { macdShown }
     }
 
     fun getMacdSignalCurveState(): CurveAnimator2.UiState? {
-        return macdSignalCurve?.state
+        layersVersion
+        return macdSignalCurve?.state.takeIf { macdShown }
     }
 
     fun getMacdHistogramBarsState(): CurveAnimatorBars.UiState? {
-        return macdHistogramBars?.state
+        layersVersion
+        return macdHistogramBars?.state.takeIf { macdShown }
     }
 
     private fun setExtremum() {
@@ -240,6 +342,14 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     }
 
     fun setTarget(chartData: ChartData, hasVolumes: Boolean) {
+        // A layer still leaving when new data comes goes on from the opacity it has: on with
+        // leaving if its data is still absent, back in if it has returned.
+        val hadBottomIndicator = hasBottomIndicator
+        val macdWasShown = macdShown
+        (leavingMovingAverageCurves.keys - chartData.movingAverages.keys).forEach { id ->
+            leavingMovingAverageCurves[id]?.leave(hide)
+        }
+
         target = chartData
         this.hasVolumes = hasVolumes
         setExtremum()
@@ -252,12 +362,23 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             maxValue
         )
 
-        if (target.movingAverages.keys != movingAverageCurves.keys) {
-            initMovingAverages()
-        } else {
-            target.movingAverages.forEach { (id, u: ChartIndicator.MovingAverage) ->
-                movingAverageCurves[id]?.setTo(
-                    u.line,
+        (movingAverageCurves.keys - target.movingAverages.keys).forEach { id ->
+            movingAverageCurves.remove(id)?.let { curve ->
+                curve.leave(hide)
+                leavingMovingAverageCurves[id] = curve
+            }
+        }
+        target.movingAverages.forEach { (id, movingAverage) ->
+            // One that returns while it is still leaving is taken back as it is on screen.
+            val curve = movingAverageCurves[id] ?: leavingMovingAverageCurves.remove(id)?.also {
+                it.color = movingAverage.color
+                movingAverageCurves[id] = it
+            }
+            if (curve == null) {
+                movingAverageCurves[id] = movingAverageCurve(movingAverage, show)
+            } else {
+                curve.setTo(
+                    movingAverage.line,
                     minKey,
                     maxKey,
                     minValue,
@@ -268,9 +389,12 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
 
         val dominanceValues = target.dominanceByTimestamp()
         if (dominanceValues.isEmpty()) {
-            dominanceCurve = null
+            dominanceCurve?.let {
+                it.leave(hide)
+                dominanceLeaving = true
+            }
         } else if (dominanceCurve == null) {
-            initDominanceCurve()
+            initDominanceCurve(show)
         } else {
             dominanceCurve?.setTo(
                 dominanceValues,
@@ -279,12 +403,16 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 dominanceValues.minOf { it.value },
                 dominanceValues.maxOf { it.value }
             )
+            dominanceLeaving = false
         }
 
         if (target.rsi == null || target.rsi?.points.isNullOrEmpty()) {
-            rsiCurve = null
+            rsiCurve?.let {
+                it.leave(hide)
+                rsiLeaving = true
+            }
         } else if (rsiCurve == null) {
-            initRsiCurve()
+            initRsiCurve(show)
         } else {
             target.rsi?.let { chartIndicatorRsi ->
                 val values = chartIndicatorRsi.points
@@ -292,18 +420,29 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     values,
                     minKey,
                     maxKey,
-                    values.minOf { it.value },
-                    values.maxOf { it.value }
+                    RSI_MIN,
+                    RSI_MAX
                 )
+                rsiLeaving = false
             }
         }
 
         if (target.macd == null) {
-            macdLineCurve = null
-            macdSignalCurve = null
-            macdHistogramBars = null
+            if (macdLineCurve != null || macdSignalCurve != null || macdHistogramBars != null) {
+                if (macdWasShown) {
+                    macdLineCurve?.leave(hide)
+                    macdSignalCurve?.leave(hide)
+                    macdHistogramBars?.leave(hide)
+                    macdLeaving = true
+                } else {
+                    // It was behind RSI, so there is nothing on screen to fade.
+                    macdLineCurve = null
+                    macdSignalCurve = null
+                    macdHistogramBars = null
+                }
+            }
         } else if (macdLineCurve == null || macdSignalCurve == null || macdHistogramBars == null) {
-            initMacdCurves()
+            initMacdCurves(show)
         } else {
             target.macd?.let { macd ->
                 val macdLine = macd.macdLine
@@ -342,7 +481,15 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                     histogramAbsMin,
                     histogramAbsMax
                 )
+                macdLeaving = false
             }
+        }
+
+        // The volume bars were hidden behind the indicator that is going, so they come in anew.
+        if (hadBottomIndicator && !hasBottomIndicator) {
+            volumeBars?.reappear(show, stillShown = volumeBarsLeaving)
+            volumeBarsCovered = false
+            volumeBarsLeaving = false
         }
 
         val volumeByTimestamp = if (hasVolumes) target.volumeByTimestamp() else linkedMapOf()
@@ -358,7 +505,9 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 minKey,
                 maxKey,
                 volumeByTimestamp.minOf { it.value },
-                volumeByTimestamp.maxOf { it.value }
+                volumeByTimestamp.maxOf { it.value },
+                transition,
+                show
             )
 
             else -> volumeBars?.setValues(
@@ -370,13 +519,39 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             )
         }
 
-        defineColors()
+        // After the bars took the new data, so that it is the hide transition they play. Bars
+        // already leaving go on with it from the opacity they have.
+        if (hasBottomIndicator && !volumeBarsCovered) {
+            volumeBars?.leave(hide)
+            volumeBarsLeaving = true
+        }
+
+        layersVersion++
+
+        // From the colours on screen, which are a blend when a transition was interrupted.
+        mainCurveColorsFrom = MainCurveColors(mainCurveColor, mainCurveGradientColors)
+        mainCurveColorsTo = targetColors()
     }
 
     fun onNextFrame(value: Float) {
+        // A colour has no room to overshoot, so the fraction of a bouncing spec is held in 0..1.
+        val colorFraction = value.coerceIn(0f, 1f)
+        showColors(
+            MainCurveColors(
+                curve = lerp(mainCurveColorsFrom.curve, mainCurveColorsTo.curve, colorFraction),
+                gradient = Pair(
+                    lerp(mainCurveColorsFrom.gradient.first, mainCurveColorsTo.gradient.first, colorFraction),
+                    lerp(mainCurveColorsFrom.gradient.second, mainCurveColorsTo.gradient.second, colorFraction),
+                )
+            )
+        )
+
         mainCurve.onNextFrame(value)
         dominanceCurve?.onNextFrame(value)
         movingAverageCurves.forEach { (_, curve) ->
+            curve.onNextFrame(value)
+        }
+        leavingMovingAverageCurves.forEach { (_, curve) ->
             curve.onNextFrame(value)
         }
         volumeBars?.onNextFrame(value)
@@ -384,6 +559,10 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         macdLineCurve?.onNextFrame(value)
         macdSignalCurve?.onNextFrame(value)
         macdHistogramBars?.onNextFrame(value)
+
+        if (value == 1f) {
+            dropLeavingLayers()
+        }
     }
 
     var selectedItem by mutableStateOf<SelectedItem?>(null)
@@ -439,6 +618,12 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     }
 
 }
+
+// The range the RSI panel is drawn in, whatever the values in the data.
+private const val RSI_MIN = 0f
+private const val RSI_MAX = 100f
+
+private data class MainCurveColors(val curve: Color, val gradient: Pair<Color, Color>)
 
 data class SelectedItem(
     val percentagePositionX: Float,

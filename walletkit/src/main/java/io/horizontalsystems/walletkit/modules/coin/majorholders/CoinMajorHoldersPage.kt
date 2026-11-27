@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -86,7 +87,7 @@ private fun CoinMajorHoldersScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
-                icon = R.drawable.ic_close,
+                icon = R.drawable.close_24,
                 onClick = { navigation.removeLastOrNull() }
             )
         )
@@ -189,7 +190,8 @@ private fun SeeAllButton(onClick: () -> Unit) {
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.arrow_b_right_24),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )

@@ -295,7 +295,7 @@ private fun RecipientCard(
                     }
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        painter = painterResource(R.drawable.arrow_s_down_20),
+                        painter = painterResource(R.drawable.arrow_s_down_24),
                         tint = ComposeAppTheme.colors.grey,
                         contentDescription = null,
                     )

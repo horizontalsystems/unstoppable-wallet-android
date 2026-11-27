@@ -127,7 +127,8 @@ private fun LanguageCell(
         ) {
             if (checked) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_checkmark_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.check_24),
                     tint = ComposeAppTheme.colors.orange,
                     contentDescription = null,
                 )

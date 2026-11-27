@@ -48,7 +48,7 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RoiSelectCoinsPage : HSPage() {
+data object RoiSelectCoinsPage : HSPage(accessibleWhileLocked = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         RoiSelectCoinsScreen(navigation)

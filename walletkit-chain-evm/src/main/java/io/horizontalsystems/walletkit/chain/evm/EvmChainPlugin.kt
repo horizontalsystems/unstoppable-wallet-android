@@ -73,6 +73,16 @@ import kotlin.reflect.KClass
  */
 class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin {
 
+    init {
+        // ethereum-kit hashes through a security provider that EthereumKit.init() registers.
+        // It has to be in place before the first adapter is created: a hash that fails inside
+        // a kit class initializer leaves that class unusable for the rest of the process.
+        // Adapters are created concurrently with onAppStart, so that hook is too late.
+        if (isFamilyAnchor) {
+            EthereumKit.init()
+        }
+    }
+
     // EVM transfers carry no memo; the calldata comes from the kit via depositTransferData.
     override fun sendTransactionData(
         token: Token,
@@ -140,10 +150,6 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
     override fun statusInfo(): Map<String, Any>? = evmKitManager.statusInfo
 
     override suspend fun onAppStart() {
-        if (isFamilyAnchor) {
-            EthereumKit.init()
-        }
-
         // Auto-Select: probe only chains in use. The kit already falls over between built-in
         // sources on its own; this only moves the preferred one when the stored source is
         // dead, stale or clearly slower.

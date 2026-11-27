@@ -217,7 +217,7 @@ private fun AccountCell(
         if (active) {
             HSpacer(8.dp)
             Icon(
-                painter = painterResource(R.drawable.ic_checkmark_20),
+                painter = painterResource(R.drawable.check_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.jacob,
                 modifier = Modifier.size(20.dp)

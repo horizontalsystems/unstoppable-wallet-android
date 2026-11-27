@@ -323,10 +323,7 @@
     <string name="Balance_Downloading">Descargando…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_BlocksRemaining">Bloques restantes - %d</string>
-    <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
-    <string name="Balance_Sort_Az">Nombre</string>
-    <string name="Balance_Sort_24hPriceChange">Cambio de Precio</string>
     <string name="Balance_NoCoinsAlert">No hay tokens aquí. Añade uno para comenzar.</string>
     <string name="Balance_NoAssetsToSend">No tiene activos para enviar.</string>
     <string name="Balance_Network">La red</string>
@@ -464,7 +461,6 @@
     <string name="FeeSettings_Overpricing_Title">Cuota demasiado alta</string>
     <string name="FeeSettings_Overpricing">La tarifa de transacción establecida es mayor de lo necesario para procesar esta transacción ahora.</string>
     <string name="FeeSettings_FeeRate">Tarifa de tarifa (SAT/BYTE)</string>
-    <string name="FeeSettings_FeeRate_RecommendedInfo">Este es el valor recomendado para golpear los siguientes 2 bloques</string>
     <string name="FeeSettings_FeeRate_Info">Al enviar una transacción, debe pagar una cuota de red. Cuanto más buscada sea la red, más alta será la comisión.
         \n\nMonedero imparable sugiere una tarifa óptima para ayudar a que su transacción confirme en un tiempo razonable. Puedes aumentar o disminuir este valor.
         \n\nEstablecer la comisión demasiado baja puede causar que tu transacción permanezca pendiente durante mucho tiempo o incluso sea rechazada. Para una confirmación más rápida, utilice una tarifa más alta.</string>
@@ -985,8 +981,7 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, sin privado.</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">Ocultar Txs Sospechosos</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Oculta pequeñas transferencias sospechosas utilizadas a menudo en ataques de phishing.</string>
-    <string name="SetDuressPin_Title">Durar contraseña</string>
-    <string name="SetDuressPin_Description">Establecer un código de acceso para el modo Duress</string>
+    <string name="SetDuressPin_Description">Establece un código para el Modo Coacción</string>
     <string name="EditDuressPin_Title">Editar contraseña de Duración</string>
     <string name="EditDuressPin_Description">Introduzca una nueva contraseña para el modo Duress</string>
     <string name="DuressPin_Title">Modo Duración</string>
@@ -1558,7 +1553,6 @@
     <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
     <string name="OSPin_Prompt_Desciption">Esta aplicación requiere el PIN de tu teléfono para mantener datos sensibles de tu monedero en el almacenamiento seguro de Android y no en la propia aplicación.</string>
     <!--Unlock-->
-    <string name="Unlock_Title">Desbloquear</string>
     <string name="Unlock_Passcode">Código de acceso</string>
     <string name="Unlock_EnterPasscode">Introducir código</string>
     <string name="Unlock_BiometricScanner">Escáner biométrico</string>
@@ -1569,12 +1563,12 @@
     <string name="Unlock_Random">Aleatorio</string>
     <!--Set Pin-->
     <string name="PinSet_Title">Crear contraseña</string>
-    <string name="PinSet_Info">Su contraseña se utilizará para desbloquear su cartera</string>
+    <string name="PinSet_Info">El código se usará para desbloquear</string>
     <string name="PinSet_ConfirmInfo">Confirmar</string>
-    <string name="PinSet_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Confirmación no válida</string>
     <string name="PinSet_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
     <string name="PinSet_ForBiometrics">Establecer un código de acceso para habilitar Biometrics</string>
-    <string name="PinSet_ForDuress">Establecer un código de acceso para activar el modo Duración</string>
+    <string name="PinSet_ForDuress">Establece un código para activar el Modo Coacción</string>
     <string name="PinSet_ErrorPinInUse">Este código de acceso ya está siendo usado.</string>
     <!--Edit Pin-->
     <!--Biometric Auth texts-->

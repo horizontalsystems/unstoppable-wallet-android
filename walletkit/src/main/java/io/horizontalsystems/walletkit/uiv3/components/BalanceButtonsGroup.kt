@@ -2,6 +2,8 @@ package io.horizontalsystems.walletkit.uiv3.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +24,25 @@ fun BalanceButtonsGroup(content: @Composable RowScope.() -> Unit) {
             .padding(bottom = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
+        content = content
+    )
+}
+
+/**
+ * Holds the amount and, below it, the action buttons at the top of the
+ * Balance tab and the token page. The bottom padding stays when the buttons
+ * are left out.
+ */
+@Composable
+fun BalanceAmountGroup(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(ComposeAppTheme.colors.tyler)
+            .padding(bottom = 8.dp),
         content = content
     )
 }

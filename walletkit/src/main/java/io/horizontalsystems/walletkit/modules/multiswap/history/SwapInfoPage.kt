@@ -321,11 +321,11 @@ internal fun SwapDetailsCard(
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = infoTitle.hs,
-                        icon = painterResource(R.drawable.ic_info_24),
+                        icon = painterResource(R.drawable.info_24),
                         iconTint = ComposeAppTheme.colors.grey,
                         onIconClick = {
                             navigation.slideFromBottom(
-                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.clock_24))
                             )
                         },
                     )
@@ -504,8 +504,9 @@ internal fun DividerWithArrow() {
         Icon(
             modifier = Modifier
                 .requiredSize(20.dp)
-                .background(ComposeAppTheme.colors.lawrence),
-            painter = painterResource(R.drawable.ic_arrow_down_20),
+                .background(ComposeAppTheme.colors.lawrence)
+                .size(20.dp),
+            painter = painterResource(R.drawable.arrow_m_down_24),
             tint = ComposeAppTheme.colors.grey,
             contentDescription = null,
         )

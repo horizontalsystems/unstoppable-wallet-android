@@ -90,7 +90,7 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
         menuItems = listOf(
             MenuItemDropdown(
                 title = TranslatableString.ResString(R.string.Button_Add),
-                icon = R.drawable.wallet_add_sharp_24,
+                icon = R.drawable.wallet_add_24,
                 iconTint = ComposeAppTheme.colors.orange,
                 items = listOf(
                     MenuItem(
@@ -227,7 +227,7 @@ fun AccountCell(
     val icon: Int
     val iconTint: Color
     if (accountViewItem.showAlertIcon) {
-        icon = R.drawable.warning_outline_24
+        icon = R.drawable.warning_24
         iconTint = ComposeAppTheme.colors.lucian
     } else {
         icon = R.drawable.threedots_24

@@ -82,7 +82,7 @@ fun PremiumPage(
                                 indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
                                 onClick = onClose
                             ),
-                        painter = painterResource(R.drawable.ic_close),
+                        painter = painterResource(R.drawable.close_24),
                         contentDescription = stringResource(R.string.Button_Close),
                         tint = ComposeAppTheme.colors.grey,
                     )
@@ -100,7 +100,8 @@ fun PremiumPage(
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.polistar_54),
+                        modifier = Modifier.size(54.dp),
+                        painter = painterResource(R.drawable.polistar_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.orange,
                     )

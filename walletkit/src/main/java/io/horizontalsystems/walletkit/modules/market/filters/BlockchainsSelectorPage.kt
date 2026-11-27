@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.market.filters
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -65,7 +66,7 @@ private fun FilterByBlockchainsScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
+                        icon = R.drawable.close_24,
                         onClick = navigation::removeLastOrNull
                     )
                 ),
@@ -144,10 +145,10 @@ private fun AnyCell(
             overflow = TextOverflow.Ellipsis,
         )
         Icon(
-            painter = painterResource(R.drawable.ic_checkmark_20),
+            painter = painterResource(R.drawable.check_24),
             tint = ComposeAppTheme.colors.orange,
             contentDescription = null,
-            modifier = Modifier.alpha(if (checked) 1f else 0f)
+            modifier = Modifier.alpha(if (checked) 1f else 0f).size(20.dp)
         )
     }
 }

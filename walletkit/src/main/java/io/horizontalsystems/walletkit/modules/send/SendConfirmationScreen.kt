@@ -303,7 +303,7 @@ fun ConfirmationTopSection(
         }
         if (address != null) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_down_20),
+                painter = painterResource(id = R.drawable.arrow_m_down_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
                 modifier = Modifier
@@ -311,6 +311,7 @@ fun ConfirmationTopSection(
                     .padding(top = 57.dp) //top cell is 67.dp - iconWidth/2(which is equal 10.dp)
                     .clip(CircleShape)
                     .background(ComposeAppTheme.colors.lawrence)
+                    .size(20.dp)
             )
         }
     }

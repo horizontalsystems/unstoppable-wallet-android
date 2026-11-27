@@ -86,6 +86,9 @@ object TestTags {
     // The coin icon carries the sync state: synced, syncing or failed
     fun balanceItemSync(coinCode: String, state: String) = "balance_item_${coinCode}_$state"
 
+    // The period is the server's code for it ("1d", "1w", ... "5y"), or "all"
+    fun chartPeriod(period: String) = "chart_period_$period"
+
     const val TOKEN_BALANCE = "token_balance"
     const val TOKEN_CHART = "token_chart"
     const val TOKEN_RECEIVE = "token_receive"
@@ -237,9 +240,14 @@ object TestTags {
 
     fun pinKey(digit: Int) = "pin_key_$digit"
     const val PIN_KEY_DELETE = "pin_key_delete"
+    const val PIN_KEY_BIOMETRIC = "pin_key_biometric"
+    const val PIN_RANDOM = "pin_random"
+    const val PIN_BACK = "pin_back"
     const val PIN_TITLE = "pin_title"
+    const val PIN_DESCRIPTION = "pin_description"
     const val PIN_ERROR = "pin_error"
     const val PIN_ATTEMPTS_LEFT = "pin_attempts_left"
+    const val PIN_DISABLED_UNTIL = "pin_disabled_until"
 
     // Index over the list as shown: wallets first, then watch addresses
     fun accountRow(index: Int) = "account_row_$index"
@@ -262,6 +270,25 @@ object TestTags {
 
     fun selectorSwitch(index: Int) = "selector_switch_$index"
     const val SELECTOR_DONE = "selector_done"
+
+    // The dropdown button inside a row; it opens the same list as the row
+    fun dropdownValue(rowTag: String) = "${rowTag}_value"
+
+    const val MARKET_FILTERS_SET = "market_filters_set"
+    const val MARKET_FILTERS_VOLUME = "market_filters_volume"
+    const val MARKET_FILTERS_BLOCKCHAINS = "market_filters_blockchains"
+    const val MARKET_FILTERS_SECTORS = "market_filters_sectors"
+    const val MARKET_FILTERS_PRICE_CHANGE = "market_filters_price_change"
+    const val MARKET_FILTERS_PRICE_PERIOD = "market_filters_price_period"
+    const val MARKET_FILTERS_TRADING_SIGNALS = "market_filters_trading_signals"
+    const val MARKET_FILTERS_PRICE_CLOSE_TO = "market_filters_price_close_to"
+
+    const val TX_FILTER_BLOCKCHAIN = "tx_filter_blockchain"
+    const val TX_FILTER_COIN = "tx_filter_coin"
+    const val TX_FILTER_CONTACT = "tx_filter_contact"
+
+    const val ADD_TOKEN_BLOCKCHAIN = "add_token_blockchain"
+    const val CONTACT_ADDRESS_BLOCKCHAIN = "contact_address_blockchain"
 }
 
 // Read once; previews have no App, so they get false

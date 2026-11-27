@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.balance
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.IAccountManager
-import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.isNative
 import io.horizontalsystems.walletkit.core.managers.ConnectivityManager
@@ -27,7 +26,6 @@ class BalanceService(
     private val activeWalletRepository: BalanceActiveWalletRepository,
     private val xRateRepository: BalanceXRateRepository,
     private val adapterRepository: BalanceAdapterRepository,
-    private val localStorage: ILocalStorage,
     private val connectivityManager: ConnectivityManager,
     private val balanceSorter: BalanceSorter,
     private val accountManager: IAccountManager
@@ -35,9 +33,6 @@ class BalanceService(
 
     val networkAvailable by connectivityManager::isConnected
     val baseCurrency by xRateRepository::baseCurrency
-
-    var sortType = localStorage.sortType
-        private set
 
     var isWatchAccount = false
         private set
@@ -80,13 +75,6 @@ class BalanceService(
         }
     }
 
-    fun setSortType(value: BalanceSortType) {
-        sortType = value
-        localStorage.sortType = value
-
-        sortAndEmitItems()
-    }
-
     private fun sortAndEmitItems() {
         sortAndEmitJob?.cancel()
         sortAndEmitJob = coroutineScope.launch {
@@ -96,7 +84,7 @@ class BalanceService(
             // overwrite a newer state that arrived mid-sort, and the lost update
             // leaves a row frozen (e.g. permanently "Syncing"/"Sync error"),
             // because an unchanged adapter state never emits again.
-            val sortedItems = balanceSorter.sort(allBalanceItems, sortType)
+            val sortedItems = balanceSorter.sort(allBalanceItems)
 
             // Publish under the mutex: updates cancel this job while holding it,
             // so checking ensureActive inside the lock guarantees a cancelled job
@@ -211,7 +199,6 @@ class BalanceService(
                 BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
                 BalanceXRateRepository(tag, App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao()), App.torKitManager),
-                App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),
                 App.accountManager

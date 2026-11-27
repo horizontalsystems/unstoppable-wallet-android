@@ -217,9 +217,9 @@ fun DetectorCell(
 
             if (issues.isNotEmpty()) {
                 val painter = if (issueViewItem.expanded) {
-                    painterResource(R.drawable.ic_arrow_big_up_20)
+                    painterResource(R.drawable.arrow_b_up_24)
                 } else {
-                    painterResource(R.drawable.ic_arrow_big_down_20)
+                    painterResource(R.drawable.arrow_b_down_24)
                 }
 
                 HSpacer(width = 8.dp)
@@ -230,7 +230,7 @@ fun DetectorCell(
                     )
                 )
                 Icon(
-                    modifier = Modifier.padding(start = 8.dp),
+                    modifier = Modifier.padding(start = 8.dp).size(20.dp),
                     painter = painter,
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey

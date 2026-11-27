@@ -71,6 +71,7 @@ fun AnalyticsBlockHeader(
                 onClick = it
             ) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
                     tint = ComposeAppTheme.colors.grey
@@ -162,7 +163,8 @@ fun AnalyticsFooterCell(
         if (showRightArrow) {
             HSpacer(8.dp)
             Image(
-                painter = painterResource(id = R.drawable.ic_arrow_right),
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(id = R.drawable.arrow_b_right_24),
                 contentDescription = "arrow icon"
             )
         }
@@ -214,6 +216,7 @@ private fun BoxItemCell(
                 }
             ) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     painter = painterResource(id = R.drawable.ic_info_20),
                     contentDescription = "info button",
                     tint = ComposeAppTheme.colors.grey,
