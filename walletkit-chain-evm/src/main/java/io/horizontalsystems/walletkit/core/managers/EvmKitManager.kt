@@ -111,7 +111,7 @@ class EvmKitManager(
         account: Account,
         blockchainType: BlockchainType
     ): EvmKitWrapper {
-        val syncSources = syncSourceManager.failoverSyncSources(blockchainType)
+        val syncSources = syncSourceManager.autoSelect.failoverSyncSources(blockchainType)
 
         val address: Address
         var signer: Signer? = null

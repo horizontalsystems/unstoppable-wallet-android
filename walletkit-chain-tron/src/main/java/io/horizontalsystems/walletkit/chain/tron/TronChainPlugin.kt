@@ -84,7 +84,7 @@ class TronChainPlugin : ChainPlugin {
         // built-in sources on its own; this only moves the preferred one when the stored
         // source is dead, stale or clearly slower.
         if (!isInUseAtStartup()) return
-        App.evmSyncSourceManager.repickOnStartup(
+        App.evmSyncSourceManager.autoSelect.repickOnStartup(
             BlockchainType.Tron,
             TronSourcePinger.LAG_THRESHOLD,
             TronSourcePinger(App.appConfigProvider.trongridApiKeys)::probe,

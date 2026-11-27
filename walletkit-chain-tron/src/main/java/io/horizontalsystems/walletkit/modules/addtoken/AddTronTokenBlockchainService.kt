@@ -49,7 +49,7 @@ class AddTronTokenBlockchainService(
 
     companion object {
         fun getInstance(blockchain: Blockchain): AddTronTokenBlockchainService {
-            val rpcSource = App.evmSyncSourceManager.failoverSyncSources(BlockchainType.Tron)
+            val rpcSource = App.evmSyncSourceManager.autoSelect.failoverSyncSources(BlockchainType.Tron)
                 .tronRpcSource(Network.Mainnet, App.appConfigProvider.trongridApiKeys)
             val trc20Provider = Trc20Provider.getInstance(rpcSource)
             return AddTronTokenBlockchainService(blockchain, trc20Provider)

@@ -20,46 +20,46 @@ class EvmSyncSourceAutoSelectTest {
 
     @Test
     fun freshInstallIsUntouched() {
-        assertTrue(EvmSyncSourceManager.isUntouched(defaults, storedUrl = null, hasCustomSources = false))
+        assertTrue(EvmSyncSourceAutoSelect.isUntouched(defaults, storedUrl = null, hasCustomSources = false))
     }
 
     @Test
     fun storedDefaultIsUntouched() {
-        assertTrue(EvmSyncSourceManager.isUntouched(defaults, storedUrl = "https://a.example", hasCustomSources = false))
+        assertTrue(EvmSyncSourceAutoSelect.isUntouched(defaults, storedUrl = "https://a.example", hasCustomSources = false))
     }
 
     @Test
     fun anotherBuiltInSelectedIsTouched() {
-        assertFalse(EvmSyncSourceManager.isUntouched(defaults, storedUrl = "https://b.example", hasCustomSources = false))
+        assertFalse(EvmSyncSourceAutoSelect.isUntouched(defaults, storedUrl = "https://b.example", hasCustomSources = false))
     }
 
     @Test
     fun customSourceAddedIsTouched() {
-        assertFalse(EvmSyncSourceManager.isUntouched(defaults, storedUrl = null, hasCustomSources = true))
-        assertFalse(EvmSyncSourceManager.isUntouched(defaults, storedUrl = "https://a.example", hasCustomSources = true))
+        assertFalse(EvmSyncSourceAutoSelect.isUntouched(defaults, storedUrl = null, hasCustomSources = true))
+        assertFalse(EvmSyncSourceAutoSelect.isUntouched(defaults, storedUrl = "https://a.example", hasCustomSources = true))
     }
 
     @Test
     fun noDefaultsIsNeverUntouched() {
-        assertFalse(EvmSyncSourceManager.isUntouched(emptyList(), storedUrl = null, hasCustomSources = false))
+        assertFalse(EvmSyncSourceAutoSelect.isUntouched(emptyList(), storedUrl = null, hasCustomSources = false))
     }
 
     @Test
     fun autoSelectOffUsesOnlySelected() {
-        assertEquals(listOf(llama), EvmSyncSourceManager.failoverOrder(llama, defaults, autoSelect = false))
+        assertEquals(listOf(llama), EvmSyncSourceAutoSelect.failoverOrder(llama, defaults, autoSelect = false))
     }
 
     @Test
     fun autoSelectPutsSelectedFirstThenOtherBuiltIns() {
         assertEquals(
             listOf(llama, unstoppable, other),
-            EvmSyncSourceManager.failoverOrder(llama, defaults, autoSelect = true)
+            EvmSyncSourceAutoSelect.failoverOrder(llama, defaults, autoSelect = true)
         )
     }
 
     @Test
     fun customSelectionNeverFallsOverToBuiltIns() {
-        assertEquals(listOf(custom), EvmSyncSourceManager.failoverOrder(custom, defaults, autoSelect = true))
+        assertEquals(listOf(custom), EvmSyncSourceAutoSelect.failoverOrder(custom, defaults, autoSelect = true))
     }
 
     @Test
@@ -67,8 +67,8 @@ class EvmSyncSourceAutoSelectTest {
         val ws = source("Ws", "wss://ws.example", ws = true)
         val withWs = listOf(unstoppable, ws, llama)
 
-        assertEquals(listOf(unstoppable, llama), EvmSyncSourceManager.failoverOrder(unstoppable, withWs, autoSelect = true))
-        assertEquals(listOf(ws), EvmSyncSourceManager.failoverOrder(ws, withWs, autoSelect = true))
+        assertEquals(listOf(unstoppable, llama), EvmSyncSourceAutoSelect.failoverOrder(unstoppable, withWs, autoSelect = true))
+        assertEquals(listOf(ws), EvmSyncSourceAutoSelect.failoverOrder(ws, withWs, autoSelect = true))
     }
 
     @Test
@@ -78,11 +78,11 @@ class EvmSyncSourceAutoSelectTest {
 
         assertEquals(
             listOf(unstoppable, keyed, llama),
-            EvmSyncSourceManager.failoverOrder(unstoppable, withKeyed, autoSelect = true)
+            EvmSyncSourceAutoSelect.failoverOrder(unstoppable, withKeyed, autoSelect = true)
         )
         assertEquals(
             listOf(keyed, unstoppable, llama),
-            EvmSyncSourceManager.failoverOrder(keyed, withKeyed, autoSelect = true)
+            EvmSyncSourceAutoSelect.failoverOrder(keyed, withKeyed, autoSelect = true)
         )
     }
 }

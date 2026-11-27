@@ -154,7 +154,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         // sources on its own; this only moves the preferred one when the stored source is
         // dead, stale or clearly slower.
         if (!isInUseAtStartup()) return
-        App.evmSyncSourceManager.repickOnStartup(
+        App.evmSyncSourceManager.autoSelect.repickOnStartup(
             blockchainType,
             EvmSourcePinger.lagThreshold(blockchainType),
             EvmSourcePinger::probe,

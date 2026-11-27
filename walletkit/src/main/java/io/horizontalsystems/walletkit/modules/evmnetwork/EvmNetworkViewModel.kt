@@ -35,8 +35,8 @@ class EvmNetworkViewModel(
         viewState = ViewState(
             defaultItems = viewItems(evmSyncSourceManager.defaultSyncSources(blockchain.type)),
             customItems = viewItems(evmSyncSourceManager.customSyncSources(blockchain.type)),
-            autoSelect = evmSyncSourceManager.autoSelectEnabled(blockchain.type),
-            autoSelectSupported = evmSyncSourceManager.autoSelectSupported(blockchain.type),
+            autoSelect = evmSyncSourceManager.autoSelect.isEnabled(blockchain.type),
+            autoSelectSupported = evmSyncSourceManager.autoSelect.isSupported(blockchain.type),
         )
     }
 
@@ -65,7 +65,7 @@ class EvmNetworkViewModel(
     }
 
     fun onToggleAutoSelect(enabled: Boolean) {
-        evmSyncSourceManager.setAutoSelect(enabled, blockchain.type)
+        evmSyncSourceManager.autoSelect.setEnabled(enabled, blockchain.type)
         syncState()
     }
 

@@ -558,8 +558,8 @@ class BackupProvider(
 
         val selectedEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
             val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
-            val autoSelect = evmSyncSourceManager.autoSelectEnabled(blockchain.type)
-                .takeIf { evmSyncSourceManager.autoSelectSupported(blockchain.type) }
+            val autoSelect = evmSyncSourceManager.autoSelect.isEnabled(blockchain.type)
+                .takeIf { evmSyncSourceManager.autoSelect.isSupported(blockchain.type) }
             EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), null, autoSelect)
         }
 

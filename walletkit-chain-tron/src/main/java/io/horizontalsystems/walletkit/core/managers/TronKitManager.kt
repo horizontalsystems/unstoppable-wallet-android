@@ -71,7 +71,7 @@ class TronKitManager(
     // The selected source first and, with Auto-Select on, the other built-in ones after it:
     // the kit falls over between them on its own.
     private fun tronRpcSource(): RpcSource =
-        evmSyncSourceManager.failoverSyncSources(BlockchainType.Tron)
+        evmSyncSourceManager.autoSelect.failoverSyncSources(BlockchainType.Tron)
             .tronRpcSource(network, App.appConfigProvider.trongridApiKeys)
 
     private fun tronTransactionSource(): TransactionSource {
