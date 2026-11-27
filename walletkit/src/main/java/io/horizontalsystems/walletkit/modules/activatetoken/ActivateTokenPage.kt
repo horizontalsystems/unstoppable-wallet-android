@@ -162,7 +162,7 @@ fun ActivateTokenScreen(
                     modifier = modifier,
                     text = stringResource(R.string.Activate_AlreadyActive_Description),
                     title = stringResource(R.string.Activate_AlreadyActive_Title),
-                    icon = R.drawable.ic_attention_20
+                    icon = R.drawable.warning_24
                 )
 
                 is ActivateTokenError.WatchAccount -> TextImportantError(
@@ -184,14 +184,14 @@ fun ActivateTokenScreen(
                     text = stringResource(
                         uiState.activationInfo?.insufficientBalanceDescriptionRes ?: R.string.Activate_InsufficientBalance_Description
                     ),
-                    icon = R.drawable.ic_attention_20
+                    icon = R.drawable.warning_24
                 )
 
                 is ActivateTokenError.Failed -> TextImportantError(
                     modifier = modifier,
                     title = stringResource(R.string.Error),
                     text = error.message,
-                    icon = R.drawable.ic_attention_20
+                    icon = R.drawable.warning_24
                 )
             }
         }

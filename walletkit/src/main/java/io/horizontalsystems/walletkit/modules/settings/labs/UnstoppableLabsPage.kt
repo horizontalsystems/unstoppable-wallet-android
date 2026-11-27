@@ -63,7 +63,7 @@ private fun UnstoppableLabsScreen(onBack: () -> Unit) {
         LabsProduct(
             R.string.UnstoppableLabs_SignalSwapBot,
             R.string.UnstoppableLabs_SignalSwapBot_Description,
-            R.drawable.chat_24,
+            R.drawable.message_24,
             config.labsSignalSwapBotLink,
         ),
         LabsProduct(

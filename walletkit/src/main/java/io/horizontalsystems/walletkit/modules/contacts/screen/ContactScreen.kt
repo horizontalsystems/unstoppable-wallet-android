@@ -195,7 +195,7 @@ fun ContactScreen(
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Alert_TitleWarning),
                             text = stringResource(R.string.Contacts_DiscardChanges_Warning),
-                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                            iconPainter = painterResource(R.drawable.warning_24),
                             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                             confirmText = stringResource(R.string.Contacts_DiscardChanges),
                             cautionType = Caution.Type.Error,

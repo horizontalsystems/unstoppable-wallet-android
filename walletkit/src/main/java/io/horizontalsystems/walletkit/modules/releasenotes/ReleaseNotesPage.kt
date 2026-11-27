@@ -96,12 +96,12 @@ fun ReleaseNotesScreen(
             ) {
                 Spacer(Modifier.padding(start = 16.dp))
                 IconButton(
-                    R.drawable.ic_twitter_filled_24,
+                    R.drawable.twitter_logo_24,
                     viewModel.twitterUrl,
                     stringResource(R.string.CoinPage_Twitter)
                 )
                 IconButton(
-                    R.drawable.ic_telegram_filled_24,
+                    R.drawable.telegram_logo_24,
                     viewModel.telegramUrl,
                     stringResource(R.string.CoinPage_Telegram)
                 )

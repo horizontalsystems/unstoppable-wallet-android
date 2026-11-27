@@ -97,7 +97,7 @@ fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
                     left = {
                         Icon(
                             modifier = Modifier.size(24.dp),
-                            painter = painterResource(R.drawable.ic_file_24),
+                            painter = painterResource(R.drawable.folder_24),
                             contentDescription = null,
                             tint = ComposeAppTheme.colors.orange
                         )

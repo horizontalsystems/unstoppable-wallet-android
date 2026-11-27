@@ -79,7 +79,7 @@ fun ReceiveActivatableTokenScreen(
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             BottomSheetHeader(
-                iconPainter = painterResource(R.drawable.ic_attention_24),
+                iconPainter = painterResource(R.drawable.warning_24),
                 iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                 title = stringResource(R.string.ActivationRequired_DialogTitle),
                 onCloseClick = {

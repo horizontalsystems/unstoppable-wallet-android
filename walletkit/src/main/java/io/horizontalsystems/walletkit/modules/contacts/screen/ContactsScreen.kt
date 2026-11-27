@@ -153,7 +153,7 @@ fun ContactsScreen(
                 add(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Contacts_ActionMore),
-                        icon = R.drawable.ic_more2_20,
+                        icon = R.drawable.threedots_24,
                         enabled = true,
                         onClick = {
                             showMoreSelectorDialog = true
@@ -219,7 +219,7 @@ fun ContactsScreen(
                 if (uiState.searchMode) {
                     ListEmptyView(
                         text = stringResource(R.string.EmptyResults),
-                        icon = R.drawable.ic_not_found
+                        icon = R.drawable.warning_filled_24
                     )
                 } else {
                     ScreenMessageWithAction(
@@ -291,7 +291,7 @@ fun ContactsScreen(
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Alert_TitleWarning),
                             text = warningMessage ?: "",
-                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                            iconPainter = painterResource(R.drawable.warning_24),
                             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                             confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
                             cautionType = Caution.Type.Warning,
@@ -318,7 +318,7 @@ fun ContactsScreen(
                         ConfirmationBottomSheet(
                             title = stringResource(R.string.Alert_TitleWarning),
                             text = stringResource(R.string.Contacts_Restore_Warning),
-                            iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                            iconPainter = painterResource(R.drawable.warning_24),
                             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                             confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
                             cautionType = Caution.Type.Error,

@@ -75,7 +75,7 @@ fun CoinMarketsScreen(
                     if (uiState.items.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.CoinPage_NoDataAvailable),
-                            icon = R.drawable.ic_no_data
+                            icon = R.drawable.warning_filled_24
                         )
                     } else {
                         CoinMarketsMenu(

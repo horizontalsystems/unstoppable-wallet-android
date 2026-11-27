@@ -38,7 +38,7 @@ fun ZcashMigrationBottomSheet(
         }
     ) {
         BottomSheetHeaderV3(
-            image72 = painterResource(R.drawable.ic_share_24),
+            image72 = painterResource(R.drawable.share_24),
             title = stringResource(R.string.Balance_Zcash_Migration_Title)
         )
         InfoTextBody(

@@ -142,7 +142,7 @@ fun ShareUiDataBlock(
         start = {
             Icon(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(R.drawable.ic_share_24px),
+                painter = painterResource(R.drawable.share_24),
                 tint = ComposeAppTheme.colors.grey,
                 contentDescription = null,
             )

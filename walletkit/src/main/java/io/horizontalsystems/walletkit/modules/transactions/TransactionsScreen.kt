@@ -106,7 +106,7 @@ fun TransactionsScreen(
             add(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Transactions_Filter),
-                    icon = R.drawable.ic_manage_2_24,
+                    icon = R.drawable.manage_24,
                     showAlertDot = showFilterAlertDot,
                     testTag = TestTags.TX_FILTER,
                     onClick = {

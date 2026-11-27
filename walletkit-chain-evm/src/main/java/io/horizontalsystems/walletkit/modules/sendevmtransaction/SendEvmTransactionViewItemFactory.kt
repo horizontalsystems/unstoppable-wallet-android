@@ -156,7 +156,7 @@ class SendEvmTransactionViewItemFactory(
             0, ViewItem.Subhead(
                 Translator.getString(R.string.Swap_FromAmountTitle),
                 coinServiceIn.token.coin.name,
-                R.drawable.ic_arrow_up_right_12
+                R.drawable.arrow_m_up_24
             )
         )
         sections.add(SectionViewItem(inViewItems))
@@ -165,7 +165,7 @@ class SendEvmTransactionViewItemFactory(
             0, ViewItem.Subhead(
                 Translator.getString(R.string.Swap_ToAmountTitle),
                 coinServiceOut.token.coin.name,
-                R.drawable.ic_arrow_down_left_12
+                R.drawable.arrow_m_down_24
             )
         )
         sections.add(SectionViewItem(outViewItems))
@@ -194,7 +194,7 @@ class SendEvmTransactionViewItemFactory(
                     ViewItem.Subhead(
                         Translator.getString(R.string.Swap_FromAmountTitle),
                         coinServiceIn.token.coin.name,
-                        R.drawable.ic_arrow_up_right_12
+                        R.drawable.arrow_m_up_24
                     ),
                     getAmount(
                         coinServiceIn.amountData(amountIn),
@@ -209,7 +209,7 @@ class SendEvmTransactionViewItemFactory(
             ViewItem.Subhead(
                 Translator.getString(R.string.Swap_ToAmountTitle),
                 coinServiceOut.token.coin.name,
-                R.drawable.ic_arrow_down_left_12
+                R.drawable.arrow_m_down_24
             )
         )
 

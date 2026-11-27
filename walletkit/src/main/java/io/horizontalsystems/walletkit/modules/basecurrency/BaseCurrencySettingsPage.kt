@@ -164,7 +164,7 @@ private fun WarningBottomSheet(
     onOkClick: () -> Unit
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_attention_24),
+        iconPainter = painterResource(R.drawable.warning_24),
         title = stringResource(R.string.SettingsCurrency_DisclaimerTitle),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick

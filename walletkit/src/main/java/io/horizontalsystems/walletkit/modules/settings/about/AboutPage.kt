@@ -125,7 +125,7 @@ private fun SettingSections(
             // The screen this row opened is gone and its replacement is not built yet
             HsSettingCell(
                 R.string.Settings_Terms,
-                R.drawable.ic_terms_20,
+                R.drawable.list_24,
                 testTag = TestTags.ABOUT_TERMS,
                 onClick = {}
             )

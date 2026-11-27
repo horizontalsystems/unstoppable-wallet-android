@@ -48,7 +48,7 @@ fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
         HSCaution.Type.Error -> {
             TextImportantError(
                 modifier = modifier,
-                icon = R.drawable.ic_attention_20,
+                icon = R.drawable.warning_24,
                 title = feeRateCaution.getString(),
                 text = feeRateCaution.getDescription() ?: ""
             )
@@ -57,7 +57,7 @@ fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
         HSCaution.Type.Warning -> {
             TextImportantWarning(
                 modifier = modifier,
-                icon = R.drawable.ic_attention_20,
+                icon = R.drawable.warning_24,
                 title = feeRateCaution.getString(),
                 text = feeRateCaution.getDescription() ?: ""
             )

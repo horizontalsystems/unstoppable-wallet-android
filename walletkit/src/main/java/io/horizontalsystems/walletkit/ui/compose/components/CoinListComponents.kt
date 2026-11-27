@@ -271,7 +271,7 @@ fun ListErrorView(
 ) {
     ListErrorView(
         errorText = errorText,
-        icon = R.drawable.ic_sync_error,
+        icon = R.drawable.warning_filled_24,
         onClick = onClick,
     )
 }
@@ -279,7 +279,7 @@ fun ListErrorView(
 @Composable
 fun ListErrorView(
     errorText: String,
-    @DrawableRes icon: Int = R.drawable.ic_sync_error,
+    @DrawableRes icon: Int = R.drawable.warning_filled_24,
     onClick: () -> Unit
 ) {
     ScreenMessageWithAction(

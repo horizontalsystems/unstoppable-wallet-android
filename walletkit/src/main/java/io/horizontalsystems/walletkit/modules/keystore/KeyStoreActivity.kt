@@ -170,7 +170,7 @@ private fun NoSystemLockWarning() {
     Column() {
         Spacer(Modifier.height(12.dp))
         Image(
-            painter = painterResource(id = R.drawable.ic_attention_24),
+            painter = painterResource(id = R.drawable.warning_24),
             contentDescription = null,
             modifier = Modifier.size(48.dp).align(Alignment.CenterHorizontally)
         )

@@ -89,7 +89,7 @@ fun MarketEarnScreen(
                     if (uiState.items.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.Error),
-                            icon = R.drawable.ic_sync_error
+                            icon = R.drawable.warning_filled_24
                         )
                     } else {
                         VaultList(

@@ -411,7 +411,7 @@ private fun AppCloseWarningBottomSheet(
     onChangeClick: () -> Unit
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(id = R.drawable.ic_attention_24),
+        iconPainter = painterResource(id = R.drawable.warning_24),
         title = stringResource(id = R.string.Alert_TitleWarning),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick

@@ -94,7 +94,7 @@ private fun CellContact(
     ) {
         Icon(
             painter = if (contact == null) {
-                painterResource(id = R.drawable.icon_paper_contract_24)
+                painterResource(id = R.drawable.list_24)
             } else {
                 painterResource(id = R.drawable.user_24)
             },

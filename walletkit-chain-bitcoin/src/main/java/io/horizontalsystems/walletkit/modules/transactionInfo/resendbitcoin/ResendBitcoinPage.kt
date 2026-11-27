@@ -135,7 +135,7 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
                             SectionTitleCell(
                                 stringResource(R.string.Send_Confirmation_YouSend),
                                 uiState.coin.name,
-                                R.drawable.ic_arrow_up_right_12
+                                R.drawable.arrow_m_up_24
                             )
                         }
                         add {

@@ -436,7 +436,8 @@ fun TransactionInfoStatusCell(
 
             TransactionStatus.Failed -> {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_attention_20),
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.warning_24),
                     contentDescription = null,
                     tint = if (notProcessed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.lucian
                 )
@@ -540,7 +541,7 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
         HSIconButton(
             variant = ButtonVariant.Secondary,
             size = ButtonSize.Small,
-            icon = painterResource(R.drawable.ic_share_20),
+            icon = painterResource(R.drawable.share_24),
             onClick = {
                 context.startActivity(Intent().apply {
                     action = Intent.ACTION_SEND

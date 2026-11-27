@@ -40,7 +40,7 @@ fun RootedDeviceScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_attention_24),
+                    painter = painterResource(R.drawable.warning_24),
                     contentDescription = null,
                     modifier = Modifier.size(48.dp)
                 )

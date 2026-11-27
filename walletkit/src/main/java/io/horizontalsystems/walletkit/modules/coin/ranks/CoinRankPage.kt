@@ -132,7 +132,7 @@ private fun CoinRankScreen(
                                     variant = ButtonVariant.Secondary,
                                     size = ButtonSize.Small,
                                     modifier = Modifier.padding(start = 16.dp),
-                                    icon = painterResource(if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20),
+                                    icon = painterResource(if (uiState.sortDescending) R.drawable.arrow_m_down_24 else R.drawable.arrow_m_up_24),
                                     onClick = { viewModel.toggleSortType() }
                                 )
                                 Spacer(Modifier.weight(1f))

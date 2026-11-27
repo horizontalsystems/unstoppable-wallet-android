@@ -105,7 +105,7 @@ private fun CoinTreasuriesScreen(
                                             HSIconButton(
                                                 variant = ButtonVariant.Secondary,
                                                 size = ButtonSize.Small,
-                                                icon = painterResource(if (treasuriesData.sortDescending) R.drawable.ic_sort_h2l_20 else R.drawable.ic_sort_l2h_20),
+                                                icon = painterResource(if (treasuriesData.sortDescending) R.drawable.arrow_m_down_24 else R.drawable.arrow_m_up_24),
                                                 onClick = {
                                                     viewModel.onToggleSortType()
                                                 }

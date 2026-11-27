@@ -135,7 +135,7 @@ fun ChooseContactScreen(
                 if (empty) {
                     ListEmptyView(
                         text = stringResource(R.string.EmptyResults),
-                        icon = R.drawable.ic_not_found
+                        icon = R.drawable.warning_filled_24
                     )
                 } else {
                     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {

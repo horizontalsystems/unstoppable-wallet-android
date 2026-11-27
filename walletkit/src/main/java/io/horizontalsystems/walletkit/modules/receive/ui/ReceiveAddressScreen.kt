@@ -369,7 +369,7 @@ private fun ActionButtonsRow(
         }
 
         ReceiveActionButton(
-            icon = R.drawable.ic_share_24px,
+            icon = R.drawable.share_24,
             buttonText = stringResource(R.string.Button_Share),
             modifier = Modifier.testTag(TestTags.RECEIVE_SHARE),
             onClick = {

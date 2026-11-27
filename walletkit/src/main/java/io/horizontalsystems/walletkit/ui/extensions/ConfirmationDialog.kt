@@ -29,7 +29,7 @@ fun ConfirmationDialog(
     transparentButtonXxx: () -> Unit
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(icon ?: R.drawable.ic_attention_24),
+        iconPainter = painterResource(icon ?: R.drawable.warning_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = title,
         onCloseClick = onClose

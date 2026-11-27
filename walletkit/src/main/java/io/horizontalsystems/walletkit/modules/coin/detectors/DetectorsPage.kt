@@ -145,30 +145,30 @@ fun DetectorCell(
 ) {
     val issue = issueViewItem.issue
     val issues = issue.issues ?: emptyList()
-    var iconResource = R.drawable.ic_check_24
+    var iconResource = R.drawable.done_e_filled_24
     var iconTint = ComposeAppTheme.colors.leah
 
     issues.firstOrNull()?.let {
         when (it.impact) {
             "Critical" -> {
-                iconResource = R.drawable.ic_warning_24
+                iconResource = R.drawable.warning_24
                 iconTint = ComposeAppTheme.colors.lucian
             }
 
             "High" -> {
-                iconResource = R.drawable.ic_warning_24
+                iconResource = R.drawable.warning_24
                 iconTint = ComposeAppTheme.colors.jacob
             }
 
             "Low" -> {
-                iconResource = R.drawable.ic_warning_24
+                iconResource = R.drawable.warning_24
                 iconTint = ComposeAppTheme.colors.remus
             }
 
             "Informational",
             "Optimization" -> {
                 if (issues.isNotEmpty()) {
-                    iconResource = R.drawable.ic_warning_24
+                    iconResource = R.drawable.warning_24
                     iconTint = ComposeAppTheme.colors.laguna
                 }
             }

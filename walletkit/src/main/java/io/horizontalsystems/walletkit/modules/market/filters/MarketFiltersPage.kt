@@ -206,7 +206,7 @@ private fun BSContent(
         TradingVolume -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_Volume24h,
-                headerIcon = R.drawable.ic_chart_24,
+                headerIcon = R.drawable.chart_vol_24,
                 items = viewModel.volumeViewItemOptions,
                 selectedItem = uiState.volume,
                 onSelect = {

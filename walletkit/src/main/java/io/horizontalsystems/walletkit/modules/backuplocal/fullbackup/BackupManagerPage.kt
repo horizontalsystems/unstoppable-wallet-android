@@ -182,7 +182,7 @@ private fun BackupManagerScreen(
                 ConfirmationBottomSheet(
                     title = stringResource(R.string.ImportWallet_WarningInvalidJson),
                     text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                    iconPainter = painterResource(R.drawable.warning_24),
                     iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
                     confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
                     cautionType = Caution.Type.Warning,

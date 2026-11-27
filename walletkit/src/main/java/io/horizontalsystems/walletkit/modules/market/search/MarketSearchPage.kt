@@ -124,7 +124,7 @@ fun MarketSearchScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Market_Filters),
-                icon = R.drawable.ic_manage_2_24,
+                icon = R.drawable.manage_24,
                 onClick = {
                     coroutineScope.launch {
                         if (isSearchActive) {

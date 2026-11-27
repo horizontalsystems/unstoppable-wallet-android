@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -178,7 +179,8 @@ internal fun InputStatusIcon(state: DataState<*>?) {
 
         is DataState.Success -> {
             Icon(
-                painter = painterResource(id = R.drawable.ic_check_20),
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(id = R.drawable.done_e_filled_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.remus
             )

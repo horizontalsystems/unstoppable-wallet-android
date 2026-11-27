@@ -36,7 +36,7 @@
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:src="@drawable/ic_attention_24"
+            tools:src="@drawable/warning_24"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="24dp"
             android:visibility="gone" />

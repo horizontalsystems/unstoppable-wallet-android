@@ -118,7 +118,7 @@ object HudHelper {
             backgroundColor = R.color.grey,
             duration = duration,
             gravity = gravity,
-            icon = R.drawable.ic_attention_24,
+            icon = R.drawable.warning_24,
             iconTint = R.color.jacob
         )
     }
@@ -135,7 +135,7 @@ object HudHelper {
             backgroundColor = R.color.grey,
             duration = duration,
             gravity = gravity,
-            icon = R.drawable.ic_attention_24,
+            icon = R.drawable.warning_24,
             iconTint = R.color.jacob
         )
     }

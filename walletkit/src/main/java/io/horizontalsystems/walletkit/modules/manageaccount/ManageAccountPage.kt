@@ -241,7 +241,7 @@ private fun BackupActions(
                     BackupActionItem(
                         title = stringResource(id = R.string.ManageAccount_LocalBackup),
                         modifier = Modifier.testTag(TestTags.ACCOUNT_LOCAL_BACKUP),
-                        icon = painterResource(id = R.drawable.ic_file_24),
+                        icon = painterResource(id = R.drawable.folder_24),
                         attention = action.showAttention,
                         onClick = navigation.authorizedAction {
                             navigation.slideFromBottom(BackupLocalPage(account))
@@ -295,7 +295,7 @@ private fun KeyActions(
                     }
                     AccountActionItem(
                         title = stringResource(id = R.string.RecoveryPhrase_Title),
-                        icon = painterResource(id = R.drawable.icon_paper_contract_20),
+                        icon = painterResource(id = R.drawable.list_24),
                         onClick = authorizedAction
                     )
                 }
@@ -387,8 +387,8 @@ private fun AccountActionItem(
 
         if (attention) {
             Icon(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                painter = painterResource(id = R.drawable.ic_attention_20),
+                modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
+                painter = painterResource(id = R.drawable.warning_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.lucian
             )
@@ -454,8 +454,8 @@ private fun BackupActionItem(
 
         if (attention) {
             Icon(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                painter = painterResource(id = R.drawable.ic_attention_20),
+                modifier = Modifier.padding(horizontal = 16.dp).size(20.dp),
+                painter = painterResource(id = R.drawable.warning_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.lucian
             )

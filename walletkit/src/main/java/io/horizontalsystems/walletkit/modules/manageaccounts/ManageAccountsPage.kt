@@ -123,7 +123,7 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
                     if (searchQuery.isNotEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.EmptyResults),
-                            icon = R.drawable.ic_not_found
+                            icon = R.drawable.warning_filled_24
                         )
                     } else {
                         ListEmptyView(

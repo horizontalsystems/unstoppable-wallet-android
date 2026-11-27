@@ -89,6 +89,7 @@ fun TextImportant(
             ) {
                 icon?.let {
                     Icon(
+                        modifier = Modifier.size(20.dp),
                         painter = painterResource(id = icon),
                         contentDescription = null,
                         tint = iconColor

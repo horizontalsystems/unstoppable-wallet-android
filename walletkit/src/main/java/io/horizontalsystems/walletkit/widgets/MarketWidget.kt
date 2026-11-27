@@ -130,7 +130,7 @@ class MarketWidget : GlanceAppWidget() {
                         )
                     } else if (state.error != null) {
                         FullScreenMessage(
-                            icon = R.drawable.ic_sync_error,
+                            icon = R.drawable.warning_filled_24,
                             text = state.error,
                         )
                     } else {

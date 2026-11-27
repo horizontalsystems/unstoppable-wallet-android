@@ -51,7 +51,7 @@ private fun RiskyAddressAlertView(
     onContinueClick: () -> Unit,
 ) {
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_attention_24),
+        iconPainter = painterResource(R.drawable.warning_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
         title = stringResource(R.string.Send_RiskyAddress),
         onCloseClick = onCloseClick
