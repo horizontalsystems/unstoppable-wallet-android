@@ -46,6 +46,7 @@ object TestTags {
     const val CREATE_PASSPHRASE_EYE = "create_passphrase_eye"
     const val CREATE_PASSPHRASE_CONFIRM_INPUT = "create_passphrase_confirm_input"
     const val CREATE_PASSPHRASE_CONFIRM_EYE = "create_passphrase_confirm_eye"
+    const val CREATE_ADVANCED_OPTIONS = "create_advanced_options"
     const val CREATE_SUBMIT = "create_submit"
 
     const val IMPORT_RECOVERY_PHRASE = "import_recovery_phrase"
@@ -61,6 +62,7 @@ object TestTags {
     const val RESTORE_WORDLIST = "restore_wordlist"
     const val RESTORE_NEXT = "restore_next"
     const val RESTORE_ERROR = "restore_error"
+    const val RESTORE_ADVANCED_OPTIONS = "restore_advanced_options"
     fun restoreChain(blockchainUid: String) = "restore_chain_$blockchainUid"
     const val RESTORE_SUBMIT = "restore_submit"
 
@@ -230,6 +232,7 @@ object TestTags {
 
     const val SECURITY_PASSCODE = "security_passcode"
     const val SECURITY_BIOMETRICS = "security_biometrics"
+    const val SECURITY_BALANCE_AUTO_HIDE = "security_balance_auto_hide"
     const val SECURITY_AUTOLOCK = "security_autolock"
     // The dropdown button inside the row above; it opens the same list
     const val SECURITY_AUTOLOCK_VALUE = "security_autolock_value"

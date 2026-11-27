@@ -143,6 +143,7 @@ private fun CreateAccountIntroScreen(
                         },
                         right = {
                             CellRightControlsSwitcher(
+                                modifier = Modifier.testTag(TestTags.CREATE_ADVANCED_OPTIONS),
                                 checked = advancedOptionsEnabled,
                                 onCheckedChange = {
                                     advancedOptionsEnabled = it

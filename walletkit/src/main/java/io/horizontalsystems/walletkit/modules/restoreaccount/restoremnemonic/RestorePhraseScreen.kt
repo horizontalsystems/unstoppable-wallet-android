@@ -308,6 +308,7 @@ fun RestorePhrase(
                         },
                         right = {
                             CellRightControlsSwitcher(
+                                modifier = Modifier.testTag(TestTags.RESTORE_ADVANCED_OPTIONS),
                                 checked = uiState.advancedOptionsEnabled,
                                 onCheckedChange = viewModel::onToggleAdvancedOptions
                             )
