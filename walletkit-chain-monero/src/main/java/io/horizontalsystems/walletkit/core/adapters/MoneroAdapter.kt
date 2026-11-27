@@ -17,15 +17,17 @@ import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.MoneroAccountInfo
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
-import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
+import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
 import io.horizontalsystems.monerokit.Balance
+import io.horizontalsystems.monerokit.DaemonNode
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.Seed
+import io.horizontalsystems.monerokit.SendResult
 import io.horizontalsystems.monerokit.SyncState
 import io.horizontalsystems.monerokit.data.MoneroAccount
 import io.horizontalsystems.monerokit.data.Subaddress
@@ -57,6 +59,7 @@ class MoneroAdapter(
     private val _activeAccountFlow: MutableStateFlow<Int>,
     private val localStorage: ILocalStorage,
     private val walletAccountId: String,
+    private val nodeManager: MoneroNodeManager,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, IMoneroAccountsAdapter,
     ITransactionsAdapter by transactionsAdapter {
 
@@ -138,6 +141,25 @@ class MoneroAdapter(
             kit.allTransactionsFlow.collect(transactionsProvider::onTransactions)
         }
 
+        coroutineScope.launch {
+            // The wallet stays open and goes on from the height it has; nothing is rebuilt.
+            // The node is read here and not taken from the flow, whose last value can be from
+            // before this adapter.
+            nodeManager.nodeChangedFlow.collect {
+                val node = nodeManager.currentNode
+                requestedNode = node.serialized
+                kit.setNode(node.serialized, node.trusted)
+            }
+        }
+
+        coroutineScope.launch {
+            // The kit moves to another node itself when a send needs one. A node this adapter
+            // asked for is not news: the user may have picked another one since.
+            kit.nodeFlow.collect { daemon ->
+                if (daemon.node != requestedNode) nodeManager.adoptNode(daemon.node)
+            }
+        }
+
         val torManager = App.torKitManager
         if (torManager.isTorEnabled) {
             // The wallet reads the Tor SOCKS port once, when it opens. Tor reports its port only
@@ -205,7 +227,16 @@ class MoneroAdapter(
         selectedOutputs: List<String>?
     ): String = withContext(Dispatchers.IO) {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        withOpenWallet { kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount) }
+        val result = withOpenWallet { kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount) }
+        when (result) {
+            is SendResult.Sent -> result.transactionHash
+            is SendResult.Unknown -> throw MoneroSendUnknownException(result.transactionHash, result.message)
+            is SendResult.NotSent -> throw when (result.reason) {
+                // The wallet closed between the check and the send
+                SendResult.Reason.WalletClosed -> LocalizedException(R.string.Swap_ErrorWalletNotSynced)
+                else -> MoneroNotSentException(result.reason, result.message)
+            }
+        }
     }
 
     // JNI: blocks on daemon RPC
@@ -223,6 +254,10 @@ class MoneroAdapter(
     @Volatile
     private var stopped = false
 
+    // The node the kit was last asked to be on, in the form it is given
+    @Volatile
+    private var requestedNode = kit.nodeFlow.value.node
+
     // The kit holds no wallet object while it is still opening, or after the open or the start
     // failed, and its fee and send calls then fail with a bare "Wallet is NULL" that the
     // confirmation page shows as is. Refuse first, with the same words the send form uses for
@@ -230,9 +265,10 @@ class MoneroAdapter(
     // kit never retries by itself and the user is about to try again. Read from the kit, not
     // from balanceState, which follows it asynchronously.
     //
-    // The wallet can still close between the check and the call. The kit reports that with an
-    // IllegalStateException ending in WALLET_CLOSED, which is mapped to the same error; other
-    // IllegalStateExceptions carry node and transaction failures and pass through.
+    // The wallet can still close between the check and the call. For a fee estimate the kit
+    // reports that with an IllegalStateException ending in WALLET_CLOSED, which is mapped to
+    // the same error; other IllegalStateExceptions carry node failures and pass through. A
+    // send says it in its result.
     private inline fun <T> withOpenWallet(call: () -> T): T {
         val messageRes = when {
             stopped -> R.string.Swap_ErrorWalletNotSynced
@@ -272,8 +308,9 @@ class MoneroAdapter(
             context: Context,
             wallet: Wallet,
             restoreSettings: RestoreSettings,
-            node: MoneroNode
+            nodeManager: MoneroNodeManager,
         ): MoneroAdapter {
+            val node = nodeManager.currentNode
             val birthdayHeightStr: String?
             val seed: Seed
             when (val accountType = wallet.account.type) {
@@ -311,7 +348,18 @@ class MoneroAdapter(
                 birthdayHeightOrDate,
                 wallet.account.id,
                 node.serialized,
-                node.trusted
+                node.trusted,
+                // With Auto-Select on, a send or a fee estimate the node fails goes on through
+                // the other nodes Auto-Select may pick. A node the user picked stays the only
+                // one their transfers are sent to. Read at the time of the send: the switch
+                // can change.
+                fallbackNodes = {
+                    if (nodeManager.autoSelectEnabled) {
+                        nodeManager.allNodes.map { DaemonNode(it.serialized, it.trusted) }
+                    } else {
+                        emptyList()
+                    }
+                },
             )
 
             val walletAccountId = wallet.account.id
@@ -326,7 +374,8 @@ class MoneroAdapter(
                 App.backgroundManager,
                 activeAccountFlow,
                 App.localStorage,
-                walletAccountId
+                walletAccountId,
+                nodeManager,
             )
         }
 
@@ -335,6 +384,12 @@ class MoneroAdapter(
         }
     }
 }
+
+/** Nothing was sent. The kit has already tried another node where it may. */
+class MoneroNotSentException(val reason: SendResult.Reason, message: String?) : Exception(message)
+
+/** The transfer may be in the network, and no node the kit could ask confirmed it. */
+class MoneroSendUnknownException(val transactionHash: String?, message: String?) : Exception(message)
 
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> {

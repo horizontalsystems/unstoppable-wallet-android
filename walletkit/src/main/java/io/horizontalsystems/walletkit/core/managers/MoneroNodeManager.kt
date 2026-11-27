@@ -22,6 +22,15 @@ class MoneroNodeManager(
     private val _currentNodeUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val currentNodeUpdatedFlow = _currentNodeUpdatedFlow.asSharedFlow()
 
+    private val _nodeChangedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    /**
+     * The host of the node the wallet was moved to, or whose trust was changed. The kit takes
+     * it with the wallet open; [currentNodeUpdatedFlow] is for a restart of the kit on the
+     * same node.
+     */
+    val nodeChangedFlow = _nodeChangedFlow.asSharedFlow()
+
     private val _nodesUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val nodesUpdatedFlow = _nodesUpdatedFlow.asSharedFlow()
 
@@ -110,15 +119,14 @@ class MoneroNodeManager(
     /**
      * The adapter starts on the stored node right away: deferring its creation until the probe
      * finished left wallet rows interactive with no adapter behind them, which crashed the send
-     * screen. save() emits, so a change rebuilds the adapter once onto the winner; when the
-     * stored node is still the fastest nothing is emitted and nothing reconnects.
+     * screen. save() emits, so a change moves the open wallet onto the winner; when the stored
+     * node is still the fastest nothing is emitted and nothing reconnects.
      */
     suspend fun autoSelectFastestNodeOnStartup() = autoSelector.pickOnStartup()
 
     /**
      * Re-runs the ping and switches to the fastest reachable node, for when the current one has
-     * died while the app was running. Unlike the startup path this emits, so the adapter is
-     * rebuilt on the new node.
+     * died while the app was running.
      */
     suspend fun reselectFastestNode(): NodeAutoSelector.Reselection = autoSelector.reselect()
 
@@ -153,7 +161,18 @@ class MoneroNodeManager(
 
     fun save(node: MoneroNode) {
         persist(node)
-        _currentNodeUpdatedFlow.tryEmit(node.host)
+        _nodeChangedFlow.tryEmit(node.host)
+    }
+
+    /**
+     * The kit moved the wallet to this node itself, for a send or a fee estimate its node
+     * failed. Stored so the settings show where the wallet is; Auto-Select stays as it was.
+     *
+     * @param serialized the node in the form the kit is given it.
+     */
+    fun adoptNode(serialized: String) {
+        if (serialized == currentNode.serialized) return
+        allNodes.firstOrNull { it.serialized == serialized }?.let(::save)
     }
 
     private fun persist(node: MoneroNode) {
@@ -209,7 +228,8 @@ class MoneroNodeManager(
         moneroNodeStorage.delete(node.host)
 
         if (isCurrent) {
-            _currentNodeUpdatedFlow.tryEmit(node.host)
+            // The selection falls back to the first built-in node
+            _nodeChangedFlow.tryEmit(currentNode.host)
         }
 
         _nodesUpdatedFlow.tryEmit(node.host)

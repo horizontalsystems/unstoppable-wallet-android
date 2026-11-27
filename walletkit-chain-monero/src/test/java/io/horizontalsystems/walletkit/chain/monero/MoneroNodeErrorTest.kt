@@ -1,49 +1,42 @@
 package io.horizontalsystems.walletkit.chain.monero
 
+import io.horizontalsystems.monerokit.SendResult
+import io.horizontalsystems.walletkit.core.adapters.MoneroNotSentException
+import io.horizontalsystems.walletkit.core.adapters.MoneroSendUnknownException
 import io.horizontalsystems.walletkit.core.chain.NodeError
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-// The messages are the ones monero-kit's WalletService raises
 class MoneroNodeErrorTest {
 
-    private fun classify(message: String?) = moneroNodeError(IllegalStateException(message))
+    private val plugin = MoneroChainPlugin(
+        { error("Context is not needed to classify an error") },
+        { error("MoneroNodeManager is not needed to classify an error") },
+    )
 
+    // No node the kit could ask confirmed the transfer, so sending again could pay twice
     @Test
-    fun unreachableNodeWhileBuildingIsBeforeTheBroadcast() {
-        val error = "Create Transaction failed: node is unreachable (internal error: Failed to get earliest fork height)"
-
-        assertEquals(NodeError(preBroadcast = true), classify(error))
+    fun transferNoNodeConfirmedMayHaveBeenSent() {
+        assertEquals(
+            NodeError(preBroadcast = false),
+            plugin.classifyNodeError(
+                MoneroSendUnknownException("aa11", "Send Transaction failed: no connection to daemon. Please make sure daemon is running.")
+            ),
+        )
     }
 
+    // The kit has already tried another node where it may; the screen must not move the chain again
     @Test
-    fun nodeThatStoppedAnsweringWhileBuildingIsBeforeTheBroadcast() {
-        val error = "Create Transaction failed: node is not responding (no connection to daemon)"
-
-        assertEquals(NodeError(preBroadcast = true), classify(error))
+    fun transferThatWasNotSentIsNotANodeFailureForTheScreen() {
+        SendResult.Reason.values().forEach {
+            assertNull(it.name, plugin.classifyNodeError(MoneroNotSentException(it, "not sent")))
+        }
     }
 
+    // A fee estimate the kit could not get from any node it may use: it has already tried
     @Test
-    fun feeEstimateTheDaemonFailedIsBeforeTheBroadcast() {
-        assertEquals(NodeError(preBroadcast = true), classify("internal error: Failed to get fee estimate"))
-    }
-
-    // The commit is the broadcast: the daemon may have taken the transaction and lost the answer
-    @Test
-    fun daemonFailureWhileCommittingMayHaveSent() {
-        assertEquals(NodeError(preBroadcast = false), classify("Send Transaction failed: no connection to daemon"))
-    }
-
-    @Test
-    fun transactionTheDaemonRefusedIsNotANodeFailure() {
-        assertNull(classify("Send Transaction failed: transaction was rejected by daemon: double spend"))
-    }
-
-    @Test
-    fun transactionThatCannotBeBuiltIsNotANodeFailure() {
-        assertNull(classify("Create Transaction failed: not enough money to transfer, available only 0.1"))
-        assertNull(classify("Create Transaction failed: Wallet is NULL"))
-        assertNull(classify(null))
+    fun failedFeeEstimateIsNotANodeFailureForTheScreen() {
+        assertNull(plugin.classifyNodeError(IllegalStateException("internal error: Failed to get fee estimate")))
     }
 }
