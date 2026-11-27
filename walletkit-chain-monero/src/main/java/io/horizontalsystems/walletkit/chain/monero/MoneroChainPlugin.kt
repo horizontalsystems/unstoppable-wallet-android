@@ -114,7 +114,7 @@ class MoneroChainPlugin(
         val nodeManager = moneroNodeManager()
         nodeManager.nodePinger = { serialized ->
             MoneroKit.pingNodes(context(), serialized).map {
-                MoneroNodeManager.NodePingResult(it.serialized, it.isValid, it.responseTime)
+                MoneroNodeManager.NodePingResult(it.serialized, it.isValid, it.responseTime, it.height)
             }
         }
         nodeManager.autoSelectFastestNodeOnStartup()

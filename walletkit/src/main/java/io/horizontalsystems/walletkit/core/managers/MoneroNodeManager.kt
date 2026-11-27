@@ -34,17 +34,7 @@ class MoneroNodeManager(
     private val _nodesUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val nodesUpdatedFlow = _nodesUpdatedFlow.asSharedFlow()
 
-    val defaultNodesInitial = listOf(
-        MoneroNode("xmr.unstoppable.money:443", "unstoppable.money", "xmr.unstoppable.money:443/mainnet/unstoppable.money", trusted = true),
-        MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),
-        MoneroNode("opennode.xmr-tw.org:18089", "xmr-tw.org", "opennode.xmr-tw.org:18089/mainnet/xmr-tw.org"),
-        MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
-        MoneroNode("node.monerodevs.org:18089", "monerodevs.org", "node.monerodevs.org:18089/mainnet/monerodevs.org"),
-        MoneroNode("nodex.monerujo.io:18081", "monerujo.io", "nodex.monerujo.io:18081/mainnet/monerujo.io"),
-        MoneroNode("xmr-node.cakewallet.com:18081", "cakewallet.com", "xmr-node.cakewallet.com:18081/mainnet/cakewallet.com"),
-        MoneroNode("monero.stackwallet.com:18081", "stackwallet.com", "monero.stackwallet.com:18081/mainnet/stackwallet.com"),
-        MoneroNode("nodes.hashvault.pro:18081", "hashvault.pro", "nodes.hashvault.pro:18081/mainnet/hashvault.pro"),
-    )
+    val defaultNodesInitial = builtInNodes
 
     val defaultNodes: List<MoneroNode>
         get() {
@@ -113,7 +103,8 @@ class MoneroNodeManager(
         current = { currentNode },
         probe = ::probeNodes,
         switchTo = ::save,
-        startupChoice = { _, probes -> NodeAutoSelector.fastest(probes) },
+        startupChoice = { _, probes -> SourceRepick.fastest(probes, LAG_THRESHOLD) },
+        lagThreshold = LAG_THRESHOLD,
     )
 
     /**
@@ -146,17 +137,9 @@ class MoneroNodeManager(
         _currentNodeUpdatedFlow.tryEmit(currentNode.host)
     }
 
-    /** Pings every node. Monero pings report no height, so every node that answers counts as current. */
     private suspend fun probeNodes(): List<SourceProbe<MoneroNode>> {
         val nodes = allNodes
-        val results = pingNodes(nodes.map { it.serialized }).associateBy { it.serialized }
-
-        return nodes.map { node ->
-            val responseTime = results[node.serialized]
-                ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
-                ?.responseTime
-            SourceProbe(node, responseTime, responseTime?.let { 0L })
-        }
+        return probes(nodes, pingNodes(nodes.map { it.serialized }))
     }
 
     fun save(node: MoneroNode) {
@@ -235,10 +218,12 @@ class MoneroNodeManager(
         _nodesUpdatedFlow.tryEmit(node.host)
     }
 
+    /** @param height the index of the node's top block; 0 when the node did not answer. */
     data class NodePingResult(
         val serialized: String,
         val isValid: Boolean,
         val responseTime: Double,
+        val height: Long,
     )
 
     data class MoneroNode(
@@ -256,5 +241,39 @@ class MoneroNodeManager(
         override fun hashCode(): Int {
             return Objects.hash(host, trusted)
         }
+    }
+
+    companion object {
+        /**
+         * How far behind the best reported height a node may be and still be picked. Monero
+         * adds a block every two minutes, and a node a block or two back is only slow to hear
+         * of it. The kit goes by the same number when a send moves to another node.
+         */
+        const val LAG_THRESHOLD = 3L
+
+        val builtInNodes = listOf(
+            MoneroNode("xmr.unstoppable.money:443", "unstoppable.money", "xmr.unstoppable.money:443/mainnet/unstoppable.money", trusted = true),
+            MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),
+            MoneroNode("opennode.xmr-tw.org:18089", "xmr-tw.org", "opennode.xmr-tw.org:18089/mainnet/xmr-tw.org"),
+            MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
+            MoneroNode("node.monerodevs.org:18089", "monerodevs.org", "node.monerodevs.org:18089/mainnet/monerodevs.org"),
+            MoneroNode("nodex.monerujo.io:18081", "monerujo.io", "nodex.monerujo.io:18081/mainnet/monerujo.io"),
+            MoneroNode("xmr-node.cakewallet.com:18081", "cakewallet.com", "xmr-node.cakewallet.com:18081/mainnet/cakewallet.com"),
+            MoneroNode("monero.stackwallet.com:18081", "stackwallet.com", "monero.stackwallet.com:18081/mainnet/stackwallet.com"),
+            MoneroNode("nodes.hashvault.pro:18081", "hashvault.pro", "nodes.hashvault.pro:18081/mainnet/hashvault.pro"),
+        )
+
+        /** Ping results as Auto-Select probes: a node that did not answer has neither time nor height. */
+        internal fun probes(nodes: List<MoneroNode>, results: List<NodePingResult>): List<SourceProbe<MoneroNode>> {
+            val bySerialized = results.associateBy { it.serialized }
+            return nodes.map { node ->
+                val ping = bySerialized[node.serialized]?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
+                SourceProbe(node, ping?.responseTime, ping?.height)
+            }
+        }
+
+        /** The fastest node that answered and is not behind the others, or null when none answered. */
+        fun fastestNode(nodes: List<MoneroNode>, results: List<NodePingResult>): MoneroNode? =
+            SourceRepick.fastest(probes(nodes, results), LAG_THRESHOLD)
     }
 }

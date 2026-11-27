@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.NodePingResult
 import io.horizontalsystems.walletkit.uiv3.components.PingState
 import io.horizontalsystems.monerokit.NodePingResult as KitNodePingResult
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -81,30 +82,27 @@ class MoneroNetworkViewModel(
 
         pingJob?.cancel()
         pingJob = viewModelScope.launch {
-            pingStates = try {
-                val results = moneroNodeManager.pingNodes(nodes.map { it.serialized })
-                    .associateBy { it.serialized }
-                nodes.associate { node ->
-                    node.serialized to (results[node.serialized]?.let(::pingState) ?: PingState.Unreachable)
-                }
+            val results = try {
+                moneroNodeManager.pingNodes(nodes.map { it.serialized })
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                nodes.associate { it.serialized to PingState.Unreachable }
+                emptyList()
+            }
+            val bySerialized = results.associateBy { it.serialized }
+            pingStates = nodes.associate { node ->
+                node.serialized to (bySerialized[node.serialized]?.let(::pingState) ?: PingState.Unreachable)
             }
             if (moneroNodeManager.autoSelectEnabled) {
-                selectFastestNode(nodes)
+                selectFastestNode(nodes, results)
             }
             emitState()
         }
     }
 
-    private fun selectFastestNode(nodes: List<MoneroNode>) {
-        val fastest = nodes
-            .mapNotNull { node ->
-                (pingStates[node.serialized] as? PingState.Reachable)?.let { node to it.responseTimeMs }
-            }
-            .minByOrNull { it.second }
-            ?.first
-            ?: return
+    // The same pick Auto-Select makes at startup: a node that is behind the others is left out
+    private fun selectFastestNode(nodes: List<MoneroNode>, results: List<NodePingResult>) {
+        val fastest = MoneroNodeManager.fastestNode(nodes, results) ?: return
 
         if (fastest.host != moneroNodeManager.currentNode.host) {
             moneroNodeManager.save(fastest)
