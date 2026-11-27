@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -191,7 +192,7 @@ private fun WelcomeContent(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .windowInsetsPadding(WindowInsets.navigationBars)
+                .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets(bottom = MinBottomSpace)))
         ) {
             // The text takes the logo's place in the middle of the whole screen,
             // not of the space the bars and the buttons leave. Where that would
@@ -385,6 +386,9 @@ private object WelcomeTimeline {
 private val LogoSize = 288.dp
 
 private val TitleLineGap = 2.dp
+
+// The space the design leaves under the consent line; a shorter navigation bar is padded up to it
+private val MinBottomSpace = 34.dp
 
 @Preview
 @Composable
