@@ -117,11 +117,11 @@ class ZanoKitManager(
             wallet = wallet,
             walletId = account.id,
             daemonAddress = node.host,
-            // With Auto-Select on, a send the node fails goes on through the other built-in
-            // nodes. A node the user picked stays the only one their transfers are sent to.
-            // Read at the time of the send: the switch can change.
+            // With Auto-Select on, a send the node fails goes on through the other nodes
+            // Auto-Select may pick. A node the user picked stays the only one their transfers
+            // are sent to. Read at the time of the send: the switch and the nodes can change.
             fallbackDaemonAddresses = {
-                if (zanoNodeManager.autoSelectEnabled) zanoNodeManager.defaultNodes.map { it.host } else emptyList()
+                if (zanoNodeManager.autoSelectEnabled) zanoNodeManager.autoSelectNodes.map { it.host } else emptyList()
             },
         )
         followKitDaemon(kit)

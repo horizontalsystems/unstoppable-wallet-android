@@ -52,11 +52,18 @@ class ZanoNodeManager(
             return allNodes.firstOrNull { it.host == host } ?: defaultNodes.first()
         }
 
+    /**
+     * The nodes Auto-Select picks from, and the ones a send may go on through: the built-in
+     * nodes and the custom nodes that can be asked whether they are up.
+     */
+    val autoSelectNodes: List<ZanoNode>
+        get() = autoSelectCandidates(defaultNodes, customNodes)
+
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(BlockchainType.Zano.uid)
 
     /**
-     * Whether the wallet may move to another built-in node when the selected one fails.
+     * Whether the wallet may move to another node when the selected one fails.
      *
      * Decided once and then stored: on only for a user who never touched the node (still on
      * the default one and no custom node added). Anyone who picked another node made a choice
@@ -78,8 +85,8 @@ class ZanoNodeManager(
     fun setAutoSelect(enabled: Boolean) {
         blockchainSettingsStorage.saveZanoAutoSelect(enabled)
 
-        // Only built-in nodes take part; a custom selection gives way to the default one.
-        if (enabled && currentNode !in defaultNodes) {
+        // A node that cannot be probed cannot take part: it gives way to the default one.
+        if (enabled && currentNode !in autoSelectNodes) {
             select(defaultNodes.first())
         } else {
             _nodesUpdatedFlow.tryEmit(currentNode.host)
@@ -98,25 +105,25 @@ class ZanoNodeManager(
     private val autoSelector = NodeAutoSelector(
         isEnabled = { autoSelectEnabled },
         current = { currentNode },
-        probe = { nodePinger?.invoke(defaultNodes) ?: emptyList() },
+        probe = { nodePinger?.invoke(autoSelectNodes) ?: emptyList() },
         // A node Auto-Select picked; Auto-Select stays on
         switchTo = ::select,
         startupChoice = { current, probes -> SourceRepick.choose(current, probes, LAG_THRESHOLD, switchForSpeed = false) },
         lagThreshold = LAG_THRESHOLD,
     )
 
-    /** Startup probe: moves off a built-in node that is down or behind. Does not wait for the kit. */
+    /** Startup probe: moves off a node that is down or behind. Does not wait for the kit. */
     suspend fun repickNode() = autoSelector.pickOnStartup()
 
     /**
-     * For a node that died while the app was running: moves to the fastest built-in node
-     * that answers.
+     * For a node that died while the app was running: moves to the fastest node that
+     * answers.
      */
     suspend fun reselectNode(): NodeAutoSelector.Reselection = autoSelector.reselect()
 
     /**
-     * Leaves the current node for the fastest other built-in one that answers, for a node that
-     * failed a send although it may still answer probes.
+     * Leaves the current node for the fastest other one that answers, for a node that failed
+     * a send although it may still answer probes.
      *
      * @return the node moved to, or null when Auto-Select is off or no other node answers.
      */
@@ -188,5 +195,14 @@ class ZanoNodeManager(
 
         fun autoSelectDefault(storedHost: String?, defaultHost: String, hasCustomNodes: Boolean): Boolean =
             (storedHost == null || storedHost == defaultHost) && !hasCustomNodes
+
+        /**
+         * The nodes that take part in Auto-Select: every built-in one, and the custom ones
+         * added with an https address. The probe goes over HTTP from the app, which refuses
+         * plain http to a host it does not list, so a custom node added with an http address
+         * would always look dead: never picked, and left at once if it were the selected one.
+         */
+        internal fun autoSelectCandidates(builtIn: List<ZanoNode>, custom: List<ZanoNode>): List<ZanoNode> =
+            builtIn + custom.filter { it.host.startsWith("https://", ignoreCase = true) }
     }
 }

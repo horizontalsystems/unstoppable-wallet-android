@@ -151,7 +151,7 @@ class ZanoChainPlugin(
         App.walletManager.activeWallets.any { it.token.blockchainType == BlockchainType.Zano }
 
     /**
-     * Moves to another built-in node when the current one has stopped working.
+     * Moves to another node when the current one has stopped working.
      *
      * Gated on a stalled sync so a healthy connection is never churned, and on connectivity
      * so a dead phone network is not mistaken for a dead node.
